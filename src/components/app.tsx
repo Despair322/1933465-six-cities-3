@@ -1,8 +1,12 @@
 import Main from '../pages/main/main';
 
-function App(): JSX.Element {
+type AppProps = {
+  cardsCount: number;
+};
+
+function App({ cardsCount }: AppProps): JSX.Element {
   return (
-    <Main/>
+    <Main cardsCount={cardsCount} />
   );
 }
 
