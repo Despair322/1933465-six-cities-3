@@ -4,7 +4,7 @@ type MainProps = {
   cardsCount: number;
 };
 
-function Main({ cardsCount }: MainProps): JSX.Element {
+function MainScreen({ cardsCount }: MainProps): JSX.Element {
   return (
     <main className="page__main page__main--index">
       <h1 className="visually-hidden">Cities</h1>
@@ -79,4 +79,4 @@ function Main({ cardsCount }: MainProps): JSX.Element {
   );
 }
 
-export default Main;
+export default MainScreen;

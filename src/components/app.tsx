@@ -1,4 +1,4 @@
-import Main from '../pages/main/main';
+import MainScreen from '../pages/main-screen/main-screen';
 
 type AppProps = {
   cardsCount: number;
@@ -6,7 +6,7 @@ type AppProps = {
 
 function App({ cardsCount }: AppProps): JSX.Element {
   return (
-    <Main cardsCount={cardsCount} />
+    <MainScreen cardsCount={cardsCount} />
   );
 }
 
