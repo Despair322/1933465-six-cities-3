@@ -4,6 +4,7 @@ import Offer from '../pages/offer/offer';
 import NotFound from '../pages/not-found/not-found';
 import Login from '../pages/login/login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { AppRoute } from '../const';
 
 type AppProps = {
   cardsCount: number;
@@ -14,19 +15,19 @@ function App({ cardsCount }: AppProps): JSX.Element {
     <BrowserRouter>
       <Routes>
         <Route
-          path="/"
+          path={AppRoute.Main}
           element={<Main cardsCount={cardsCount} />}
         />
         <Route
-          path="/login"
+          path={AppRoute.Login}
           element={<Login />}
         />
         <Route
-          path="/offer/:id"
+          path={AppRoute.Offer}
           element={<Offer />}
         />
         <Route
-          path="/favorites"
+          path={AppRoute.Favorites}
           element={<Favorites />}
         />
         <Route
