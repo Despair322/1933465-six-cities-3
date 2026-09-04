@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import Header from '../../components/shared/header';
+import { Link } from 'react-router-dom';
 
 function NotFound(): JSX.Element {
   return (
@@ -14,7 +15,9 @@ function NotFound(): JSX.Element {
         <div className="page__not-found-container container">
           <section className="not-found">
             <h1 className="not-found__title">404 Not found</h1>
-            <a className="not-found__link" href="main.html">Go to main page</a>
+            <Link className="not-found__link" to="/">
+              Go to main page
+            </Link>
           </section>
         </div>
       </main>
