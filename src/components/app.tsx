@@ -4,7 +4,8 @@ import Offer from '../pages/offer/offer';
 import NotFound from '../pages/not-found/not-found';
 import Login from '../pages/login/login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AppRoute } from '../const';
+import { AppRoute, AuthorizationStatus } from '../const';
+import PrivateRoute from './private-route';
 
 type AppProps = {
   cardsCount: number;
@@ -28,7 +29,13 @@ function App({ cardsCount }: AppProps): JSX.Element {
         />
         <Route
           path={AppRoute.Favorites}
-          element={<Favorites />}
+          element={
+            <PrivateRoute
+              authorizationStatus={AuthorizationStatus.NoAuth}
+            >
+              <Favorites />
+            </PrivateRoute>
+          }
         />
         <Route
           path="*"
