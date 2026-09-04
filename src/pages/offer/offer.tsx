@@ -1,8 +1,14 @@
+import { Helmet } from 'react-helmet-async';
 import Header from '../../components/shared/header';
 
 function Offer(): JSX.Element {
   return (
     <div className="page">
+
+      <Helmet>
+        <title>Offer</title>
+      </Helmet>
+
       <Header />
 
       <main className="page__main page__main--offer">

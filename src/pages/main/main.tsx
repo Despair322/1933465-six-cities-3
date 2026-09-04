@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import Header from '../../components/shared/header';
 import Card from './components/card';
 
@@ -8,6 +9,11 @@ type MainProps = {
 function Main({ cardsCount }: MainProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
+
+      <Helmet>
+        <title>6 Cities</title>
+      </Helmet>
+
       <Header />
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>

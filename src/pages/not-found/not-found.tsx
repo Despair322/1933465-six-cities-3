@@ -1,8 +1,14 @@
+import { Helmet } from 'react-helmet-async';
 import Header from '../../components/shared/header';
 
 function NotFound(): JSX.Element {
   return (
     <div className="page">
+
+      <Helmet>
+        <title>Not Found</title>
+      </Helmet>
+
       <Header />
       <main className="page__main page__main--not-found">
         <div className="page__not-found-container container">
