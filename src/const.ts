@@ -9,3 +9,9 @@ export const AppRoute = {
   OfferById: (id: string) => `/offer/${id}`,
   Favorites: '/favorites',
 };
+
+export enum AuthorizationStatus {
+  Auth = 'AUTH',
+  NoAuth = 'NO_AUTH',
+  Unknown = 'UNKNOWN',
+}
