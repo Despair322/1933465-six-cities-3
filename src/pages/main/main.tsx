@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
-import Header from '../../components/shared/header';
 import Card from './components/card';
+import { Fragment } from 'react';
 
 type MainProps = {
   cardsCount: number;
@@ -8,13 +8,11 @@ type MainProps = {
 
 function Main({ cardsCount }: MainProps): JSX.Element {
   return (
-    <div className="page page--gray page--main">
+    <Fragment>
 
       <Helmet>
         <title>6 Cities</title>
       </Helmet>
-
-      <Header />
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
@@ -85,7 +83,7 @@ function Main({ cardsCount }: MainProps): JSX.Element {
           </div>
         </div>
       </main>
-    </div>
+    </Fragment>
   );
 }
 
