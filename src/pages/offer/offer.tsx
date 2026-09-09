@@ -1,6 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import Feature from './components/feature';
 import { Fragment } from 'react';
+import type { Offer } from '../../types/offer';
+import { useParams } from 'react-router-dom';
+import NotFound from '../not-found/not-found';
 
 const FEATURES = [
   'Wi-Fi',
@@ -15,7 +18,18 @@ const FEATURES = [
   'Fridge'
 ];
 
-function Offer(): JSX.Element {
+type OfferProps = {
+  offers: Offer[];
+};
+
+function Offer({ offers }: OfferProps): JSX.Element {
+  const { id } = useParams<{ id: string }>();
+  const offer = offers.find((item) => item.id === id);
+
+  if (!offer) {
+    return <NotFound />;
+  }
+
   return (
     <Fragment>
 

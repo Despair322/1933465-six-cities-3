@@ -1,6 +1,6 @@
 import Main from '../pages/main/main';
 import Favorites from '../pages/favorites/favorites';
-import Offer from '../pages/offer/offer';
+import OfferPage from '../pages/offer/offer';
 import NotFound from '../pages/not-found/not-found';
 import Login from '../pages/login/login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -8,12 +8,14 @@ import { AppRoute, AuthorizationStatus } from '../const';
 import PrivateRoute from './private-route';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './layout';
+import type { Offer } from '../types/offer';
 
 type AppProps = {
-  cardsCount: number;
+  offers: Offer[];
+  favorites: Offer[];
 };
 
-function App({ cardsCount }: AppProps): JSX.Element {
+function App({ offers, favorites }: AppProps): JSX.Element {
   return (
     <HelmetProvider>
       <BrowserRouter>
@@ -21,7 +23,7 @@ function App({ cardsCount }: AppProps): JSX.Element {
           <Route path={AppRoute.Main} element={<Layout />}>
             <Route
               index
-              element={<Main cardsCount={cardsCount} />}
+              element={<Main offers={offers} />}
             />
             <Route
               path={AppRoute.Login}
@@ -29,7 +31,7 @@ function App({ cardsCount }: AppProps): JSX.Element {
             />
             <Route
               path={AppRoute.Offer}
-              element={<Offer />}
+              element={<OfferPage offers={offers} />}
             />
             <Route
               path={AppRoute.Favorites}
@@ -37,7 +39,7 @@ function App({ cardsCount }: AppProps): JSX.Element {
                 <PrivateRoute
                   authorizationStatus={AuthorizationStatus.NoAuth}
                 >
-                  <Favorites />
+                  <Favorites favorites={favorites} />
                 </PrivateRoute>
               }
             />

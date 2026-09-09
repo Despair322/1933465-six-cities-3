@@ -1,7 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 import { Fragment } from 'react';
+import type { Offer } from '../../types/offer';
 
-function Favorites(): JSX.Element {
+type FavoritesProps = {
+  favorites: Offer[];
+};
+
+function Favorites({ favorites: _favorites }: FavoritesProps): JSX.Element {
   return (
     <Fragment>
       <Helmet>

@@ -1,12 +1,14 @@
 import { Helmet } from 'react-helmet-async';
 import Card from './components/card';
 import { Fragment } from 'react';
+import { Offer } from '../../types/offer';
 
 type MainProps = {
-  cardsCount: number;
+  offers: Offer[];
 };
 
-function Main({ cardsCount }: MainProps): JSX.Element {
+
+function Main({ offers }: MainProps): JSX.Element {
   return (
     <Fragment>
 
@@ -72,8 +74,8 @@ function Main({ cardsCount }: MainProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                {Array.from({ length: cardsCount }, (_, index) => (
-                  <Card key={index} />
+                {offers && offers.length > 0 && offers.map((offer) => (
+                  <Card key={offer.id} offer={offer} />
                 ))}
               </div>
             </section>
