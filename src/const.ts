@@ -22,8 +22,18 @@ export const PageClassesMap: Partial<Record<StringRouteKeys, readonly string[] |
   [AppRoute.Login]: ['page--gray', 'page--login'],
 };
 
+export const CityNames = [
+  'Paris',
+  'Cologne',
+  'Brussels',
+  'Amsterdam',
+  'Hamburg',
+  'Dusseldorf'
+] as const;
+
 export enum AuthorizationStatus {
   Auth = 'AUTH',
   NoAuth = 'NO_AUTH',
   Unknown = 'UNKNOWN',
 }
+
