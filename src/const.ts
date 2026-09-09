@@ -4,6 +4,7 @@ export const Setting = {
 
 export const AppRoute = {
   Main: '/',
+  CityByName: (city: string) => `/?city=${encodeURIComponent(city)}`,
   Login: '/login',
   Offer: '/offer/:id',
   OfferById: (id: string) => `/offer/${id}`,
@@ -30,6 +31,8 @@ export const CityNames = [
   'Hamburg',
   'Dusseldorf'
 ] as const;
+
+export type CityName = (typeof CityNames)[number];
 
 export enum AuthorizationStatus {
   Auth = 'AUTH',

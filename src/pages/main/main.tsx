@@ -1,7 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 import Card from './components/card';
 import { Fragment } from 'react';
-import { Offer } from '../../types/offer';
+import type { Offer } from '../../types/offer';
+import { useSearchParams } from 'react-router-dom';
+import { CityName, CityNames } from '../../const';
+import LocationItem from './components/location-item';
 
 type MainProps = {
   offers: Offer[];
@@ -9,6 +12,13 @@ type MainProps = {
 
 
 function Main({ offers }: MainProps): JSX.Element {
+  const [searchParams] = useSearchParams();
+  const cityParam = searchParams.get('city');
+  const activeCity: CityName = CityNames.includes(cityParam as CityName)
+    ? cityParam as CityName
+    : 'Amsterdam';
+  const cityOffers = offers.filter((offer) => offer.city.name === activeCity);
+
   return (
     <Fragment>
 
@@ -20,36 +30,9 @@ function Main({ offers }: MainProps): JSX.Element {
         <div className="tabs">
           <section className="locations container">
             <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
+              {CityNames.map((city) => (
+                <LocationItem key={city} city={city} isActive={city === activeCity} />
+              ))}
             </ul>
           </section>
         </div>
@@ -57,7 +40,7 @@ function Main({ offers }: MainProps): JSX.Element {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">312 places to stay in Amsterdam</b>
+              <b className="places__found">{cityOffers.length} places to stay in {activeCity}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -74,7 +57,7 @@ function Main({ offers }: MainProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                {offers && offers.length > 0 && offers.map((offer) => (
+                {cityOffers.length > 0 && cityOffers.map((offer) => (
                   <Card key={offer.id} offer={offer} />
                 ))}
               </div>
