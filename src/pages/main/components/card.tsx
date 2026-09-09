@@ -5,14 +5,15 @@ import type { Offer } from '../../../types/offer';
 
 type CardProps = {
   offer: Offer;
+  onHover?: (offerId: string | null) => void;
 };
 
-function Card({ offer }: CardProps): JSX.Element {
+function Card({ offer, onHover }: CardProps): JSX.Element {
   const { id, isPremium, previewImage, price, isFavorite, rating, title, type } = offer;
   const offerPath = AppRoute.OfferById(id);
 
   return (
-    <article className="cities__card place-card">
+    <article className="cities__card place-card" onMouseEnter={() => onHover?.(id)}>
       {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import Card from './components/card';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import type { Offer } from '../../types/offer';
 import { useSearchParams } from 'react-router-dom';
 import { CityName, CityNames } from '../../const';
@@ -18,6 +18,13 @@ function Main({ offers }: MainProps): JSX.Element {
     ? cityParam as CityName
     : 'Amsterdam';
   const cityOffers = offers.filter((offer) => offer.city.name === activeCity);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
+
+  function handleOfferHover(offerId: string | null) {
+    setActiveOfferId(offerId);
+  }
 
   return (
     <Fragment>
@@ -58,7 +65,7 @@ function Main({ offers }: MainProps): JSX.Element {
               </form>
               <div className="cities__places-list places__list tabs__content">
                 {cityOffers.length > 0 && cityOffers.map((offer) => (
-                  <Card key={offer.id} offer={offer} />
+                  <Card key={offer.id} offer={offer} onHover={handleOfferHover} />
                 ))}
               </div>
             </section>
