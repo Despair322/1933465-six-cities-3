@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { AppRoute } from '../../../const';
 import type { Offer } from '../../../types/offer';
+import { transformRatingToPercent } from '../../../utils/common';
 
 type CardProps = {
   offer: Offer;
@@ -44,7 +45,7 @@ function Card({ offer, onHover }: CardProps): JSX.Element {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${rating * 20}%` }}></span>
+            <span style={{ width: `${transformRatingToPercent(rating)}%` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
