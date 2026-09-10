@@ -31,7 +31,7 @@ function App({ offers, favorites }: AppProps): JSX.Element {
             />
             <Route
               path={AppRoute.Offer}
-              element={<OfferPage offers={offers} />}
+              element={<OfferPage />}
             />
             <Route
               path={AppRoute.Favorites}
