@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { AppRoute, CityName } from '../../../const';
+import { AppRoute } from '../../../const';
+import type { CityName } from '../../../const';
 
 type LocationProps = {
   city: CityName;

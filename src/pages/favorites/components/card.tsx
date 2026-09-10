@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Offer } from '../../../types/offer';
+import type { Offer } from '../../../types/offer';
 import { transformRatingToPercent } from '../../../utils/common';
 
 type CardProps = {

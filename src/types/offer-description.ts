@@ -1,6 +1,6 @@
-import { City, Location } from './offer';
+import type { City, OfferLocation } from './offer';
 
-type host = {
+type Host = {
   isPro: boolean;
   name: string;
   avatarUrl: string;
@@ -14,9 +14,9 @@ export type OfferDescription = {
   price: number;
   images: string[];
   city: City;
-  location: Location;
+  location: OfferLocation;
   goods: string[];
-  host: host;
+  host: Host;
   isFavorite: boolean;
   isPremium: boolean;
   rating: number;

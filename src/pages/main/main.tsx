@@ -3,7 +3,8 @@ import Card from './components/card';
 import { Fragment, useState } from 'react';
 import type { Offer } from '../../types/offer';
 import { useSearchParams } from 'react-router-dom';
-import { CityName, CityNames } from '../../const';
+import { CityNames } from '../../const';
+import type { CityName } from '../../const';
 import LocationItem from './components/location-item';
 
 type MainProps = {

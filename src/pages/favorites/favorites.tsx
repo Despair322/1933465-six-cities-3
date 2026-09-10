@@ -8,8 +8,8 @@ type FavoritesProps = {
   favorites: Offer[];
 };
 
-function Favorites({ favorites: _favorites }: FavoritesProps): JSX.Element {
-  const groupedFavorites = groupFavoritesByCity(_favorites);
+function Favorites({ favorites }: FavoritesProps): JSX.Element {
+  const groupedFavorites = groupFavoritesByCity(favorites);
 
   return (
     <Fragment>

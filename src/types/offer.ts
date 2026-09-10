@@ -1,4 +1,4 @@
-export type Location = {
+export type OfferLocation = {
   latitude: number;
   longitude: number;
   zoom: number;
@@ -6,7 +6,7 @@ export type Location = {
 
 export type City = {
   name: string;
-  location: Location;
+  location: OfferLocation;
 };
 
 export type Offer = {
@@ -16,7 +16,7 @@ export type Offer = {
   price: number;
   previewImage: string;
   city: City;
-  location: Location;
+  location: OfferLocation;
   isFavorite: boolean;
   isPremium: boolean;
   rating: number;
