@@ -2,6 +2,8 @@ export const Setting = {
   CardsCount: 6,
 };
 
+export const numberOfStars = 5;
+
 export const AppRoute = {
   Main: '/',
   CityByName: (city: string) => `/?city=${encodeURIComponent(city)}`,

@@ -1,7 +1,7 @@
-import { AuthorizationStatus } from '../const';
+import { AuthorizationStatus, numberOfStars } from '../const';
 
 function transformRatingToPercent(rating: number): number {
-  return (rating / 5 * 100);
+  return (rating / numberOfStars * 100);
 }
 
 function transformDateToMonthYear(date: string): string {
@@ -12,7 +12,7 @@ function transformDateToMonthYear(date: string): string {
 }
 
 function getAuthorizationStatus(): AuthorizationStatus {
-  return AuthorizationStatus.NoAuth;
+  return AuthorizationStatus.Auth;
 }
 
 export { transformRatingToPercent, transformDateToMonthYear, getAuthorizationStatus };
