@@ -1,21 +1,12 @@
+import { Fragment } from 'react';
 import { Helmet } from 'react-helmet-async';
-import Logo from '../../components/shared/logo';
 
 function LoginScreen(): JSX.Element {
   return (
-    <div className="page page--gray page--login">
-
+    <Fragment>
       <Helmet>
         <title>Login</title>
       </Helmet>
-
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <Logo />
-          </div>
-        </div>
-      </header>
 
       <main className="page__main page__main--login">
         <div className="page__login-container container">
@@ -42,7 +33,7 @@ function LoginScreen(): JSX.Element {
           </section>
         </div>
       </main>
-    </div>
+    </Fragment >
   );
 }
 
