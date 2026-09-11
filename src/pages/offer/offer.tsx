@@ -3,18 +3,15 @@ import { Fragment } from 'react';
 import type { Offer } from '../../types/offer';
 import { offerDescription } from '../../mocks/full-offer';
 import { reviews } from '../../mocks/reviews';
-import Review from './components/review';
 import Image from './components/image';
 import Feature from './components/feature';
 import classNames from 'classnames';
-import { getAuthorizationStatus } from '../../utils/common';
-import { AuthorizationStatus } from '../../const';
 import Form from './components/form';
+import ReviewsList from './components/reviews-list';
 
 function Offer(): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults } = offerDescription;
-  const authorizationStatus = getAuthorizationStatus();
   return (
     <Fragment>
 
@@ -96,12 +93,10 @@ function Offer(): JSX.Element {
                 </div>
               </div>
               <section className="offer__reviews reviews">
-                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">1</span></h2>
+                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews ? reviews.length : 0}</span></h2>
 
-                <ul className="reviews__list">
-                  {reviews && reviews.length > 0 && reviews.map((review) => <Review key={review.id} review={review} />)}
-                </ul>
-                {authorizationStatus === AuthorizationStatus.Auth && <Form />}
+                <ReviewsList reviews={reviews} />
+                <Form />
               </section>
             </div>
           </div>

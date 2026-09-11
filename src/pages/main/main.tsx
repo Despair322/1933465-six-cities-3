@@ -20,8 +20,7 @@ function Main({ offers }: MainProps): JSX.Element {
     : 'Amsterdam';
   const cityOffers = offers.filter((offer) => offer.city.name === activeCity);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
+  const [, setActiveOfferId] = useState<string | null>(null);
 
   function handleOfferHover(offerId: string | null) {
     setActiveOfferId(offerId);

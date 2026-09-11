@@ -1,18 +1,23 @@
 import { useState } from 'react';
-import { numberOfStars } from '../../../const';
+import { AuthorizationStatus, numberOfStars } from '../../../const';
 import Star from './star';
+import { getAuthorizationStatus } from '../../../utils/common';
 
 type FormData = {
   rating: string;
   review: string;
 };
 
-function Form(): JSX.Element {
-
+function Form(): JSX.Element | null {
+  const authorizationStatus = getAuthorizationStatus();
   const [formData, setFormData] = useState<FormData>({
     rating: '',
     review: '',
   });
+
+  if (authorizationStatus !== AuthorizationStatus.Auth) {
+    return null;
+  }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = event.target;
@@ -24,8 +29,6 @@ function Form(): JSX.Element {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // eslint-disable-next-line no-console
-    console.log('Form submitted:', formData);
   }
 
   return (
