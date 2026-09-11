@@ -47,7 +47,8 @@ function Main({ offers }: MainProps): JSX.Element {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{cityOffers.length} places to stay in {activeCity}</b>
+              <b className="places__found">{cityOffers && cityOffers.length} places to stay in {activeCity}</b>
+
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -64,7 +65,7 @@ function Main({ offers }: MainProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                {cityOffers.length > 0 && cityOffers.map((offer) => (
+                {cityOffers && cityOffers.length > 0 && cityOffers.map((offer) => (
                   <Card key={offer.id} offer={offer} onHover={handleOfferHover} />
                 ))}
               </div>

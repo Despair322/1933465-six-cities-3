@@ -22,7 +22,7 @@ function Favorites({ favorites }: FavoritesProps): JSX.Element {
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
               {groupedFavorites.map(({ city, offers }) => (
-                city && offers.length > 0 && (
+                city && offers && offers.length > 0 && (
                   <li className="favorites__locations-items" key={city}>
                     <div className="favorites__locations locations locations--current">
                       <div className="locations__item">
