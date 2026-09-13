@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { AppRoute } from '../../../const';
+import { AppRoute } from '../../../constants/app';
 import type { Offer } from '../../../types/offer';
 import { transformRatingToPercent } from '../../../utils/common';
 

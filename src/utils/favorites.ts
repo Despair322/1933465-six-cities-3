@@ -1,4 +1,4 @@
-import { CityNames } from '../const';
+import { CityNames } from '../constants/cities';
 import type { Offer } from '../types/offer';
 
 export function groupFavoritesByCity(favorites: Offer[]) {

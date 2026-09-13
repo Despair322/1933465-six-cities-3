@@ -1,7 +1,3 @@
-export const Setting = {
-  CardsCount: 6,
-};
-
 export const numberOfStars = 5;
 
 export const AppRoute = {
@@ -25,20 +21,8 @@ export const PageClassesMap: Partial<Record<StringRouteKeys, readonly string[] |
   [AppRoute.Login]: ['page--gray', 'page--login'],
 };
 
-export const CityNames = [
-  'Paris',
-  'Cologne',
-  'Brussels',
-  'Amsterdam',
-  'Hamburg',
-  'Dusseldorf'
-] as const;
-
-export type CityName = (typeof CityNames)[number];
-
 export enum AuthorizationStatus {
   Auth = 'AUTH',
   NoAuth = 'NO_AUTH',
   Unknown = 'UNKNOWN',
 }
-

@@ -4,7 +4,7 @@ import OfferPage from '../pages/offer/offer';
 import NotFound from '../pages/not-found/not-found';
 import Login from '../pages/login/login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AppRoute } from '../const';
+import { AppRoute } from '../constants/app';
 import PrivateRoute from './private-route';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './layout';

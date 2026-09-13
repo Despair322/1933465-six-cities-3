@@ -1,4 +1,4 @@
-import { AuthorizationStatus, numberOfStars } from '../const';
+import { AuthorizationStatus, numberOfStars } from '../constants/app';
 
 function transformRatingToPercent(rating: number): number {
   return (rating / numberOfStars * 100);

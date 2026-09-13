@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AuthorizationStatus, numberOfStars } from '../../../const';
+import { AuthorizationStatus, numberOfStars } from '../../../constants/app';
 import Star from './star';
 import { getAuthorizationStatus } from '../../../utils/common';
 
