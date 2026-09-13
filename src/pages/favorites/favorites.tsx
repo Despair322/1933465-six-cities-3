@@ -3,7 +3,8 @@ import { Fragment } from 'react';
 import type { Offer } from '../../types/offer';
 import Card from '../../components/shared/card';
 import { groupFavoritesByCity } from '../../utils/favorites';
-import { CardVariants } from '../../constants/app';
+import { AppRoute, CardVariants } from '../../constants/app';
+import { Link } from 'react-router-dom';
 
 type FavoritesProps = {
   favorites: Offer[];
@@ -27,9 +28,9 @@ function Favorites({ favorites }: FavoritesProps): JSX.Element {
                   <li className="favorites__locations-items" key={city}>
                     <div className="favorites__locations locations locations--current">
                       <div className="locations__item">
-                        <a className="locations__item-link" href="#">
+                        <Link className="locations__item-link" to={AppRoute.CityByName(city)}>
                           <span>{city}</span>
-                        </a>
+                        </Link>
                       </div>
                     </div>
                     <div className="favorites__places">
