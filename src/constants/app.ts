@@ -33,3 +33,10 @@ export const CardVariants = {
 } as const;
 
 export type CardVariant = (typeof CardVariants)[keyof typeof CardVariants];
+
+export const RatingVariants = {
+  Card: 'card',
+  Offer: 'offer',
+};
+
+export type RatingVariant = (typeof RatingVariants)[keyof typeof RatingVariants];

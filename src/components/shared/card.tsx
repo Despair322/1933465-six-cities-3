@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { AppRoute, CardVariants } from '../../constants/app';
+import { AppRoute, CardVariants, RatingVariants } from '../../constants/app';
 import type { CardVariant } from '../../constants/app';
 import type { Offer } from '../../types/offer';
-import { transformRatingToPercent } from '../../utils/common';
+import Rating from './rating';
 
 type CardProps = {
   offer: Offer;
@@ -60,12 +60,7 @@ function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.E
             <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
           </button>
         </div>
-        <div className="place-card__rating rating">
-          <div className="place-card__stars rating__stars">
-            <span style={{ width: `${transformRatingToPercent(rating)}%` }}></span>
-            <span className="visually-hidden">Rating</span>
-          </div>
-        </div>
+        <Rating rating={rating} variant={RatingVariants.Card} />
         <h2 className="place-card__name">
           <Link to={offerPath}>{title}</Link>
         </h2>

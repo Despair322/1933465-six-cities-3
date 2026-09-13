@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { AuthorizationStatus, numberOfStars } from '../../../constants/app';
+import { numberOfStars } from '../../../constants/app';
 import Star from './star';
-import { getAuthorizationStatus } from '../../../utils/common';
 
 type FormData = {
   rating: string;
@@ -9,15 +8,10 @@ type FormData = {
 };
 
 function Form(): JSX.Element | null {
-  const authorizationStatus = getAuthorizationStatus();
   const [formData, setFormData] = useState<FormData>({
     rating: '',
     review: '',
   });
-
-  if (authorizationStatus !== AuthorizationStatus.Auth) {
-    return null;
-  }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = event.target;

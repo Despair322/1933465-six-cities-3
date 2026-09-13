@@ -4,13 +4,13 @@ import type { Offer } from '../../types/offer';
 import { offerDescription } from '../../mocks/full-offer';
 import { reviews } from '../../mocks/reviews';
 import Image from './components/image';
-import Feature from './components/feature';
 import classNames from 'classnames';
-import Form from './components/form';
-import ReviewsList from './components/reviews-list';
+import Rating from '../../components/shared/rating';
+import { RatingVariants } from '../../constants/app';
+import Features from './components/featiures';
+import Reviews from './components/reviews';
 
 function Offer(): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults } = offerDescription;
   return (
     <Fragment>
@@ -45,13 +45,7 @@ function Offer(): JSX.Element {
                   <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
                 </button>
               </div>
-              <div className="offer__rating rating">
-                <div className="offer__stars rating__stars">
-                  <span style={{ width: `${rating * 20}%` }}></span>
-                  <span className="visually-hidden">Rating</span>
-                </div>
-                <span className="offer__rating-value rating__value">{rating}</span>
-              </div>
+              <Rating rating={rating} variant={RatingVariants.Offer} />
               <ul className="offer__features">
                 <li className="offer__feature offer__feature--entire">
                   {type}
@@ -67,14 +61,7 @@ function Offer(): JSX.Element {
                 <b className="offer__price-value">{price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
-              <div className="offer__inside">
-                <h2 className="offer__inside-title">What&apos;s inside</h2>
-                <ul className="offer__inside-list">
-                  {goods && goods.map((feature) => (
-                    <Feature key={feature} feature={feature} />
-                  ))}
-                </ul>
-              </div>
+              {goods && goods.length > 0 && <Features goods={goods} />}
               <div className="offer__host">
                 <h2 className="offer__host-title">Meet the host</h2>
                 <div className="offer__host-user user">
@@ -92,12 +79,7 @@ function Offer(): JSX.Element {
                   </p>
                 </div>
               </div>
-              <section className="offer__reviews reviews">
-                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews ? reviews.length : 0}</span></h2>
-
-                <ReviewsList reviews={reviews} />
-                <Form />
-              </section>
+              <Reviews reviews={reviews} />
             </div>
           </div>
           <section className="offer__map map"></section>
