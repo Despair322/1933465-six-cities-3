@@ -1,11 +1,18 @@
 import { useState } from 'react';
-import { numberOfStars } from '../../../constants/app';
 import Star from './star';
 
 type FormData = {
   rating: string;
   review: string;
 };
+
+const rating = [
+  { value: 5, title: 'perfect' },
+  { value: 4, title: 'good' },
+  { value: 3, title: 'not bad' },
+  { value: 2, title: 'badly' },
+  { value: 1, title: 'terribly' },
+];
 
 function Form(): JSX.Element | null {
   const [formData, setFormData] = useState<FormData>({
@@ -29,12 +36,9 @@ function Form(): JSX.Element | null {
     <form className="reviews__form form" action="#" method="post" onSubmit={handleSubmit}>
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
-        {Array.from({ length: numberOfStars }, (_, index) => {
-          const starValue = (numberOfStars - index).toString();
-          return (
-            <Star key={starValue} rating={starValue} onChange={handleInputChange} />
-          );
-        })}
+        {rating.map(({ value, title }) =>
+          <Star key={value} rating={value} title={title} onChange={handleInputChange} />
+        )}
       </div>
       <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved" value={formData.review} onChange={handleInputChange}></textarea>
       <div className="reviews__button-wrapper">
