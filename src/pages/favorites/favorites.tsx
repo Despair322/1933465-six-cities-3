@@ -1,8 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import { Fragment } from 'react';
 import type { Offer } from '../../types/offer';
-import Card from './components/card';
+import Card from '../../components/shared/card';
 import { groupFavoritesByCity } from '../../utils/favorites';
+import { CardVariants } from '../../constants/app';
 
 type FavoritesProps = {
   favorites: Offer[];
@@ -33,7 +34,7 @@ function Favorites({ favorites }: FavoritesProps): JSX.Element {
                     </div>
                     <div className="favorites__places">
                       {offers.map((offer) => (
-                        <Card key={offer.id} offer={offer} />
+                        <Card key={offer.id} offer={offer} variant={CardVariants.Favorites} />
                       ))}
                     </div>
                   </li>

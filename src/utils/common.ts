@@ -12,7 +12,7 @@ function transformDateToMonthYear(date: string): string {
 }
 
 function getAuthorizationStatus(): AuthorizationStatus {
-  return AuthorizationStatus.NoAuth;
+  return AuthorizationStatus.Auth;
 }
 
 export { transformRatingToPercent, transformDateToMonthYear, getAuthorizationStatus };

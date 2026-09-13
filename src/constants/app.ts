@@ -26,3 +26,10 @@ export enum AuthorizationStatus {
   NoAuth = 'NO_AUTH',
   Unknown = 'UNKNOWN',
 }
+
+export const CardVariants = {
+  Main: 'main',
+  Favorites: 'favorites',
+} as const;
+
+export type CardVariant = (typeof CardVariants)[keyof typeof CardVariants];
