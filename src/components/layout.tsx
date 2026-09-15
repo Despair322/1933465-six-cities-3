@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import Header from './shared/header';
-import { AppRoute, PageClassesMap } from '../const';
+import { AppRoute, PageClassesMap } from '../constants/app';
 import { getRouteKey } from '../utils/route';
 import Footer from './shared/footer';
 
