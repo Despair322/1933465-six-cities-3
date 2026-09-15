@@ -25,15 +25,7 @@ function Main({ offers }: MainProps): JSX.Element {
   );
 
   const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
-
-  let mapComponent: JSX.Element;
-
-  if (cityOffers.length === 0) {
-    mapComponent = <section className="cities__map map"></section>;
-  } else {
-    const selectedPoint = cityOffers.find((point) => point.id === activeOffer?.id);
-    mapComponent = <CitiesMap city={cityOffers[0].city} points={cityOffers} selectedPoint={selectedPoint} />;
-  }
+  const selectedPoint = cityOffers.find((point) => point.id === activeOffer?.id);
 
   function handleOfferHover(offer: Offer | null) {
     setActiveOffer(offer);
@@ -61,7 +53,15 @@ function Main({ offers }: MainProps): JSX.Element {
               {cityOffers.length > 0 && <PlacesList offers={cityOffers} onHover={handleOfferHover} />}
             </section>
             <div className="cities__right-section">
-              {mapComponent}
+              {cityOffers.length > 0 ? (
+                <CitiesMap
+                  city={cityOffers[0].city}
+                  points={cityOffers}
+                  selectedPoint={selectedPoint}
+                />
+              ) : (
+                <section className="cities__map map"></section>
+              )}
             </div>
           </div>
         </div>
