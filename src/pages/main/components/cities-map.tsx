@@ -1,14 +1,14 @@
 import { useRef, useEffect } from 'react';
-import { Icon, Marker, layerGroup } from 'leaflet';
+import { Icon, Marker, LayerGroup, layerGroup } from 'leaflet';
 import useMap from '../../../hooks/use-map';
-import { City } from '../../../types/offer';
+import type { City, Offer } from '../../../types/offer';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../../constants/app';
 import 'leaflet/dist/leaflet.css';
 
 type MapProps = {
   city: City;
-  points: City[];
-  selectedPoint: City | undefined;
+  points: Offer[];
+  selectedPoint: Offer | undefined;
 }
 
 const defaultCustomIcon = new Icon({
@@ -29,26 +29,47 @@ function CitiesMap(props: MapProps): JSX.Element {
 
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
+  const markerLayerRef = useRef<LayerGroup | null>(null);
+  const markersRef = useRef<Map<string, Marker>>(new Map());
 
   useEffect(() => {
-    if (map) {
-      const markerLayer = layerGroup().addTo(map);
-      points.forEach((point) => {
-        const marker = new Marker({
+    if (!map) {
+      return;
+    }
+    const markerLayer = layerGroup().addTo(map);
+    const markers = markersRef.current;
+    markerLayerRef.current = markerLayer;
+    return () => {
+      map.removeLayer(markerLayer);
+      markerLayerRef.current = null;
+      markers.clear();
+    };
+  }, [map]);
+
+  useEffect(() => {
+    const markerLayer = markerLayerRef.current;
+    if (!markerLayer) {
+      return;
+    }
+
+    points.forEach((point) => {
+      let marker = markersRef.current.get(point.id);
+      if (!marker) {
+        marker = new Marker({
           lat: point.location.latitude,
           lng: point.location.longitude,
         });
-        marker.setIcon(
-          (selectedPoint?.name === point.name)
-          && (selectedPoint?.location.latitude === point.location.latitude) ? currentCustomIcon : defaultCustomIcon
-        )
-          .addTo(markerLayer);
-      });
+        marker.addTo(markerLayer);
 
-      return () => {
-        map.removeLayer(markerLayer);
-      };
-    }
+        markersRef.current.set(point.id, marker);
+      }
+
+      marker.setIcon(
+        (point.id === selectedPoint?.id)
+          ? currentCustomIcon
+          : defaultCustomIcon
+      );
+    });
   }, [map, points, selectedPoint]);
 
   return (

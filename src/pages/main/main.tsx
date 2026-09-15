@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import type { Offer } from '../../types/offer';
 import { useSearchParams } from 'react-router-dom';
 import { CityNames, CityParam, DefaultCity } from '../../constants/cities';
@@ -19,7 +19,10 @@ function Main({ offers }: MainProps): JSX.Element {
   const activeCity: CityName = CityNames.includes(cityParam as CityName)
     ? cityParam as CityName
     : DefaultCity;
-  const cityOffers = offers.filter((offer) => offer.city.name === activeCity);
+  const cityOffers = useMemo(
+    () => offers.filter((offer) => offer.city.name === activeCity),
+    [offers, activeCity]
+  );
 
   const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
 
@@ -28,13 +31,8 @@ function Main({ offers }: MainProps): JSX.Element {
   if (cityOffers.length === 0) {
     mapComponent = <section className="cities__map map"></section>;
   } else {
-    const city = cityOffers[0].city;
-    const points = cityOffers.map(
-      (offer) => ({ name: offer.title, location: { ...offer.location } })
-    );
-    const selectedOffer = cityOffers.find((point) => point.id === activeOffer?.id);
-    const selectedPoint = selectedOffer ? {name: selectedOffer.title, location: { ...selectedOffer.location } } : undefined;
-    mapComponent = <CitiesMap city={city} points={points} selectedPoint={selectedPoint} />;
+    const selectedPoint = cityOffers.find((point) => point.id === activeOffer?.id);
+    mapComponent = <CitiesMap city={cityOffers[0].city} points={cityOffers} selectedPoint={selectedPoint} />;
   }
 
   function handleOfferHover(offer: Offer | null) {
