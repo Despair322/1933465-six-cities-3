@@ -7,7 +7,7 @@ import Rating from './rating';
 
 type CardProps = {
   offer: Offer;
-  onHover?: (offerId: string | null) => void;
+  onHover?: (offerId: Offer | null) => void;
   variant?: CardVariant;
 };
 
@@ -26,7 +26,7 @@ function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.E
         { 'cities__card': isMain },
         { 'favorites__card': isFavorites },
         'place-card')}
-      onMouseEnter={onHover ? () => onHover(id) : undefined}
+      onMouseEnter={onHover ? () => onHover(offer) : undefined}
     >
       {isPremium && (
         <div className="place-card__mark">

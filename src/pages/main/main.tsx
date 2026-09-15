@@ -21,10 +21,24 @@ function Main({ offers }: MainProps): JSX.Element {
     : DefaultCity;
   const cityOffers = offers.filter((offer) => offer.city.name === activeCity);
 
-  const [, setActiveOfferId] = useState<string | null>(null);
+  const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
 
-  function handleOfferHover(offerId: string | null) {
-    setActiveOfferId(offerId);
+  let mapComponent: JSX.Element;
+
+  if (cityOffers.length === 0) {
+    mapComponent = <section className="cities__map map"></section>;
+  } else {
+    const city = cityOffers[0].city;
+    const points = cityOffers.map(
+      (offer) => ({ name: offer.title, location: { ...offer.location } })
+    );
+    const selectedOffer = cityOffers.find((point) => point.id === activeOffer?.id);
+    const selectedPoint = selectedOffer ? {name: selectedOffer.title, location: { ...selectedOffer.location } } : undefined;
+    mapComponent = <CitiesMap city={city} points={points} selectedPoint={selectedPoint} />;
+  }
+
+  function handleOfferHover(offer: Offer | null) {
+    setActiveOffer(offer);
   }
 
   return (
@@ -43,13 +57,13 @@ function Main({ offers }: MainProps): JSX.Element {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{cityOffers.length} places to stay in {activeCity}</b>
+              <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} places to stay in {activeCity}</b>
 
               {cityOffers.length > 0 && <SortForm />}
               {cityOffers.length > 0 && <PlacesList offers={cityOffers} onHover={handleOfferHover} />}
             </section>
             <div className="cities__right-section">
-              <CitiesMap />
+              {mapComponent}
             </div>
           </div>
         </div>

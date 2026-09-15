@@ -92,29 +92,6 @@ export const offers = [
     rating: 4.7
   },
   {
-    id: '10190ef8-4b66-4383-9a2f-3f17748dd2eb',
-    title: 'Nice, cozy, warm big bed apartment',
-    type: 'room',
-    price: 152,
-    previewImage: 'https://15.design.htmlacademy.pro/static/hotel/15.jpg',
-    city: {
-      name: 'Brussels',
-      location: {
-        latitude: 50.846557,
-        longitude: 4.351697,
-        zoom: 13
-      }
-    },
-    location: {
-      latitude: 50.842557,
-      longitude: 4.363696999999999,
-      zoom: 16
-    },
-    isFavorite: false,
-    isPremium: true,
-    rating: 3.8
-  },
-  {
     id: '617a6d64-e793-4b48-8d90-464078acd7e7',
     title: 'Loft Studio in the Central Area',
     type: 'apartment',
