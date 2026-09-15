@@ -1,14 +1,16 @@
 import { useRef, useEffect } from 'react';
 import { Icon, Marker, LayerGroup, layerGroup } from 'leaflet';
-import useMap from '../../../hooks/use-map';
-import type { City, Offer } from '../../../types/offer';
-import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../../constants/app';
+import useMap from '../../hooks/use-map';
+import type { City, Offer } from '../../types/offer';
+import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT, MapVariant, MapVariants } from '../../constants/app';
 import 'leaflet/dist/leaflet.css';
+import classNames from 'classnames';
 
 type MapProps = {
   city: City;
   points: Offer[];
-  selectedPoint: Offer | undefined;
+  selectedPoint?: Offer | undefined;
+  variant?: MapVariant;
 }
 
 const defaultCustomIcon = new Icon({
@@ -25,12 +27,15 @@ const currentCustomIcon = new Icon({
 
 
 function CitiesMap(props: MapProps): JSX.Element {
-  const { city, points, selectedPoint } = props;
+  const { city, points, selectedPoint, variant } = props;
 
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
   const markerLayerRef = useRef<LayerGroup | null>(null);
   const markersRef = useRef<Map<string, Marker>>(new Map());
+
+  const isMain = variant === MapVariants.Main;
+  const isOffer = variant === MapVariants.Offer;
 
   useEffect(() => {
     if (!map) {
@@ -73,7 +78,11 @@ function CitiesMap(props: MapProps): JSX.Element {
   }, [map, points, selectedPoint]);
 
   return (
-    <section className="cities__map map" ref={mapRef}></section>
+    <section className={classNames(
+      { 'cities__map': isMain },
+      { 'offer__map': isOffer }, 'map')} ref={mapRef}
+    >
+    </section>
   );
 }
 

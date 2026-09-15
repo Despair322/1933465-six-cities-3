@@ -30,6 +30,7 @@ export enum AuthorizationStatus {
 export const CardVariants = {
   Main: 'main',
   Favorites: 'favorites',
+  Near: 'near',
 } as const;
 
 export type CardVariant = (typeof CardVariants)[keyof typeof CardVariants];
@@ -46,3 +47,10 @@ export const URL_MARKER_DEFAULT =
 
 export const URL_MARKER_CURRENT =
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
+
+export const MapVariants = {
+  Main: 'main',
+  Offer: 'offer',
+};
+
+export type MapVariant = (typeof MapVariants)[keyof typeof MapVariants];

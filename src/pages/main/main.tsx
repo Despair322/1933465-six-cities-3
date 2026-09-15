@@ -6,8 +6,9 @@ import { CityNames, CityParam, DefaultCity } from '../../constants/cities';
 import type { CityName } from '../../constants/cities';
 import PlacesList from './components/places-list';
 import LocationsList from './components/locations-list';
-import CitiesMap from './components/cities-map';
+import CitiesMap from '../../components/shared/cities-map';
 import SortForm from './components/sort-form';
+import { MapVariants } from '../../constants/app';
 
 type MainProps = {
   offers: Offer[];
@@ -58,6 +59,7 @@ function Main({ offers }: MainProps): JSX.Element {
                   city={cityOffers[0].city}
                   points={cityOffers}
                   selectedPoint={selectedPoint}
+                  variant={MapVariants.Main}
                 />
               ) : (
                 <section className="cities__map map"></section>

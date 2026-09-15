@@ -16,6 +16,7 @@ function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.E
   const offerPath = AppRoute.OfferById(id);
 
   const isMain = variant === CardVariants.Main;
+  const isNear = variant === CardVariants.Near;
   const isFavorites = variant === CardVariants.Favorites;
   const imageWidth = isFavorites ? 150 : 260;
   const imageHeight = isFavorites ? 110 : 200;
@@ -25,6 +26,7 @@ function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.E
       className={classNames(
         { 'cities__card': isMain },
         { 'favorites__card': isFavorites },
+        { 'near-places__card': isNear },
         'place-card')}
       onMouseEnter={onHover ? () => onHover(offer) : undefined}
     >
@@ -36,13 +38,17 @@ function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.E
       <div className={classNames(
         { 'cities__image-wrapper': isMain },
         { 'favorites__image-wrapper': isFavorites },
+        { 'near-places__image-wrapper': isNear },
         'place-card__image-wrapper')}
       >
         <Link to={offerPath}>
           <img className="place-card__image" src={previewImage} width={imageWidth} height={imageHeight} alt="Place image" />
         </Link>
       </div>
-      <div className={classNames({ 'favorites__card-info': isFavorites }, 'place-card__info')}>
+      <div className={classNames(
+        { 'favorites__card-info': isFavorites },
+        'place-card__info')}
+      >
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>
