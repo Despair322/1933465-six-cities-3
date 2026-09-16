@@ -1,28 +1,28 @@
 import { useRef, useEffect } from 'react';
 import { Icon, Marker, LayerGroup, layerGroup } from 'leaflet';
 import useMap from '../../hooks/use-map';
-import type { City, Offer } from '../../types/offer';
-import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT, MapVariants } from '../../constants/app';
-import type { MapVariant } from '../../types/types';
+import type { City } from '../../types/offer';
+import { MapVariants } from '../../constants/app';
+import type { MapVariant, Point } from '../../types/types';
 import 'leaflet/dist/leaflet.css';
 import classNames from 'classnames';
 
 type MapProps = {
   city: City;
-  points: Offer[];
-  selectedPoint?: Offer | undefined;
+  points: Point[];
+  selectedPoint?: string | undefined | null;
   variant?: MapVariant;
 }
 
 const defaultCustomIcon = new Icon({
-  iconUrl: URL_MARKER_DEFAULT,
-  iconSize: [40, 40],
+  iconUrl: 'img/pin.svg',
+  iconSize: [27, 39],
   iconAnchor: [20, 40]
 });
 
 const currentCustomIcon = new Icon({
-  iconUrl: URL_MARKER_CURRENT,
-  iconSize: [40, 40],
+  iconUrl: 'img/pin-active.svg',
+  iconSize: [27, 39],
   iconAnchor: [20, 40]
 });
 
@@ -71,7 +71,7 @@ function CitiesMap(props: MapProps): JSX.Element {
       }
 
       marker.setIcon(
-        (point.id === selectedPoint?.id)
+        (selectedPoint && point.id === selectedPoint)
           ? currentCustomIcon
           : defaultCustomIcon
       );

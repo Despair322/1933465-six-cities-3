@@ -9,6 +9,7 @@ import LocationsList from './components/locations-list';
 import CitiesMap from '../../components/shared/cities-map';
 import SortForm from './components/sort-form';
 import { MapVariants } from '../../constants/app';
+import { mapToPoint } from '../../utils/common';
 
 type MainProps = {
   offers: Offer[];
@@ -25,11 +26,13 @@ function Main({ offers }: MainProps): JSX.Element {
     [offers, activeCity]
   );
 
-  const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
-  const selectedPoint = cityOffers.find((point) => point.id === activeOffer?.id);
+  const points = mapToPoint(cityOffers);
 
-  function handleOfferHover(offer: Offer | null) {
-    setActiveOffer(offer);
+  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
+  // const selectedPoint = cityOffers.find((point) => point.id === activeOfferId);
+
+  function handleOfferHover(id: string | null) {
+    setActiveOfferId(id);
   }
 
   return (
@@ -57,8 +60,8 @@ function Main({ offers }: MainProps): JSX.Element {
               {cityOffers.length > 0 ? (
                 <CitiesMap
                   city={cityOffers[0].city}
-                  points={cityOffers}
-                  selectedPoint={selectedPoint}
+                  points={points}
+                  selectedPoint={activeOfferId}
                   variant={MapVariants.Main}
                 />
               ) : (

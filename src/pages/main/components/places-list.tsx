@@ -4,7 +4,7 @@ import { CardVariants } from '../../../constants/app';
 
 type PlacesListProps = {
   offers: Offer[];
-  onHover?: (offerId: Offer | null) => void;
+  onHover?: (offerId: string | null) => void;
 }
 
 function PlacesList({ offers, onHover }: PlacesListProps): JSX.Element {

@@ -12,10 +12,14 @@ import Features from './components/featiures';
 import Reviews from './components/reviews';
 import Card from '../../components/shared/card';
 import CitiesMap from '../../components/shared/cities-map';
+import { mapToPoint } from '../../utils/common';
 
 function Offer(): JSX.Element {
-  const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city } = offerDescription;
+  const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city, id } = offerDescription;
   const nearOffers = offers.slice(5, 8);
+  const activePoint = mapToPoint(offerDescription);
+  const nearPoints = mapToPoint(nearOffers);
+  const allPoints = [...nearPoints, activePoint];
 
   return (
     <Fragment>
@@ -87,7 +91,7 @@ function Offer(): JSX.Element {
               <Reviews reviews={reviews} />
             </div>
           </div>
-          <CitiesMap city={city} points={nearOffers} variant={MapVariants.Offer} />
+          <CitiesMap city={city} points={allPoints} variant={MapVariants.Offer} selectedPoint={id} />
         </section>
         <div className="container">
           <section className="near-places places">
