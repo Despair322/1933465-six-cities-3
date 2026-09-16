@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { AppRoute, CardVariants, RatingVariants } from '../../constants/app';
-import type { CardVariant } from '../../constants/app';
+import type { CardVariant } from '../../types/types';
 import type { Offer } from '../../types/offer';
 import Rating from './rating';
 

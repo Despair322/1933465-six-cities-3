@@ -1,3 +1,6 @@
+import { StringRouteKeys } from '../types/types';
+
+
 export const numberOfStars = 5;
 
 export const AppRoute = {
@@ -8,13 +11,6 @@ export const AppRoute = {
   OfferById: (id: string) => `/offer/${id}`,
   Favorites: '/favorites',
 } as const;
-
-export type StringRouteValues = Extract<
-  (typeof AppRoute)[keyof typeof AppRoute],
-  string
->;
-
-export type StringRouteKeys = StringRouteValues | '*';
 
 export const PageClassesMap: Partial<Record<StringRouteKeys, readonly string[] | string>> = {
   [AppRoute.Main]: ['page--gray', 'page--main'],
@@ -33,14 +29,11 @@ export const CardVariants = {
   Near: 'near',
 } as const;
 
-export type CardVariant = (typeof CardVariants)[keyof typeof CardVariants];
 
 export const RatingVariants = {
   Card: 'card',
   Offer: 'offer',
 };
-
-export type RatingVariant = (typeof RatingVariants)[keyof typeof RatingVariants];
 
 export const URL_MARKER_DEFAULT =
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg';
@@ -53,4 +46,3 @@ export const MapVariants = {
   Offer: 'offer',
 };
 
-export type MapVariant = (typeof MapVariants)[keyof typeof MapVariants];
