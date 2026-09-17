@@ -1,6 +1,4 @@
 import { AppRoute, CardVariants, MapVariants, RatingVariants } from '../constants/app';
-import { OfferLocation } from './offer';
-
 
 export type StringRouteValues = Extract<
   (typeof AppRoute)[keyof typeof AppRoute],
@@ -17,5 +15,8 @@ export type MapVariant = (typeof MapVariants)[keyof typeof MapVariants];
 
 export type Point = {
   id: string;
-  location: OfferLocation;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
 }

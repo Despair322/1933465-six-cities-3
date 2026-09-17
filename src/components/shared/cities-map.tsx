@@ -82,8 +82,7 @@ function CitiesMap(props: MapProps): JSX.Element {
     <section className={classNames(
       { 'cities__map': isMain },
       { 'offer__map': isOffer }, 'map')} ref={mapRef}
-    >
-    </section>
+    />
   );
 }
 

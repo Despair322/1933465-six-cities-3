@@ -22,7 +22,10 @@ export function mapToPoint<T extends Point>(input: T): Point;
 export function mapToPoint<T extends Point>(input: T | T[]): Point | Point[] {
   const toPoint = (item: T) : Point => ({
     id: item.id,
-    location: item.location,
+    location: {
+      latitude: item.location.latitude,
+      longitude: item.location.longitude
+    },
   });
 
   return Array.isArray(input) ? input.map(toPoint) : toPoint(input);

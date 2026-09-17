@@ -29,7 +29,6 @@ function Main({ offers }: MainProps): JSX.Element {
   const points = mapToPoint(cityOffers);
 
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
-  // const selectedPoint = cityOffers.find((point) => point.id === activeOfferId);
 
   function handleOfferHover(id: string | null) {
     setActiveOfferId(id);
@@ -65,7 +64,7 @@ function Main({ offers }: MainProps): JSX.Element {
                   variant={MapVariants.Main}
                 />
               ) : (
-                <section className="cities__map map"></section>
+                <section className="cities__map map"/>
               )}
             </div>
           </div>
