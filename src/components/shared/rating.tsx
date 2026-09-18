@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import type { RatingVariant } from '../../constants/app';
+import type { RatingVariant } from '../../types/types';
 import { RatingVariants } from '../../constants/app';
 import { transformRatingToPercent } from '../../utils/common';
 

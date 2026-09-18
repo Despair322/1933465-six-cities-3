@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment } from 'react';
+import { Fragment, Suspense } from 'react';
 import type { Offer } from '../../types/offer';
 import { offerDescription } from '../../mocks/full-offer';
 import { offers } from '../../mocks/offers';
@@ -11,11 +11,15 @@ import { CardVariants, MapVariants, RatingVariants } from '../../constants/app';
 import Features from './components/featiures';
 import Reviews from './components/reviews';
 import Card from '../../components/shared/card';
-import CitiesMap from '../../components/shared/cities-map';
+import CitiesMap from '../../components/shared/lazy-cities-map';
+import { mapToPoint } from '../../utils/common';
 
 function Offer(): JSX.Element {
-  const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city } = offerDescription;
+  const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city, id } = offerDescription;
   const nearOffers = offers.slice(5, 8);
+  const activePoint = mapToPoint(offerDescription);
+  const nearPoints = mapToPoint(nearOffers);
+  const allPoints = [...nearPoints, activePoint];
 
   return (
     <Fragment>
@@ -87,13 +91,15 @@ function Offer(): JSX.Element {
               <Reviews reviews={reviews} />
             </div>
           </div>
-          <CitiesMap city={city} points={nearOffers} variant={MapVariants.Offer} />
+          <Suspense fallback={<section className="offer__map map" />}>
+            <CitiesMap city={city} points={allPoints} variant={MapVariants.Offer} selectedPoint={id} />
+          </Suspense>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              {nearOffers.map((offer) =>
+              {nearOffers && nearOffers.map((offer) =>
                 <Card key={offer.id} offer={offer} variant={CardVariants.Near} />)}
             </div>
           </section>

@@ -1,14 +1,15 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, Suspense, useMemo, useState } from 'react';
 import type { Offer } from '../../types/offer';
 import { useSearchParams } from 'react-router-dom';
 import { CityNames, CityParam, DefaultCity } from '../../constants/cities';
 import type { CityName } from '../../constants/cities';
 import PlacesList from './components/places-list';
 import LocationsList from './components/locations-list';
-import CitiesMap from '../../components/shared/cities-map';
+import CitiesMap from '../../components/shared/lazy-cities-map';
 import SortForm from './components/sort-form';
 import { MapVariants } from '../../constants/app';
+import { mapToPoint } from '../../utils/common';
 
 type MainProps = {
   offers: Offer[];
@@ -25,11 +26,12 @@ function Main({ offers }: MainProps): JSX.Element {
     [offers, activeCity]
   );
 
-  const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
-  const selectedPoint = cityOffers.find((point) => point.id === activeOffer?.id);
+  const points = mapToPoint(cityOffers);
 
-  function handleOfferHover(offer: Offer | null) {
-    setActiveOffer(offer);
+  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
+
+  function handleOfferHover(id: string | null) {
+    setActiveOfferId(id);
   }
 
   return (
@@ -55,14 +57,16 @@ function Main({ offers }: MainProps): JSX.Element {
             </section>
             <div className="cities__right-section">
               {cityOffers.length > 0 ? (
-                <CitiesMap
-                  city={cityOffers[0].city}
-                  points={cityOffers}
-                  selectedPoint={selectedPoint}
-                  variant={MapVariants.Main}
-                />
+                <Suspense fallback={<section className="cities__map map" />}>
+                  <CitiesMap
+                    city={cityOffers[0].city}
+                    points={points}
+                    selectedPoint={activeOfferId}
+                    variant={MapVariants.Main}
+                  />
+                </Suspense>
               ) : (
-                <section className="cities__map map"></section>
+                <section className="cities__map map"/>
               )}
             </div>
           </div>

@@ -1,33 +1,35 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Icon, Marker, LayerGroup, layerGroup } from 'leaflet';
 import useMap from '../../hooks/use-map';
-import type { City, Offer } from '../../types/offer';
-import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT, MapVariant, MapVariants } from '../../constants/app';
+import type { City } from '../../types/offer';
+import { MapVariants } from '../../constants/app';
+import type { MapVariant, Point } from '../../types/types';
 import 'leaflet/dist/leaflet.css';
 import classNames from 'classnames';
 
 type MapProps = {
   city: City;
-  points: Offer[];
-  selectedPoint?: Offer | undefined;
+  points: Point[];
+  selectedPoint?: string | undefined | null;
   variant?: MapVariant;
 }
 
 const defaultCustomIcon = new Icon({
-  iconUrl: URL_MARKER_DEFAULT,
-  iconSize: [40, 40],
+  iconUrl: `${import.meta.env.BASE_URL}img/pin.svg`,
+  iconSize: [27, 39],
   iconAnchor: [20, 40]
 });
 
 const currentCustomIcon = new Icon({
-  iconUrl: URL_MARKER_CURRENT,
-  iconSize: [40, 40],
+  iconUrl: `${import.meta.env.BASE_URL}img/pin-active.svg`,
+  iconSize: [27, 39],
   iconAnchor: [20, 40]
 });
 
 
 function CitiesMap(props: MapProps): JSX.Element {
   const { city, points, selectedPoint, variant } = props;
+  const [isMapInteractive, setIsMapInteractive] = useState(variant !== MapVariants.Offer);
 
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
@@ -52,6 +54,33 @@ function CitiesMap(props: MapProps): JSX.Element {
   }, [map]);
 
   useEffect(() => {
+    if (!map || !isOffer) {
+      return;
+    }
+
+    const interactionHandlers = [
+      map.dragging,
+      map.touchZoom,
+      map.doubleClickZoom,
+      map.scrollWheelZoom,
+      map.boxZoom,
+      map.keyboard,
+    ];
+
+    interactionHandlers.forEach((handler) => {
+      if (isMapInteractive) {
+        handler.enable();
+      } else {
+        handler.disable();
+      }
+    });
+
+    return () => {
+      interactionHandlers.forEach((handler) => handler.enable());
+    };
+  }, [map, isMapInteractive, isOffer]);
+
+  useEffect(() => {
     const markerLayer = markerLayerRef.current;
     if (!markerLayer) {
       return;
@@ -70,18 +99,47 @@ function CitiesMap(props: MapProps): JSX.Element {
       }
 
       marker.setIcon(
-        (point.id === selectedPoint?.id)
+        (selectedPoint && point.id === selectedPoint)
           ? currentCustomIcon
           : defaultCustomIcon
       );
     });
   }, [map, points, selectedPoint]);
 
+  function handleMapUnlock() {
+    setIsMapInteractive(true);
+  }
+
+  function handleMapUnlockKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleMapUnlock();
+    }
+  }
+
   return (
-    <section className={classNames(
-      { 'cities__map': isMain },
-      { 'offer__map': isOffer }, 'map')} ref={mapRef}
+    <section
+      className={classNames(
+        { 'cities__map': isMain },
+        { 'offer__map': isOffer }, 'map')}
+      ref={mapRef}
+      style={isOffer ? { position: 'relative' } : undefined}
     >
+      {isOffer && !isMapInteractive && (
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label="Enable map interaction"
+          onClick={handleMapUnlock}
+          onKeyDown={handleMapUnlockKeyDown}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1000,
+            cursor: 'pointer',
+          }}
+        />
+      )}
     </section>
   );
 }

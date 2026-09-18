@@ -1,4 +1,5 @@
 import { AuthorizationStatus, numberOfStars } from '../constants/app';
+import { Point } from '../types/types';
 
 function transformRatingToPercent(rating: number): number {
   return (rating / numberOfStars * 100);
@@ -13,6 +14,21 @@ function transformDateToMonthYear(date: string): string {
 
 function getAuthorizationStatus(): AuthorizationStatus {
   return AuthorizationStatus.Auth;
+}
+
+export function mapToPoint<T extends Point>(input: T[]): Point[];
+export function mapToPoint<T extends Point>(input: T): Point;
+
+export function mapToPoint<T extends Point>(input: T | T[]): Point | Point[] {
+  const toPoint = (item: T) : Point => ({
+    id: item.id,
+    location: {
+      latitude: item.location.latitude,
+      longitude: item.location.longitude
+    },
+  });
+
+  return Array.isArray(input) ? input.map(toPoint) : toPoint(input);
 }
 
 export { transformRatingToPercent, transformDateToMonthYear, getAuthorizationStatus };
