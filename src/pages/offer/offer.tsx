@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment } from 'react';
+import { Fragment, Suspense } from 'react';
 import type { Offer } from '../../types/offer';
 import { offerDescription } from '../../mocks/full-offer';
 import { offers } from '../../mocks/offers';
@@ -11,7 +11,7 @@ import { CardVariants, MapVariants, RatingVariants } from '../../constants/app';
 import Features from './components/featiures';
 import Reviews from './components/reviews';
 import Card from '../../components/shared/card';
-import CitiesMap from '../../components/shared/cities-map';
+import CitiesMap from '../../components/shared/lazy-cities-map';
 import { mapToPoint } from '../../utils/common';
 
 function Offer(): JSX.Element {
@@ -91,7 +91,9 @@ function Offer(): JSX.Element {
               <Reviews reviews={reviews} />
             </div>
           </div>
-          <CitiesMap city={city} points={allPoints} variant={MapVariants.Offer} selectedPoint={id} />
+          <Suspense fallback={<section className="offer__map map" />}>
+            <CitiesMap city={city} points={allPoints} variant={MapVariants.Offer} selectedPoint={id} />
+          </Suspense>
         </section>
         <div className="container">
           <section className="near-places places">

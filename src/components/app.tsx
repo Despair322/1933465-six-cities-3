@@ -1,14 +1,16 @@
-import Main from '../pages/main/main';
-import Favorites from '../pages/favorites/favorites';
-import OfferPage from '../pages/offer/offer';
-import NotFound from '../pages/not-found/not-found';
-import Login from '../pages/login/login';
+import { lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AppRoute } from '../constants/app';
 import PrivateRoute from './private-route';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './layout';
 import type { Offer } from '../types/offer';
+
+const Main = lazy(() => import('../pages/main/main'));
+const Favorites = lazy(() => import('../pages/favorites/favorites'));
+const OfferPage = lazy(() => import('../pages/offer/offer'));
+const NotFound = lazy(() => import('../pages/not-found/not-found'));
+const Login = lazy(() => import('../pages/login/login'));
 
 type AppProps = {
   offers: Offer[];
