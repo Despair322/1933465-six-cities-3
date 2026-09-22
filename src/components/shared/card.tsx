@@ -1,15 +1,8 @@
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { AppRoute, CardVariants, RatingVariants } from '../../constants/app';
-import type { CardVariant } from '../../types/types';
-import type { Offer } from '../../types/offer';
+import type { CardProps } from '../../types/components';
 import Rating from './rating';
-
-type CardProps = {
-  offer: Offer;
-  onHover?: (offerId: string| null) => void;
-  variant?: CardVariant;
-};
 
 function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.Element {
   const { id, isPremium, previewImage, price, isFavorite, rating, title, type } = offer;

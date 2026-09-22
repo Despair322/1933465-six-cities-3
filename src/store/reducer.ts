@@ -1,11 +1,22 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { changeCity } from './action';
+import { changeCity, changeSortType, resetCity, resetSortType } from './action';
 import { DefaultCity } from '../constants/cities';
-import type { CityName } from '../types/types';
+import type { CityName, SortType } from '../types/types';
 
-const initialState: CityName = DefaultCity;
+const initialState: { city: CityName; sortType: SortType } = { city: DefaultCity, sortType: 'popular' };
 
-export const reducer = createReducer<CityName>(initialState, (builder) =>
+export const reducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(changeCity, (_state, action) => action.payload)
+    .addCase(changeCity, (state, action) => {
+      state.city = action.payload;
+    })
+    .addCase(changeSortType, (state, action) => {
+      state.sortType = action.payload;
+    })
+    .addCase(resetCity, (state) => {
+      state.city = DefaultCity;
+    })
+    .addCase(resetSortType, (state) => {
+      state.sortType = 'popular';
+    })
 );

@@ -1,5 +1,6 @@
 import { AppRoute, CardVariants, MapVariants, RatingVariants } from '../constants/app';
 import { CityNames } from '../constants/cities';
+import { SORT_OPTIONS } from '../constants/app';
 
 export type StringRouteValues = Extract<
   (typeof AppRoute)[keyof typeof AppRoute],
@@ -23,3 +24,5 @@ export type Point = {
 }
 
 export type CityName = (typeof CityNames)[number];
+
+export type SortType = typeof SORT_OPTIONS[number]['value'];

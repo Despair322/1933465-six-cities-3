@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import Star from './star';
-
-type FormData = {
-  rating: string;
-  review: string;
-};
+import type { FormData } from '../../../types/form';
 
 const rating = [
   { value: 5, title: 'perfect' },

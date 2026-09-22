@@ -1,6 +1,4 @@
-type FeatureProps = {
-  goods: string[];
-}
+import type { FeatureProps } from '../../../types/components';
 
 function Features({ goods }: FeatureProps): JSX.Element {
   return (

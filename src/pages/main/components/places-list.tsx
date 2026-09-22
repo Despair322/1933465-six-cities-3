@@ -1,11 +1,6 @@
-import { Offer } from '../../../types/offer';
 import Card from '../../../components/shared/card';
 import { CardVariants } from '../../../constants/app';
-
-type PlacesListProps = {
-  offers: Offer[];
-  onHover?: (offerId: string | null) => void;
-}
+import type { PlacesListProps } from '../../../types/components';
 
 function PlacesList({ offers, onHover }: PlacesListProps): JSX.Element {
   return (
