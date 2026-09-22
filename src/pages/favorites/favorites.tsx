@@ -1,14 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 import { Fragment } from 'react';
-import type { Offer } from '../../types/offer';
+import type { FavoritesProps } from '../../types/pages';
 import Card from '../../components/shared/card';
 import { groupFavoritesByCity } from '../../utils/favorites';
 import { AppRoute, CardVariants } from '../../constants/app';
 import { Link } from 'react-router-dom';
-
-type FavoritesProps = {
-  favorites: Offer[];
-};
 
 function Favorites({ favorites }: FavoritesProps): JSX.Element {
   const groupedFavorites = groupFavoritesByCity(favorites);

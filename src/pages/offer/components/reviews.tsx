@@ -1,11 +1,7 @@
-import type { Review } from '../../../types/review';
 import { getAuthorizationStatus } from '../../../utils/common';
 import Form from './form';
 import ReviewsList from './reviews-list';
-
-type ReviewsListProps = {
-  reviews: Review[];
-}
+import type { ReviewsListProps } from '../../../types/components';
 
 function Reviews({ reviews }: ReviewsListProps): JSX.Element {
   const isAuth = getAuthorizationStatus();

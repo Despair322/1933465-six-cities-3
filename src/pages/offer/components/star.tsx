@@ -1,10 +1,5 @@
 import { Fragment } from 'react';
-
-type StarProps = {
-  rating: number;
-  title: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-};
+import type { StarProps } from '../../../types/components';
 
 function Star({ rating, title, onChange }: StarProps): JSX.Element {
   return (

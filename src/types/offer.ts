@@ -1,3 +1,5 @@
+import type { CityName } from './types';
+
 export type OfferLocation = {
   latitude: number;
   longitude: number;
@@ -5,7 +7,7 @@ export type OfferLocation = {
 };
 
 export type City = {
-  name: string;
+  name: CityName;
   location: OfferLocation;
 };
 

@@ -4,18 +4,13 @@ import { AppRoute } from '../constants/app';
 import PrivateRoute from './private-route';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './layout';
-import type { Offer } from '../types/offer';
-
 const Main = lazy(() => import('../pages/main/main'));
 const Favorites = lazy(() => import('../pages/favorites/favorites'));
 const OfferPage = lazy(() => import('../pages/offer/offer'));
 const NotFound = lazy(() => import('../pages/not-found/not-found'));
 const Login = lazy(() => import('../pages/login/login'));
 
-type AppProps = {
-  offers: Offer[];
-  favorites: Offer[];
-};
+import type { AppProps } from '../types/pages';
 
 function App({ offers, favorites }: AppProps): JSX.Element {
   return (

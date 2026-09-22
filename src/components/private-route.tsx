@@ -1,11 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../constants/app';
 import { getAuthorizationStatus } from '../utils/common';
-
-type PrivateRouteProps = {
-  children: JSX.Element;
-  isAuthorizationRequired?: boolean;
-};
+import type { PrivateRouteProps } from '../types/components';
 
 function PrivateRoute(props: PrivateRouteProps): JSX.Element {
   const { children, isAuthorizationRequired } = props;

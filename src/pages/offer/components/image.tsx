@@ -1,6 +1,4 @@
-type ImageProps = {
-  src: string;
-}
+import type { ImageProps } from '../../../types/components';
 
 function Image({ src }: ImageProps): JSX.Element {
   return (

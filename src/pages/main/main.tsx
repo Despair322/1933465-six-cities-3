@@ -1,32 +1,40 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment, Suspense, useMemo, useState } from 'react';
-import type { Offer } from '../../types/offer';
-import { useSearchParams } from 'react-router-dom';
-import { CityNames, CityParam, DefaultCity } from '../../constants/cities';
-import type { CityName } from '../../constants/cities';
+import { Fragment, Suspense, useEffect, useMemo, useState } from 'react';
+import type { MainProps } from '../../types/pages';
 import PlacesList from './components/places-list';
 import LocationsList from './components/locations-list';
 import CitiesMap from '../../components/shared/lazy-cities-map';
 import SortForm from './components/sort-form';
 import { MapVariants } from '../../constants/app';
 import { mapToPoint } from '../../utils/common';
-
-type MainProps = {
-  offers: Offer[];
-};
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { CityName } from '../../types/types';
+import { changeCity, resetCity, resetSortType } from '../../store/action';
+import { sortOffers } from '../../utils/sort-offers';
 
 function Main({ offers }: MainProps): JSX.Element {
-  const [searchParams] = useSearchParams();
-  const cityParam = searchParams.get(CityParam);
-  const activeCity: CityName = CityNames.includes(cityParam as CityName)
-    ? cityParam as CityName
-    : DefaultCity;
+  const activeCity = useAppSelector((state) => state.city);
+  const activeSortType = useAppSelector((state) => state.sortType);
+  const dispatch = useAppDispatch();
   const cityOffers = useMemo(
     () => offers.filter((offer) => offer.city.name === activeCity),
     [offers, activeCity]
   );
 
-  const points = mapToPoint(cityOffers);
+  const sortedOffers = useMemo(
+    () => sortOffers(cityOffers, activeSortType),
+    [cityOffers, activeSortType]
+  );
+
+  const sortedPoints = useMemo(
+    () => mapToPoint(sortedOffers),
+    [sortedOffers]
+  );
+
+  useEffect(() => {
+    dispatch(resetSortType());
+    dispatch(resetCity());
+  }, [dispatch]);
 
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
@@ -43,7 +51,7 @@ function Main({ offers }: MainProps): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <LocationsList activeCity={activeCity} />
+            <LocationsList activeCity={activeCity} onClick={(city: CityName) => dispatch(changeCity(city))} />
           </section>
         </div>
         <div className="cities">
@@ -53,20 +61,20 @@ function Main({ offers }: MainProps): JSX.Element {
               <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} places to stay in {activeCity}</b>
 
               {cityOffers.length > 0 && <SortForm />}
-              {cityOffers.length > 0 && <PlacesList offers={cityOffers} onHover={handleOfferHover} />}
+              {cityOffers.length > 0 && <PlacesList offers={sortedOffers} onHover={handleOfferHover} />}
             </section>
             <div className="cities__right-section">
               {cityOffers.length > 0 ? (
                 <Suspense fallback={<section className="cities__map map" />}>
                   <CitiesMap
                     city={cityOffers[0].city}
-                    points={points}
+                    points={sortedPoints}
                     selectedPoint={activeOfferId}
                     variant={MapVariants.Main}
                   />
                 </Suspense>
               ) : (
-                <section className="cities__map map"/>
+                <section className="cities__map map" />
               )}
             </div>
           </div>

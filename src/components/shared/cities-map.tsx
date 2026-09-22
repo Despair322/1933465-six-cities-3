@@ -1,18 +1,10 @@
 import { useRef, useEffect, useState } from 'react';
 import { Icon, Marker, LayerGroup, layerGroup } from 'leaflet';
 import useMap from '../../hooks/use-map';
-import type { City } from '../../types/offer';
 import { MapVariants } from '../../constants/app';
-import type { MapVariant, Point } from '../../types/types';
+import type { MapProps } from '../../types/components';
 import 'leaflet/dist/leaflet.css';
 import classNames from 'classnames';
-
-type MapProps = {
-  city: City;
-  points: Point[];
-  selectedPoint?: string | undefined | null;
-  variant?: MapVariant;
-}
 
 const defaultCustomIcon = new Icon({
   iconUrl: `${import.meta.env.BASE_URL}img/pin.svg`,

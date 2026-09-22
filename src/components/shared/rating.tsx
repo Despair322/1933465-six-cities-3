@@ -1,12 +1,7 @@
 import classNames from 'classnames';
-import type { RatingVariant } from '../../types/types';
+import type { RatingProps } from '../../types/components';
 import { RatingVariants } from '../../constants/app';
 import { transformRatingToPercent } from '../../utils/common';
-
-type RatingProps = {
-  rating: number;
-  variant: RatingVariant;
-}
 
 function Rating({ rating, variant }: RatingProps): JSX.Element {
   const isCard = variant === RatingVariants.Card;
