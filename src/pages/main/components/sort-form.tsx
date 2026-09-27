@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { SORT_OPTIONS } from '../../../constants/app';
 import type { SortType } from '../../../types/types';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { changeSortType } from '../../../store/action';
+import { setSortType } from '../../../store/action';
 
 function SortForm(): JSX.Element {
   const activeSortType = useAppSelector((state) => state.sortType);
@@ -31,7 +31,7 @@ function SortForm(): JSX.Element {
 
   const handleOptionClick = (sortType: SortType) => {
     setIsOpen(false);
-    dispatch(changeSortType(sortType));
+    dispatch(setSortType(sortType));
   };
 
   return (

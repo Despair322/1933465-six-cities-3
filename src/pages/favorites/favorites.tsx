@@ -5,9 +5,17 @@ import Card from '../../components/shared/card';
 import { groupFavoritesByCity } from '../../utils/favorites';
 import { AppRoute, CardVariants } from '../../constants/app';
 import { Link } from 'react-router-dom';
+import { CityName } from '../../types/types';
+import { useAppDispatch } from '../../hooks';
+import { setActiveCity } from '../../store/action';
 
 function Favorites({ favorites }: FavoritesProps): JSX.Element {
   const groupedFavorites = groupFavoritesByCity(favorites);
+
+  const dispatch = useAppDispatch();
+  const handleClick = (city: CityName) => {
+    dispatch(setActiveCity(city));
+  };
 
   return (
     <Fragment>
@@ -24,7 +32,10 @@ function Favorites({ favorites }: FavoritesProps): JSX.Element {
                   <li className="favorites__locations-items" key={city}>
                     <div className="favorites__locations locations locations--current">
                       <div className="locations__item">
-                        <Link className="locations__item-link" to={AppRoute.CityByName(city)}>
+                        <Link className="locations__item-link" to={AppRoute.Main} onClick={() => {
+                          handleClick(city);
+                        }}
+                        >
                           <span>{city}</span>
                         </Link>
                       </div>

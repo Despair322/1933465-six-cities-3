@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment, Suspense, useEffect, useMemo, useState } from 'react';
+import { Fragment, Suspense, useMemo, useState } from 'react';
 import type { MainProps } from '../../types/pages';
 import PlacesList from './components/places-list';
 import LocationsList from './components/locations-list';
@@ -9,7 +9,7 @@ import { MapVariants } from '../../constants/app';
 import { mapToPoint } from '../../utils/common';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { CityName } from '../../types/types';
-import { changeCity, resetCity, resetSortType } from '../../store/action';
+import { setActiveCity } from '../../store/action';
 import { sortOffers } from '../../utils/sort-offers';
 
 function Main({ offers }: MainProps): JSX.Element {
@@ -31,11 +31,6 @@ function Main({ offers }: MainProps): JSX.Element {
     [sortedOffers]
   );
 
-  useEffect(() => {
-    dispatch(resetSortType());
-    dispatch(resetCity());
-  }, [dispatch]);
-
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
   function handleOfferHover(id: string | null) {
@@ -51,7 +46,7 @@ function Main({ offers }: MainProps): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <LocationsList activeCity={activeCity} onClick={(city: CityName) => dispatch(changeCity(city))} />
+            <LocationsList activeCity={activeCity} onClick={(city: CityName) => dispatch(setActiveCity(city))} />
           </section>
         </div>
         <div className="cities">
