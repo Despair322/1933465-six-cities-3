@@ -5,7 +5,6 @@ export const numberOfStars = 5;
 
 export const AppRoute = {
   Main: '/',
-  CityByName: (city: string) => `/?city=${encodeURIComponent(city)}`,
   Login: '/login',
   Offer: '/offer/:id',
   OfferById: (id: string) => `/offer/${id}`,
