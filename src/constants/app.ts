@@ -52,3 +52,14 @@ export const SORT_OPTIONS = [
   { value: 'top-rated', title: 'Top rated first' },
 ] as const;
 
+export const APIRoute = {
+  Offers: '/offers',
+  OfferById: (id: string) => `/offers/${encodeURIComponent(id)}`,
+  NearbyOffers: (id: string) =>
+    `/offers/${encodeURIComponent(id)}/nearby`,
+  Favorites: '/favorites',
+  setFavorite: (id: string, status: boolean) => `/favorites/${encodeURIComponent(id)}/${status ? 1 : 0}`,
+  Comments: (id: string) => `/comments/${encodeURIComponent(id)}`,
+  Login: '/login',
+  Logout: '/logout',
+} as const;

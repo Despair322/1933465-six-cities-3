@@ -1,9 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { loadFavorites, loadNearby, loadOffer, loadOffers, requireAuthorization, setActiveCity, setSortType } from './action';
+import { loadComments, loadFavorites, loadNearby, loadOffer, loadOffers, postComment, requireAuthorization, setActiveCity, setSortType } from './action';
 import { DefaultCity } from '../constants/cities';
 import type { AuthorizationStatusType, CityName, SortType } from '../types/types';
 import { Offer } from '../types/offer';
 import { OfferDescription } from '../types/offer-description';
+import { Review } from '../types/review';
 import { AuthorizationStatus } from '../constants/app';
 
 type State = {
@@ -13,6 +14,7 @@ type State = {
   favorites: Offer[];
   offer: OfferDescription | null;
   nearby: Offer[];
+  comments: Review[];
   authorizationStatus: AuthorizationStatusType;
 };
 
@@ -24,6 +26,7 @@ const initialState: State = {
   favorites: [],
   offer: null,
   nearby: [],
+  comments: [],
   authorizationStatus: AuthorizationStatus.Unknown,
 };
 
@@ -46,6 +49,12 @@ export const reducer = createReducer(initialState, (builder) =>
     })
     .addCase(loadNearby, (state, action) => {
       state.nearby = action.payload;
+    })
+    .addCase(loadComments, (state, action) => {
+      state.comments = action.payload;
+    })
+    .addCase(postComment, (state, action) => {
+      state.comments.push(action.payload);
     })
     .addCase(requireAuthorization, (state, action) => {
       state.authorizationStatus = action.payload;
