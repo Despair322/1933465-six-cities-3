@@ -5,14 +5,12 @@ import PrivateRoute from './private-route';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './layout';
 const Main = lazy(() => import('../pages/main/main'));
-const Favorites = lazy(() => import('../pages/favorites/favorites'));
+// const Favorites = lazy(() => import('../pages/favorites/favorites'));
 const OfferPage = lazy(() => import('../pages/offer/offer'));
 const NotFound = lazy(() => import('../pages/not-found/not-found'));
 const Login = lazy(() => import('../pages/login/login'));
 
-import type { AppProps } from '../types/pages';
-
-function App({ offers, favorites }: AppProps): JSX.Element {
+function App(): JSX.Element {
   return (
     <HelmetProvider>
       <BrowserRouter>
@@ -20,7 +18,7 @@ function App({ offers, favorites }: AppProps): JSX.Element {
           <Route path={AppRoute.Main} element={<Layout />}>
             <Route
               index
-              element={<Main offers={offers} />}
+              element={<Main />}
             />
             <Route
               path={AppRoute.Login}
@@ -34,14 +32,14 @@ function App({ offers, favorites }: AppProps): JSX.Element {
               path={AppRoute.Offer}
               element={<OfferPage />}
             />
-            <Route
+            {/* <Route
               path={AppRoute.Favorites}
               element={
                 <PrivateRoute isAuthorizationRequired>
-                  <Favorites favorites={favorites} />
+                  <Favorites/>
                 </PrivateRoute>
               }
-            />
+            /> */}
             <Route
               path="*"
               element={<NotFound />}

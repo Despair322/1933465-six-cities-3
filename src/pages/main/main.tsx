@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment, Suspense, useMemo, useState } from 'react';
-import type { MainProps } from '../../types/pages';
+import { Fragment, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import PlacesList from './components/places-list';
 import LocationsList from './components/locations-list';
 import CitiesMap from '../../components/shared/lazy-cities-map';
@@ -9,13 +8,19 @@ import { MapVariants } from '../../constants/app';
 import { mapToPoint } from '../../utils/common';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { CityName } from '../../types/types';
+import { fetchOffersAction } from '../../store/api-action';
 import { setActiveCity } from '../../store/action';
 import { sortOffers } from '../../utils/sort-offers';
 
-function Main({ offers }: MainProps): JSX.Element {
+function Main(): JSX.Element {
+  const offers = useAppSelector((state) => state.offers);
   const activeCity = useAppSelector((state) => state.city);
   const activeSortType = useAppSelector((state) => state.sortType);
   const dispatch = useAppDispatch();
+
+  const placesRef = useRef<HTMLElement | null>(null);
+  const previousCityRef = useRef(activeCity);
+
   const cityOffers = useMemo(
     () => offers.filter((offer) => offer.city.name === activeCity),
     [offers, activeCity]
@@ -32,6 +37,20 @@ function Main({ offers }: MainProps): JSX.Element {
   );
 
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (previousCityRef.current !== activeCity) {
+      placesRef.current?.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+      previousCityRef.current = activeCity;
+    }
+  }, [activeCity]);
+
+  useEffect(() => {
+    dispatch(fetchOffersAction());
+  }, [dispatch]);
 
   function handleOfferHover(id: string | null) {
     setActiveOfferId(id);
@@ -51,7 +70,7 @@ function Main({ offers }: MainProps): JSX.Element {
         </div>
         <div className="cities">
           <div className="cities__places-container container">
-            <section className="cities__places places">
+            <section ref={placesRef} className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} places to stay in {activeCity}</b>
 

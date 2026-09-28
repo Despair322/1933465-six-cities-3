@@ -1,10 +1,10 @@
-import { getAuthorizationStatus } from '../../../utils/common';
 import Form from './form';
 import ReviewsList from './reviews-list';
 import type { ReviewsListProps } from '../../../types/components';
+import { useAppSelector } from '../../../hooks';
 
 function Reviews({ reviews }: ReviewsListProps): JSX.Element {
-  const isAuth = getAuthorizationStatus();
+  const isAuth = useAppSelector((state) => state.authorizationStatus);
   const hasReviews = reviews && reviews.length > 0;
   return (
     <section className="offer__reviews reviews">
