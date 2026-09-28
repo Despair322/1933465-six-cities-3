@@ -16,11 +16,11 @@ export const PageClassesMap: Partial<Record<StringRouteKeys, readonly string[] |
   [AppRoute.Login]: ['page--gray', 'page--login'],
 };
 
-export enum AuthorizationStatus {
-  Auth = 'AUTH',
-  NoAuth = 'NO_AUTH',
-  Unknown = 'UNKNOWN',
-}
+export const AuthorizationStatus = {
+  Auth: 'AUTH',
+  NoAuth: 'NO_AUTH',
+  Unknown: 'UNKNOWN',
+} as const;
 
 export const CardVariants = {
   Main: 'main',
