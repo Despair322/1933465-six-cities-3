@@ -9,6 +9,7 @@ export const AppRoute = {
   Offer: '/offer/:id',
   OfferById: (id: string) => `/offer/${id}`,
   Favorites: '/favorites',
+  NotFound: '/404',
 } as const;
 
 export const PageClassesMap: Partial<Record<StringRouteKeys, readonly string[] | string>> = {
@@ -16,11 +17,11 @@ export const PageClassesMap: Partial<Record<StringRouteKeys, readonly string[] |
   [AppRoute.Login]: ['page--gray', 'page--login'],
 };
 
-export enum AuthorizationStatus {
-  Auth = 'AUTH',
-  NoAuth = 'NO_AUTH',
-  Unknown = 'UNKNOWN',
-}
+export const AuthorizationStatus = {
+  Auth: 'AUTH',
+  NoAuth: 'NO_AUTH',
+  Unknown: 'UNKNOWN',
+} as const;
 
 export const CardVariants = {
   Main: 'main',
@@ -52,3 +53,16 @@ export const SORT_OPTIONS = [
   { value: 'top-rated', title: 'Top rated first' },
 ] as const;
 
+export const APIRoute = {
+  Offers: '/offers',
+  OfferById: (id: string) => `/offers/${encodeURIComponent(id)}`,
+  NearbyOffers: (id: string) =>
+    `/offers/${encodeURIComponent(id)}/nearby`,
+  Favorites: '/favorite',
+  setFavorite: (id: string, status: boolean) => `/favorite/${encodeURIComponent(id)}/${status ? 1 : 0}`,
+  Comments: (id: string) => `/comments/${encodeURIComponent(id)}`,
+  Login: '/login',
+  Logout: '/logout',
+} as const;
+
+export const TIMEOUT_SHOW_ERROR = 2000;

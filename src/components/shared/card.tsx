@@ -3,16 +3,22 @@ import classNames from 'classnames';
 import { AppRoute, CardVariants, RatingVariants } from '../../constants/app';
 import type { CardProps } from '../../types/components';
 import Rating from './rating';
+import { useAppDispatch } from '../../hooks';
+import { postFavoriteAction } from '../../store/api-action';
 
 function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.Element {
+  const dispatch = useAppDispatch();
   const { id, isPremium, previewImage, price, isFavorite, rating, title, type } = offer;
   const offerPath = AppRoute.OfferById(id);
-
   const isMain = variant === CardVariants.Main;
   const isNear = variant === CardVariants.Near;
   const isFavorites = variant === CardVariants.Favorites;
   const imageWidth = isFavorites ? 150 : 260;
   const imageHeight = isFavorites ? 110 : 200;
+
+  const handleFavoriteClick = () => {
+    dispatch(postFavoriteAction({ id, status: !isFavorite }));
+  };
 
   return (
     <article
@@ -52,6 +58,7 @@ function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.E
               'place-card__bookmark-button--active': isFavorite,
             })}
             type="button"
+            onClick={handleFavoriteClick}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
