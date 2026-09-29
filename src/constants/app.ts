@@ -9,6 +9,7 @@ export const AppRoute = {
   Offer: '/offer/:id',
   OfferById: (id: string) => `/offer/${id}`,
   Favorites: '/favorites',
+  NotFound: '/404',
 } as const;
 
 export const PageClassesMap: Partial<Record<StringRouteKeys, readonly string[] | string>> = {

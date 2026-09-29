@@ -4,13 +4,13 @@ import type { Offer } from '../../types/offer';
 import Image from './components/image';
 import classNames from 'classnames';
 import Rating from '../../components/shared/rating';
-import { CardVariants, MapVariants, RatingVariants } from '../../constants/app';
+import { AppRoute, CardVariants, MapVariants, RatingVariants } from '../../constants/app';
 import Features from './components/featiures';
 import Reviews from './components/reviews';
 import Card from '../../components/shared/card';
 import CitiesMap from '../../components/shared/lazy-cities-map';
 import { mapToPoint } from '../../utils/common';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchCommentsAction, fetchNearbyOffersAction, fetchOfferAction, postFavoriteAction } from '../../store/api-action';
 import Spinner from '../../components/shared/spinner/spinner';
@@ -45,12 +45,12 @@ function Offer(): JSX.Element {
     }
   }, [dispatch, id]);
 
-  if (offerStatus === 'idle' || offerStatus === 'loading' || !offerDescription) {
-    return <Spinner label="Loading offer" />;
+  if (offerStatus === 'failed') {
+    return <Navigate to={AppRoute.NotFound} replace />;
   }
 
-  if (offerStatus === 'failed') {
-    return <div>Unable to load this offer.</div>;
+  if (offerStatus === 'idle' || offerStatus === 'loading' || !offerDescription) {
+    return <Spinner label="Loading offer" />;
   }
 
   const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city, id: offerId} = offerDescription;
