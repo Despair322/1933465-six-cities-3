@@ -1,18 +1,33 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment } from 'react';
-import type { FavoritesProps } from '../../types/pages';
+import { Fragment, useEffect } from 'react';
 import Card from '../../components/shared/card';
 import { groupFavoritesByCity } from '../../utils/favorites';
 import { AppRoute, CardVariants } from '../../constants/app';
 import { Link } from 'react-router-dom';
 import { CityName } from '../../types/types';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setActiveCity } from '../../store/action';
+import { fetchFavoritesAction } from '../../store/api-action';
+import Spinner from '../../components/shared/spinner/spinner';
 
-function Favorites({ favorites }: FavoritesProps): JSX.Element {
-  const groupedFavorites = groupFavoritesByCity(favorites);
-
+function Favorites(): JSX.Element {
+  const favorites = useAppSelector((state) => state.favorites);
+  const favoritesStatus = useAppSelector((state) => state.loadingStatus.favorites);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchFavoritesAction());
+  }, [dispatch]);
+
+  if (favoritesStatus === 'idle' || favoritesStatus === 'loading') {
+    return <Spinner label="Loading favorites" />;
+  }
+
+  if (favoritesStatus === 'failed') {
+    return <p>Unable to load favorites.</p>;
+  }
+
+  const groupedFavorites = groupFavoritesByCity(favorites);
   const handleClick = (city: CityName) => {
     dispatch(setActiveCity(city));
   };

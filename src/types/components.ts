@@ -62,3 +62,7 @@ export type StarProps = {
   title: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 };
+
+export type FormProps = {
+  id: string;
+};

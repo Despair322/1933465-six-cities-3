@@ -12,13 +12,16 @@ import CitiesMap from '../../components/shared/lazy-cities-map';
 import { mapToPoint } from '../../utils/common';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { fetchCommentsAction, fetchNearbyOffersAction, fetchOfferAction } from '../../store/api-action';
+import { fetchCommentsAction, fetchNearbyOffersAction, fetchOfferAction, postFavoriteAction } from '../../store/api-action';
+import Spinner from '../../components/shared/spinner/spinner';
 
 function Offer(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const offerDescription = useAppSelector((state) => state.offer);
+  const offerStatus = useAppSelector((state) => state.loadingStatus.offer);
   const nearbyOffers = useAppSelector((state) => state.nearby).slice(0, 3);
+  const nearbyStatus = useAppSelector((state) => state.loadingStatus.nearby);
   const reviews = useAppSelector((state) => state.comments);
 
   const offerRef = useRef<HTMLElement | null>(null);
@@ -42,14 +45,22 @@ function Offer(): JSX.Element {
     }
   }, [dispatch, id]);
 
-  if (!offerDescription) {
-    return <div>Is loading</div>;
+  if (offerStatus === 'idle' || offerStatus === 'loading' || !offerDescription) {
+    return <Spinner label="Loading offer" />;
   }
 
-  const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city } = offerDescription;
+  if (offerStatus === 'failed') {
+    return <div>Unable to load this offer.</div>;
+  }
+
+  const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city, id: offerId} = offerDescription;
   const activePoint = mapToPoint(offerDescription);
   const nearPoints = mapToPoint(nearbyOffers);
   const allPoints = [...nearPoints, activePoint];
+
+  const handleFavoriteClick = () => {
+    dispatch(postFavoriteAction({ id: offerId, status: !isFavorite }));
+  };
 
   return (
     <Fragment>
@@ -77,7 +88,7 @@ function Offer(): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <button className={classNames('offer__bookmark-button', 'button', { 'offer__bookmark-button--active': isFavorite })} type="button">
+                <button className={classNames('offer__bookmark-button', 'button', { 'offer__bookmark-button--active': isFavorite })} type="button" onClick={handleFavoriteClick}>
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -129,7 +140,9 @@ function Offer(): JSX.Element {
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              {nearbyOffers && nearbyOffers.map((offer) =>
+              {(nearbyStatus === 'idle' || nearbyStatus === 'loading') && <Spinner label="Loading nearby places" />}
+              {nearbyStatus === 'failed' && <p>Unable to load nearby places.</p>}
+              {nearbyStatus === 'succeeded' && nearbyOffers.map((offer) =>
                 <Card key={offer.id} offer={offer} variant={CardVariants.Near} />)}
             </div>
           </section>

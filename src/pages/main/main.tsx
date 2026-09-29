@@ -11,9 +11,11 @@ import { CityName } from '../../types/types';
 import { fetchOffersAction } from '../../store/api-action';
 import { setActiveCity } from '../../store/action';
 import { sortOffers } from '../../utils/sort-offers';
+import Spinner from '../../components/shared/spinner/spinner';
 
 function Main(): JSX.Element {
   const offers = useAppSelector((state) => state.offers);
+  const offersStatus = useAppSelector((state) => state.loadingStatus.offers);
   const activeCity = useAppSelector((state) => state.city);
   const activeSortType = useAppSelector((state) => state.sortType);
   const dispatch = useAppDispatch();
@@ -72,10 +74,15 @@ function Main(): JSX.Element {
           <div className="cities__places-container container">
             <section ref={placesRef} className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} places to stay in {activeCity}</b>
-
-              {cityOffers.length > 0 && <SortForm />}
-              {cityOffers.length > 0 && <PlacesList offers={sortedOffers} onHover={handleOfferHover} />}
+              {(offersStatus === 'idle' || offersStatus === 'loading') && <Spinner label="Loading offers" />}
+              {offersStatus === 'failed' && <p>Unable to load offers.</p>}
+              {offersStatus === 'succeeded' && (
+                <>
+                  <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} places to stay in {activeCity}</b>
+                  {cityOffers.length > 0 && <SortForm />}
+                  {cityOffers.length > 0 && <PlacesList offers={sortedOffers} onHover={handleOfferHover} />}
+                </>
+              )}
             </section>
             <div className="cities__right-section">
               {cityOffers.length > 0 ? (

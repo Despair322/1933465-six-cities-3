@@ -1,16 +1,28 @@
-import { lazy } from 'react';
+import { lazy, useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AppRoute } from '../constants/app';
+import { AppRoute, AuthorizationStatus } from '../constants/app';
 import PrivateRoute from './private-route';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './layout';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { fetchFavoritesAction } from '../store/api-action';
 const Main = lazy(() => import('../pages/main/main'));
-// const Favorites = lazy(() => import('../pages/favorites/favorites'));
+const Favorites = lazy(() => import('../pages/favorites/favorites'));
 const OfferPage = lazy(() => import('../pages/offer/offer'));
 const NotFound = lazy(() => import('../pages/not-found/not-found'));
 const Login = lazy(() => import('../pages/login/login'));
 
 function App(): JSX.Element {
+
+  const dispatch = useAppDispatch();
+  const authStatus = useAppSelector((state) => state.authorizationStatus);
+
+  useEffect(() => {
+    if (authStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchFavoritesAction());
+    }
+  }, [authStatus, dispatch]);
+
   return (
     <HelmetProvider>
       <BrowserRouter>
@@ -32,14 +44,14 @@ function App(): JSX.Element {
               path={AppRoute.Offer}
               element={<OfferPage />}
             />
-            {/* <Route
+            <Route
               path={AppRoute.Favorites}
               element={
                 <PrivateRoute isAuthorizationRequired>
-                  <Favorites/>
+                  <Favorites />
                 </PrivateRoute>
               }
-            /> */}
+            />
             <Route
               path="*"
               element={<NotFound />}

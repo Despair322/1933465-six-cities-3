@@ -3,3 +3,8 @@ export type UserData = {
   email: string;
   token: string;
 };
+
+export type StoredUserData = {
+  email: string;
+};
+

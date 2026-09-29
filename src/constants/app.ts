@@ -57,9 +57,11 @@ export const APIRoute = {
   OfferById: (id: string) => `/offers/${encodeURIComponent(id)}`,
   NearbyOffers: (id: string) =>
     `/offers/${encodeURIComponent(id)}/nearby`,
-  Favorites: '/favorites',
-  setFavorite: (id: string, status: boolean) => `/favorites/${encodeURIComponent(id)}/${status ? 1 : 0}`,
+  Favorites: '/favorite',
+  setFavorite: (id: string, status: boolean) => `/favorite/${encodeURIComponent(id)}/${status ? 1 : 0}`,
   Comments: (id: string) => `/comments/${encodeURIComponent(id)}`,
   Login: '/login',
   Logout: '/logout',
 } as const;
+
+export const TIMEOUT_SHOW_ERROR = 2000;
