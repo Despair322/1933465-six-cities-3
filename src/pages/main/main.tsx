@@ -20,6 +20,8 @@ function Main(): JSX.Element {
   const activeSortType = useAppSelector((state) => state.sortType);
   const dispatch = useAppDispatch();
 
+  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
+
   const placesRef = useRef<HTMLElement | null>(null);
   const previousCityRef = useRef(activeCity);
 
@@ -38,7 +40,9 @@ function Main(): JSX.Element {
     [sortedOffers]
   );
 
-  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
+  function handleOfferHover(id: string | null) {
+    setActiveOfferId(id);
+  }
 
   useEffect(() => {
     if (previousCityRef.current !== activeCity) {
@@ -53,10 +57,6 @@ function Main(): JSX.Element {
   useEffect(() => {
     dispatch(fetchOffersAction());
   }, [dispatch]);
-
-  function handleOfferHover(id: string | null) {
-    setActiveOfferId(id);
-  }
 
   return (
     <Fragment>

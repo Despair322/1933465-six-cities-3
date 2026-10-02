@@ -14,7 +14,13 @@ function Favorites(): JSX.Element {
   const favoritesStatus = useAppSelector((state) => state.loadingStatus.favorites);
   const oldFavorites = useAppSelector((state) => state.oldFavorites);
   const dispatch = useAppDispatch();
+
   const [initialLoading, setInitialLoading] = useState(true);
+
+  const groupedFavorites = groupFavoritesByCity(oldFavorites);
+  const handleClick = (city: CityName) => {
+    dispatch(setActiveCity(city));
+  };
 
   useEffect(() => {
     void dispatch(fetchFavoritesAction()).unwrap().then((loadedFavorites) => {
@@ -32,11 +38,6 @@ function Favorites(): JSX.Element {
   if (favoritesStatus === 'failed') {
     return <p>Unable to load favorites.</p>;
   }
-
-  const groupedFavorites = groupFavoritesByCity(oldFavorites);
-  const handleClick = (city: CityName) => {
-    dispatch(setActiveCity(city));
-  };
 
   return (
     <Fragment>

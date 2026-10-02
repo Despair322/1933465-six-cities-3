@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
 import { Fragment, Suspense, useEffect, useMemo, useRef } from 'react';
-import type { Offer } from '../../types/offer';
 import Image from './components/image';
 import classNames from 'classnames';
 import Rating from '../../components/shared/rating';
@@ -26,6 +25,17 @@ function Offer(): JSX.Element {
 
   const offerRef = useRef<HTMLElement | null>(null);
   const previousOfferRef = useRef(id);
+
+  const handleFavoriteClick = useMemo(
+    () => debounce(() => {
+      if (!offerDescription) {
+        return;
+      }
+
+      dispatch(postFavoriteAction({ id: offerDescription.id, status: !offerDescription.isFavorite }));
+    }, 300),
+    [dispatch, offerDescription],
+  );
 
   useEffect(() => {
     if (previousOfferRef.current !== id) {
@@ -53,17 +63,10 @@ function Offer(): JSX.Element {
     return <Spinner label="Loading offer" />;
   }
 
-  const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city, id: offerId} = offerDescription;
+  const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city } = offerDescription;
   const activePoint = mapToPoint(offerDescription);
   const nearPoints = mapToPoint(nearbyOffers);
   const allPoints = [...nearPoints, activePoint];
-
-  const handleFavoriteClick = useMemo(
-    () => debounce(() => {
-      dispatch(postFavoriteAction({ id: offerId, status: !isFavorite }));
-    }, 300),
-    [dispatch, isFavorite, offerId],
-  );
 
   return (
     <Fragment>
