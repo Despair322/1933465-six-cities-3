@@ -1,25 +1,31 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import Card from '../../components/shared/card';
 import { groupFavoritesByCity } from '../../utils/favorites';
 import { AppRoute, CardVariants } from '../../constants/app';
 import { Link } from 'react-router-dom';
 import { CityName } from '../../types/types';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setActiveCity } from '../../store/action';
+import { setActiveCity, setOldFavorites } from '../../store/action';
 import { fetchFavoritesAction } from '../../store/api-action';
 import Spinner from '../../components/shared/spinner/spinner';
 
 function Favorites(): JSX.Element {
-  const favorites = useAppSelector((state) => state.favorites);
   const favoritesStatus = useAppSelector((state) => state.loadingStatus.favorites);
+  const oldFavorites = useAppSelector((state) => state.oldFavorites);
   const dispatch = useAppDispatch();
+  const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchFavoritesAction());
+    void dispatch(fetchFavoritesAction()).unwrap().then((loadedFavorites) => {
+      dispatch(setOldFavorites(loadedFavorites));
+      setInitialLoading(false);
+    }).catch(() => {
+      setInitialLoading(false);
+    });
   }, [dispatch]);
 
-  if (favoritesStatus === 'idle' || favoritesStatus === 'loading') {
+  if (initialLoading) {
     return <Spinner label="Loading favorites" />;
   }
 
@@ -27,7 +33,7 @@ function Favorites(): JSX.Element {
     return <p>Unable to load favorites.</p>;
   }
 
-  const groupedFavorites = groupFavoritesByCity(favorites);
+  const groupedFavorites = groupFavoritesByCity(oldFavorites);
   const handleClick = (city: CityName) => {
     dispatch(setActiveCity(city));
   };
@@ -40,7 +46,7 @@ function Favorites(): JSX.Element {
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           <section className="favorites">
-            <h1 className="favorites__title">Saved listing</h1>
+            <h1 className="favorites__title">{oldFavorites.length > 0 ? 'Saved listing' : 'Nothing yet saved.'}</h1>
             <ul className="favorites__list">
               {groupedFavorites.map(({ city, offers }) => (
                 city && offers && offers.length > 0 && (

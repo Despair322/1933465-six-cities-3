@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { AppRoute, CardVariants, RatingVariants } from '../../constants/app';
@@ -5,6 +6,7 @@ import type { CardProps } from '../../types/components';
 import Rating from './rating';
 import { useAppDispatch } from '../../hooks';
 import { postFavoriteAction } from '../../store/api-action';
+import { debounce } from '../../utils/common';
 
 function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.Element {
   const dispatch = useAppDispatch();
@@ -16,9 +18,12 @@ function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.E
   const imageWidth = isFavorites ? 150 : 260;
   const imageHeight = isFavorites ? 110 : 200;
 
-  const handleFavoriteClick = () => {
-    dispatch(postFavoriteAction({ id, status: !isFavorite }));
-  };
+  const handleFavoriteClick = useMemo(
+    () => debounce(() => {
+      dispatch(postFavoriteAction({ id, status: !isFavorite }));
+    }, 300),
+    [dispatch, id, isFavorite],
+  );
 
   return (
     <article

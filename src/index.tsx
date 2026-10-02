@@ -5,10 +5,14 @@ import App from './components/app';
 import { store } from './store';
 import { checkAuthAction } from './store/api-action';
 import { getToken } from './services/token';
+import { requireAuthorization } from './store/action';
+import { AuthorizationStatus } from './constants/app';
 
 const token = getToken();
 if (token) {
   store.dispatch(checkAuthAction());
+}else{
+  store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
 }
 
 const root = ReactDOM.createRoot(

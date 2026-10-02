@@ -6,7 +6,7 @@ import { useAppSelector } from '../hooks';
 function PrivateRoute(props: PrivateRouteProps): JSX.Element {
   const { children, isAuthorizationRequired } = props;
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  if(isAuthorizationRequired && authorizationStatus !== AuthorizationStatus.Auth) {
+  if(isAuthorizationRequired && authorizationStatus === AuthorizationStatus.NoAuth) {
     return <Navigate to={AppRoute.Login} />;
   }
   if(!isAuthorizationRequired && authorizationStatus === AuthorizationStatus.Auth) {
