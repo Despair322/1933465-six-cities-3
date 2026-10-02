@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment, Suspense, useEffect, useRef } from 'react';
-import type { Offer } from '../../types/offer';
+import { Fragment, Suspense, useEffect, useMemo, useRef } from 'react';
 import Image from './components/image';
 import classNames from 'classnames';
 import Rating from '../../components/shared/rating';
@@ -9,7 +8,7 @@ import Features from './components/featiures';
 import Reviews from './components/reviews';
 import Card from '../../components/shared/card';
 import CitiesMap from '../../components/shared/lazy-cities-map';
-import { mapToPoint } from '../../utils/common';
+import { debounce, mapToPoint } from '../../utils/common';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchCommentsAction, fetchNearbyOffersAction, fetchOfferAction, postFavoriteAction } from '../../store/api-action';
@@ -26,6 +25,17 @@ function Offer(): JSX.Element {
 
   const offerRef = useRef<HTMLElement | null>(null);
   const previousOfferRef = useRef(id);
+
+  const handleFavoriteClick = useMemo(
+    () => debounce(() => {
+      if (!offerDescription) {
+        return;
+      }
+
+      dispatch(postFavoriteAction({ id: offerDescription.id, status: !offerDescription.isFavorite }));
+    }, 300),
+    [dispatch, offerDescription],
+  );
 
   useEffect(() => {
     if (previousOfferRef.current !== id) {
@@ -53,14 +63,10 @@ function Offer(): JSX.Element {
     return <Spinner label="Loading offer" />;
   }
 
-  const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city, id: offerId} = offerDescription;
+  const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city } = offerDescription;
   const activePoint = mapToPoint(offerDescription);
   const nearPoints = mapToPoint(nearbyOffers);
   const allPoints = [...nearPoints, activePoint];
-
-  const handleFavoriteClick = () => {
-    dispatch(postFavoriteAction({ id: offerId, status: !isFavorite }));
-  };
 
   return (
     <Fragment>

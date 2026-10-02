@@ -3,14 +3,20 @@ import { AppRoute, AuthorizationStatus } from '../../constants/app';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logoutAction } from '../../store/api-action';
 
-function Navigation(): JSX.Element {
-  const isAuth = useAppSelector((state) => state.authorizationStatus) === AuthorizationStatus.Auth;
+function Navigation(): JSX.Element | null {
+  const authStatus = useAppSelector((state) => state.authorizationStatus);
+  const isAuth = authStatus === AuthorizationStatus.Auth;
+  const isUnknown = authStatus === AuthorizationStatus.Unknown;
   const user = useAppSelector((state) => state.userData);
   const favorites = useAppSelector((state) => state.favoritesCount);
   const dispatch = useAppDispatch();
   const handleSignOut = () => {
     dispatch(logoutAction());
   };
+
+  if(isUnknown) {
+    return null;
+  }
 
   return (
     <nav className="header__nav">

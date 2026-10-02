@@ -1,4 +1,4 @@
-import { FormEvent, Fragment, useRef } from 'react';
+import { FormEvent, Fragment, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../constants/app';
@@ -9,17 +9,23 @@ function LoginScreen(): JSX.Element {
 
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const dispatch = useAppDispatch();
   const activeCity = useAppSelector((state)=> state.city);
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+    setLoginError(null);
     if (loginRef.current !== null && passwordRef.current !== null){
-      dispatch(loginAction({
+      void dispatch(loginAction({
         login: loginRef.current.value,
         password: passwordRef.current.value,
-      }));
+      })).unwrap().catch((error: unknown) => {
+        if (typeof error === 'string') {
+          setLoginError(error);
+        }
+      });
     }
   };
 
@@ -42,6 +48,7 @@ function LoginScreen(): JSX.Element {
                 <label className="visually-hidden">Password</label>
                 <input ref={passwordRef} className="login__input form__input" type="password" name="password" placeholder="Password" required />
               </div>
+              {loginError && <p className="login__error" role="alert">{loginError}</p>}
               <button className="login__submit form__submit button" type="submit">Sign in</button>
             </form>
           </section>

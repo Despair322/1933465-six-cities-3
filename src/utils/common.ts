@@ -16,7 +16,7 @@ export function mapToPoint<T extends Point>(input: T[]): Point[];
 export function mapToPoint<T extends Point>(input: T): Point;
 
 export function mapToPoint<T extends Point>(input: T | T[]): Point | Point[] {
-  const toPoint = (item: T) : Point => ({
+  const toPoint = (item: T): Point => ({
     id: item.id,
     location: {
       latitude: item.location.latitude,
@@ -27,4 +27,20 @@ export function mapToPoint<T extends Point>(input: T | T[]): Point | Point[] {
   return Array.isArray(input) ? input.map(toPoint) : toPoint(input);
 }
 
-export { transformRatingToPercent, transformDateToMonthYear };
+function debounce<Args extends unknown[]>(
+  fn: (...args: Args) => void,
+  delay: number
+): (...args: Args) => void {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  return function (...args: Args): void {
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+}
+
+export { transformRatingToPercent, transformDateToMonthYear, debounce };

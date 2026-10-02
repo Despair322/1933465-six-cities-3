@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { decrementFavoritesCount, incrementFavoritesCount, loadComments, loadFavorites, loadNearby, loadOffer, loadOffers, postComment, requireAuthorization, setActiveCity, setError, setFavorite, setFavoritesCount, setSortType, setUserData } from './action';
+import { loadComments, loadFavorites, loadNearby, loadOffer, loadOffers, requireAuthorization, setActiveCity, setError, setFavorite, setFavoritesCount, setOldFavorites, setSortType, setUserData } from './action';
 import { fetchCommentsAction, fetchFavoritesAction, fetchNearbyOffersAction, fetchOfferAction, fetchOffersAction } from './api-action';
 import { DefaultCity } from '../constants/cities';
 import type { AuthorizationStatusType, CityName, SortType } from '../types/types';
@@ -15,6 +15,7 @@ type State = {
   sortType: SortType;
   offers: Offer[];
   favorites: Offer[];
+  oldFavorites: Offer[];
   favoritesCount: number;
   offer: OfferDescription | null;
   nearby: Offer[];
@@ -36,6 +37,7 @@ const initialState: State = {
   sortType: 'popular',
   offers: [],
   favorites: [],
+  oldFavorites: [],
   favoritesCount: 0,
   offer: null,
   nearby: [],
@@ -120,9 +122,6 @@ export const reducer = createReducer(initialState, (builder) =>
     .addCase(loadComments, (state, action) => {
       state.comments = action.payload;
     })
-    .addCase(postComment, (state, action) => {
-      state.comments.push(action.payload);
-    })
     .addCase(requireAuthorization, (state, action) => {
       state.authorizationStatus = action.payload;
     })
@@ -138,9 +137,11 @@ export const reducer = createReducer(initialState, (builder) =>
         }
       });
 
-      if (!status) {
-        state.favorites = state.favorites.filter((favorite) => favorite.id !== id);
-      }
+      state.oldFavorites.forEach((offer) => {
+        if (offer.id === id) {
+          offer.isFavorite = status;
+        }
+      });
 
       if (state.offer?.id === id) {
         state.offer.isFavorite = status;
@@ -152,14 +153,11 @@ export const reducer = createReducer(initialState, (builder) =>
         }
       });
     })
+    .addCase(setOldFavorites, (state, action) => {
+      state.oldFavorites = action.payload;
+    })
     .addCase(setFavoritesCount, (state, action) => {
       state.favoritesCount = action.payload;
-    })
-    .addCase(incrementFavoritesCount, (state) => {
-      state.favoritesCount += 1;
-    })
-    .addCase(decrementFavoritesCount, (state) => {
-      state.favoritesCount -= 1;
     })
     .addCase(setError, (state, action) => {
       state.error = action.payload;
