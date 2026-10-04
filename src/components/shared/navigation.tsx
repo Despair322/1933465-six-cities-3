@@ -1,20 +1,22 @@
 import { Link } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../constants/app';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { logoutAction } from '../../store/api-action';
+import { logoutAction } from '../../store/thunks/user';
+import { selectAuthorizationStatus, selectUserData } from '../../store/slices/user';
+import { selectFavoritesCount } from '../../store/slices/favorites';
 
 function Navigation(): JSX.Element | null {
-  const authStatus = useAppSelector((state) => state.authorizationStatus);
+  const authStatus = useAppSelector(selectAuthorizationStatus);
+  const user = useAppSelector(selectUserData);
+  const favorites = useAppSelector(selectFavoritesCount);
   const isAuth = authStatus === AuthorizationStatus.Auth;
   const isUnknown = authStatus === AuthorizationStatus.Unknown;
-  const user = useAppSelector((state) => state.userData);
-  const favorites = useAppSelector((state) => state.favoritesCount);
   const dispatch = useAppDispatch();
   const handleSignOut = () => {
     dispatch(logoutAction());
   };
 
-  if(isUnknown) {
+  if (isUnknown) {
     return null;
   }
 

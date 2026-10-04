@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { SORT_OPTIONS } from '../../../constants/app';
 import type { SortType } from '../../../types/types';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { setSortType } from '../../../store/action';
+import { selectSortType, setSortType } from '../../../store/slices/catalog';
 
 function SortForm(): JSX.Element {
-  const activeSortType = useAppSelector((state) => state.sortType);
+  const activeSortType = useAppSelector(selectSortType);
   const activeSortText = SORT_OPTIONS.find(({ value }) => value === activeSortType)?.title;
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();

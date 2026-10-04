@@ -5,8 +5,8 @@ import { AppRoute, CardVariants, RatingVariants } from '../../constants/app';
 import type { CardProps } from '../../types/components';
 import Rating from './rating';
 import { useAppDispatch } from '../../hooks';
-import { postFavoriteAction } from '../../store/api-action';
 import { debounce } from '../../utils/common';
+import { postFavoriteAction } from '../../store/thunks/favorites';
 
 function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.Element {
   const dispatch = useAppDispatch();

@@ -6,7 +6,7 @@ type Host = {
   avatarUrl: string;
 };
 
-export type OfferDescription = {
+export type DetailedOffer = {
   id: string;
   title: string;
   description: string;

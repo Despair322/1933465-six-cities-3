@@ -2,7 +2,8 @@ import { useState } from 'react';
 import Star from './star';
 import type { FormData } from '../../../types/form';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { postCommentAction } from '../../../store/api-action';
+import { postReviewAction } from '../../../store/thunks/detailedOffer';
+import { selectDetailedOffer } from '../../../store/slices/detailedOffer';
 
 const rating = [
   { value: 5, title: 'perfect' },
@@ -14,7 +15,7 @@ const rating = [
 
 function Form(): JSX.Element | null {
   const dispatch = useAppDispatch();
-  const id = useAppSelector((state) => state.offer?.id) || '0';
+  const id = useAppSelector(selectDetailedOffer)?.id || '0';
   const [formData, setFormData] = useState<FormData>({
     rating: '',
     review: '',
@@ -31,7 +32,7 @@ function Form(): JSX.Element | null {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const ratingNumber = Number(formData.rating);
-    dispatch(postCommentAction({ id, comment: formData.review, rating: ratingNumber }));
+    dispatch(postReviewAction({ id, comment: formData.review, rating: ratingNumber }));
   }
 
   return (

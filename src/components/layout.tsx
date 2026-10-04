@@ -4,7 +4,7 @@ import Header from './shared/header';
 import { AppRoute, PageClassesMap } from '../constants/app';
 import { getRouteKey } from '../utils/route';
 import Footer from './shared/footer';
-import ErrorMessage from './shared/error-message/error-message';
+import {ToastContainer} from 'react-toastify';
 import Spinner from './shared/spinner/spinner';
 
 function Layout(): JSX.Element {
@@ -24,7 +24,7 @@ function Layout(): JSX.Element {
   const fullClassName = ['page', pageModifiers].filter(Boolean).join(' ');
   return (
     <div className={fullClassName}>
-      <ErrorMessage />
+      <ToastContainer />
       <Header hasNavigation={hasHeaderNavigation} />
       <Suspense fallback={
         <main

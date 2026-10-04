@@ -3,7 +3,7 @@ import { Fragment, Suspense, useEffect, useMemo, useRef } from 'react';
 import Image from './components/image';
 import classNames from 'classnames';
 import Rating from '../../components/shared/rating';
-import { AppRoute, CardVariants, MapVariants, RatingVariants } from '../../constants/app';
+import { AppRoute, CardVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants/app';
 import Features from './components/featiures';
 import Reviews from './components/reviews';
 import Card from '../../components/shared/card';
@@ -11,17 +11,19 @@ import CitiesMap from '../../components/shared/lazy-cities-map';
 import { debounce, mapToPoint } from '../../utils/common';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { fetchCommentsAction, fetchNearbyOffersAction, fetchOfferAction, postFavoriteAction } from '../../store/api-action';
 import Spinner from '../../components/shared/spinner/spinner';
+import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectReviews } from '../../store/slices/detailedOffer';
+import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/thunks/detailedOffer';
+import { postFavoriteAction } from '../../store/thunks/favorites';
 
 function Offer(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
-  const offerDescription = useAppSelector((state) => state.offer);
-  const offerStatus = useAppSelector((state) => state.loadingStatus.offer);
-  const nearbyOffers = useAppSelector((state) => state.nearby).slice(0, 3);
-  const nearbyStatus = useAppSelector((state) => state.loadingStatus.nearby);
-  const reviews = useAppSelector((state) => state.comments);
+  const offerDescription = useAppSelector(selectDetailedOffer);
+  const offerStatus = useAppSelector(selectDetailedOfferLoadingStatus);
+  const nearbyOffers = useAppSelector(selectNearbyOffers).slice(0, 3);
+  const nearbyOffersLoadingStatus = useAppSelector(selectNearbyOffersLoadingStatus);
+  const reviews = useAppSelector(selectReviews);
 
   const offerRef = useRef<HTMLElement | null>(null);
   const previousOfferRef = useRef(id);
@@ -51,15 +53,15 @@ function Offer(): JSX.Element {
     if (id) {
       dispatch(fetchOfferAction(id));
       dispatch(fetchNearbyOffersAction(id));
-      dispatch(fetchCommentsAction(id));
+      dispatch(fetchReviewsAction(id));
     }
   }, [dispatch, id]);
 
-  if (offerStatus === 'failed') {
+  if (offerStatus === RequestStatus.Failed) {
     return <Navigate to={AppRoute.NotFound} replace />;
   }
 
-  if (offerStatus === 'idle' || offerStatus === 'loading' || !offerDescription) {
+  if (offerStatus === RequestStatus.Idle || offerStatus === RequestStatus.Loading || !offerDescription) {
     return <Spinner label="Loading offer" />;
   }
 
@@ -146,9 +148,9 @@ function Offer(): JSX.Element {
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              {(nearbyStatus === 'idle' || nearbyStatus === 'loading') && <Spinner label="Loading nearby places" />}
-              {nearbyStatus === 'failed' && <p>Unable to load nearby places.</p>}
-              {nearbyStatus === 'succeeded' && nearbyOffers.map((offer) =>
+              {(nearbyOffersLoadingStatus === RequestStatus.Idle || nearbyOffersLoadingStatus === RequestStatus.Loading) && <Spinner label="Loading nearby places" />}
+              {nearbyOffersLoadingStatus === RequestStatus.Failed && <p>Unable to load nearby places.</p>}
+              {nearbyOffersLoadingStatus === RequestStatus.Succeeded && nearbyOffers.map((offer) =>
                 <Card key={offer.id} offer={offer} variant={CardVariants.Near} />)}
             </div>
           </section>

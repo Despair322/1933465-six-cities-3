@@ -5,7 +5,8 @@ import PrivateRoute from './private-route';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './layout';
 import { useAppDispatch, useAppSelector } from '../hooks';
-import { fetchFavoritesAction } from '../store/api-action';
+import { selectAuthorizationStatus } from '../store/slices/user';
+import { fetchFavoritesAction } from '../store/thunks/favorites';
 const Main = lazy(() => import('../pages/main/main'));
 const Favorites = lazy(() => import('../pages/favorites/favorites'));
 const OfferPage = lazy(() => import('../pages/offer/offer'));
@@ -15,7 +16,7 @@ const Login = lazy(() => import('../pages/login/login'));
 function App(): JSX.Element {
 
   const dispatch = useAppDispatch();
-  const authStatus = useAppSelector((state) => state.authorizationStatus);
+  const authStatus = useAppSelector(selectAuthorizationStatus);
 
   useEffect(() => {
     if (authStatus === AuthorizationStatus.Auth) {

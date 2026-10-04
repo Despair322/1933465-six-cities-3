@@ -1,31 +1,34 @@
 import { FormEvent, Fragment, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { AppRoute } from '../../constants/app';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { loginAction } from '../../store/api-action';
+import { selectActiveCity } from '../../store/slices/catalog';
+import { loginAction } from '../../store/thunks/user';
 
 function LoginScreen(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const activeCity = useAppSelector(selectActiveCity);
+
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
-  const [loginError, setLoginError] = useState<string | null>(null);
-
-  const dispatch = useAppDispatch();
-  const activeCity = useAppSelector((state)=> state.city);
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     setLoginError(null);
-    if (loginRef.current !== null && passwordRef.current !== null){
+    if (loginRef.current !== null && passwordRef.current !== null) {
       void dispatch(loginAction({
         login: loginRef.current.value,
         password: passwordRef.current.value,
-      })).unwrap().catch((error: unknown) => {
-        if (typeof error === 'string') {
-          setLoginError(error);
-        }
-      });
+      })).unwrap().then(() => <Navigate to={AppRoute.Main} />
+      )
+        .catch((error: unknown) => {
+          if (typeof error === 'string') {
+            setLoginError(error);
+          }
+        });
     }
   };
 

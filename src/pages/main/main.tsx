@@ -4,20 +4,20 @@ import PlacesList from './components/places-list';
 import LocationsList from './components/locations-list';
 import CitiesMap from '../../components/shared/lazy-cities-map';
 import SortForm from './components/sort-form';
-import { MapVariants } from '../../constants/app';
+import { MapVariants, RequestStatus } from '../../constants/app';
 import { mapToPoint } from '../../utils/common';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { CityName } from '../../types/types';
-import { fetchOffersAction } from '../../store/api-action';
-import { setActiveCity } from '../../store/action';
 import { sortOffers } from '../../utils/sort-offers';
 import Spinner from '../../components/shared/spinner/spinner';
+import { selectActiveCity, selectOffers, selectOffersLoadingStatus, selectSortType, setActiveCity } from '../../store/slices/catalog';
+import { fetchOffersAction } from '../../store/thunks/catalog';
 
 function Main(): JSX.Element {
-  const offers = useAppSelector((state) => state.offers);
-  const offersStatus = useAppSelector((state) => state.loadingStatus.offers);
-  const activeCity = useAppSelector((state) => state.city);
-  const activeSortType = useAppSelector((state) => state.sortType);
+  const offers = useAppSelector(selectOffers);
+  const offersStatus = useAppSelector(selectOffersLoadingStatus);
+  const activeCity = useAppSelector(selectActiveCity);
+  const activeSortType = useAppSelector(selectSortType);
   const dispatch = useAppDispatch();
 
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
@@ -74,9 +74,9 @@ function Main(): JSX.Element {
           <div className="cities__places-container container">
             <section ref={placesRef} className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              {(offersStatus === 'idle' || offersStatus === 'loading') && <Spinner label="Loading offers" />}
-              {offersStatus === 'failed' && <p>Unable to load offers.</p>}
-              {offersStatus === 'succeeded' && (
+              {(offersStatus === RequestStatus.Idle || offersStatus === RequestStatus.Loading) && <Spinner label="Loading offers" />}
+              {offersStatus === RequestStatus.Failed && <p>Unable to load offers.</p>}
+              {offersStatus === RequestStatus.Succeeded && (
                 <>
                   <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} places to stay in {activeCity}</b>
                   {cityOffers.length > 0 && <SortForm />}

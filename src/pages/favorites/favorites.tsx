@@ -2,17 +2,18 @@ import { Helmet } from 'react-helmet-async';
 import { Fragment, useEffect, useState } from 'react';
 import Card from '../../components/shared/card';
 import { groupFavoritesByCity } from '../../utils/favorites';
-import { AppRoute, CardVariants } from '../../constants/app';
+import { AppRoute, CardVariants, RequestStatus } from '../../constants/app';
 import { Link } from 'react-router-dom';
 import { CityName } from '../../types/types';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setActiveCity, setOldFavorites } from '../../store/action';
-import { fetchFavoritesAction } from '../../store/api-action';
 import Spinner from '../../components/shared/spinner/spinner';
+import { selectFavoritesLoadingStatus, selectOldFavorites, setOldFavorites } from '../../store/slices/favorites';
+import { setActiveCity } from '../../store/slices/catalog';
+import { fetchFavoritesAction } from '../../store/thunks/favorites';
 
 function Favorites(): JSX.Element {
-  const favoritesStatus = useAppSelector((state) => state.loadingStatus.favorites);
-  const oldFavorites = useAppSelector((state) => state.oldFavorites);
+  const favoritesStatus = useAppSelector(selectFavoritesLoadingStatus);
+  const oldFavorites = useAppSelector(selectOldFavorites);
   const dispatch = useAppDispatch();
 
   const [initialLoading, setInitialLoading] = useState(true);
@@ -35,10 +36,9 @@ function Favorites(): JSX.Element {
     return <Spinner label="Loading favorites" />;
   }
 
-  if (favoritesStatus === 'failed') {
+  if (favoritesStatus === RequestStatus.Failed) {
     return <p>Unable to load favorites.</p>;
   }
-
   return (
     <Fragment>
       <Helmet>
