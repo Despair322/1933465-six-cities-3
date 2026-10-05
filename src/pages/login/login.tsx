@@ -1,14 +1,20 @@
 import { FormEvent, Fragment, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link, Navigate } from 'react-router-dom';
-import { AppRoute } from '../../constants/app';
+import { Link, Navigate, useLocation } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../constants/app';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectActiveCity } from '../../store/slices/catalog';
 import { loginAction } from '../../store/thunks/user';
+import { LoginLocationState } from '../../types/pages';
+import { selectAuthorizationStatus } from '../../store/slices/user';
 
 function LoginScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const activeCity = useAppSelector(selectActiveCity);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const location = useLocation();
+  const locationState = location.state as LoginLocationState | null;
+  const fromPage = locationState?.from?.pathname || AppRoute.Main;
 
   const [loginError, setLoginError] = useState<string | null>(null);
 
@@ -22,7 +28,7 @@ function LoginScreen(): JSX.Element {
       void dispatch(loginAction({
         login: loginRef.current.value,
         password: passwordRef.current.value,
-      })).unwrap().then(() => <Navigate to={AppRoute.Main} />
+      })).unwrap().then(() => <Navigate to={fromPage} />
       )
         .catch((error: unknown) => {
           if (typeof error === 'string') {
@@ -31,6 +37,10 @@ function LoginScreen(): JSX.Element {
         });
     }
   };
+
+  if (authorizationStatus === AuthorizationStatus.Auth) {
+    return <Navigate to={fromPage} replace />;
+  }
 
   return (
     <Fragment>

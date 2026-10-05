@@ -1,7 +1,7 @@
 import { lazy, useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../constants/app';
-import PrivateRoute from './private-route';
+import PrivateRoute from './protected-route';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './layout';
 import { useAppDispatch, useAppSelector } from '../hooks';
@@ -36,9 +36,7 @@ function App(): JSX.Element {
             <Route
               path={AppRoute.Login}
               element={
-                <PrivateRoute>
-                  <Login />
-                </PrivateRoute>
+                <Login />
               }
             />
             <Route
