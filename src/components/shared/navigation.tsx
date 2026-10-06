@@ -3,12 +3,11 @@ import { AppRoute, AuthorizationStatus } from '../../constants/app';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logoutAction } from '../../store/thunks/user';
 import { selectAuthorizationStatus, selectUserData } from '../../store/slices/user';
-import { selectFavoritesCount } from '../../store/slices/favorites';
+import FavoriteCount from './favorite-count';
 
 function Navigation(): JSX.Element | null {
   const authStatus = useAppSelector(selectAuthorizationStatus);
   const user = useAppSelector(selectUserData);
-  const favorites = useAppSelector(selectFavoritesCount);
   const isAuth = authStatus === AuthorizationStatus.Auth;
   const isUnknown = authStatus === AuthorizationStatus.Unknown;
   const dispatch = useAppDispatch();
@@ -33,7 +32,7 @@ function Navigation(): JSX.Element | null {
               isAuth ?
                 <>
                   <span className="header__user-name user__name">{user?.email}</span>
-                  <span className="header__favorite-count">{favorites}</span>
+                  <FavoriteCount/>
                 </> :
                 <span className="header__login">Sign in</span>
             }

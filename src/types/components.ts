@@ -72,3 +72,7 @@ export type FavoriteButtonProps = {
   id: string;
   variant?: FavoriteButtonVariant;
 };
+
+export type LocationItemProps = {
+  city: CityName;
+};

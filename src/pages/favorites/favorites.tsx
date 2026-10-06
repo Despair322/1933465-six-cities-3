@@ -2,14 +2,12 @@ import { Helmet } from 'react-helmet-async';
 import { Fragment, useEffect, useState } from 'react';
 import Card from '../../components/shared/card';
 import { groupFavoritesByCity } from '../../utils/favorites';
-import { AppRoute, CardVariants, RequestStatus } from '../../constants/app';
-import { Link } from 'react-router-dom';
-import { CityName } from '../../types/types';
+import { CardVariants, RequestStatus } from '../../constants/app';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import Spinner from '../../components/shared/spinner/spinner';
 import { selectFavoritesLoadingStatus, selectOldFavorites, setOldFavorites } from '../../store/slices/favorites';
-import { setActiveCity } from '../../store/slices/catalog';
 import { fetchFavoritesAction } from '../../store/thunks/favorites';
+import LocationItem from './components/location-item';
 
 function Favorites(): JSX.Element {
   const favoritesStatus = useAppSelector(selectFavoritesLoadingStatus);
@@ -20,9 +18,6 @@ function Favorites(): JSX.Element {
 
   const groupedFavorites = groupFavoritesByCity(oldFavorites);
   const isEmpty = oldFavorites.length === 0;
-  const handleClick = (city: CityName) => {
-    dispatch(setActiveCity(city));
-  };
 
   useEffect(() => {
     void dispatch(fetchFavoritesAction()).unwrap().then((loadedFavorites) => {
@@ -62,16 +57,7 @@ function Favorites(): JSX.Element {
                 {groupedFavorites.map(({ city, offers }) => (
                   city && offers && offers.length > 0 && (
                     <li className="favorites__locations-items" key={city}>
-                      <div className="favorites__locations locations locations--current">
-                        <div className="locations__item">
-                          <Link className="locations__item-link" to={AppRoute.Main} onClick={() => {
-                            handleClick(city);
-                          }}
-                          >
-                            <span>{city}</span>
-                          </Link>
-                        </div>
-                      </div>
+                      <LocationItem city={city} />
                       <div className="favorites__places">
                         {offers.map((offer) => (
                           <Card key={offer.id} offer={offer} variant={CardVariants.Favorites} />

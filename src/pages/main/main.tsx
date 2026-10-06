@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PlacesList from './components/places-list';
 import LocationsList from './components/locations-list';
 import CitiesMap from '../../components/shared/lazy-cities-map';
@@ -40,9 +40,13 @@ function Main(): JSX.Element {
     [sortedOffers]
   );
 
-  function handleOfferHover(id: string | null) {
+  const handleOfferHover = useCallback((id: string | null) => {
     setActiveOfferId(id);
-  }
+  }, []);
+
+  const handleCityClick = useCallback((city: CityName) => {
+    dispatch(setActiveCity(city));
+  }, [dispatch]);
 
   useEffect(() => {
     if (previousCityRef.current !== activeCity) {
@@ -67,7 +71,7 @@ function Main(): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <LocationsList activeCity={activeCity} onClick={(city: CityName) => dispatch(setActiveCity(city))} />
+            <LocationsList activeCity={activeCity} onClick={handleCityClick} />
           </section>
         </div>
         <div className="cities">

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { SORT_OPTIONS } from '../../../constants/app';
 import type { SortType } from '../../../types/types';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
@@ -59,4 +59,6 @@ function SortForm(): JSX.Element {
   );
 }
 
-export default SortForm;
+const MemoizedSortForm = memo(SortForm);
+
+export default MemoizedSortForm;
