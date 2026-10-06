@@ -1,5 +1,5 @@
 import type { Offer } from './offer';
-import type { CityName, CardVariant, MapVariant, Point, RatingVariant } from './types';
+import type { CityName, CardVariant, MapVariant, Point, RatingVariant, FavoriteButtonVariant } from './types';
 import type { Review } from './review';
 
 export type PrivateRouteProps = {
@@ -65,4 +65,10 @@ export type StarProps = {
 
 export type FormProps = {
   id: string;
+};
+
+export type FavoriteButtonProps = {
+  isFavorite: boolean;
+  id: string;
+  variant?: FavoriteButtonVariant;
 };

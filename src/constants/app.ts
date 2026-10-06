@@ -33,6 +33,11 @@ export const MapVariants = {
   Offer: 'offer',
 } as const;
 
+export const FavoriteButtonVariants = {
+  Card: 'card',
+  Offer: 'offer',
+};
+
 export const SORT_OPTIONS = [
   { value: 'popular', title: 'Popular' },
   { value: 'price', title: 'Price: low to high' },

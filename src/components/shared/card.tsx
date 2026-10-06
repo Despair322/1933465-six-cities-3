@@ -1,15 +1,11 @@
-import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { AppRoute, CardVariants, RatingVariants } from '../../constants/app';
+import { AppRoute, CardVariants, FavoriteButtonVariants, RatingVariants } from '../../constants/app';
 import type { CardProps } from '../../types/components';
 import Rating from './rating';
-import { useAppDispatch } from '../../hooks';
-import { debounce } from '../../utils/common';
-import { postFavoriteAction } from '../../store/thunks/favorites';
+import FavoriteisButton from './favorite-button';
 
 function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.Element {
-  const dispatch = useAppDispatch();
   const { id, isPremium, previewImage, price, isFavorite, rating, title, type } = offer;
   const offerPath = AppRoute.OfferById(id);
   const isMain = variant === CardVariants.Main;
@@ -17,13 +13,6 @@ function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.E
   const isFavorites = variant === CardVariants.Favorites;
   const imageWidth = isFavorites ? 150 : 260;
   const imageHeight = isFavorites ? 110 : 200;
-
-  const handleFavoriteClick = useMemo(
-    () => debounce(() => {
-      dispatch(postFavoriteAction({ id, status: !isFavorite }));
-    }, 300),
-    [dispatch, id, isFavorite],
-  );
 
   return (
     <article
@@ -58,18 +47,7 @@ function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.E
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button
-            className={classNames('place-card__bookmark-button button', {
-              'place-card__bookmark-button--active': isFavorite,
-            })}
-            type="button"
-            onClick={handleFavoriteClick}
-          >
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
-          </button>
+          <FavoriteisButton isFavorite={isFavorite} id={id} variant={FavoriteButtonVariants.Card} />
         </div>
         <Rating rating={rating} variant={RatingVariants.Card} />
         <h2 className="place-card__name">

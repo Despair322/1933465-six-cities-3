@@ -55,6 +55,12 @@ const detailedOfferSlice = createSlice({
         const { id, isFavorite } = action.payload;
         if (state.detailedOffer && state.detailedOffer.id === id) {
           state.detailedOffer.isFavorite = isFavorite;
+        } else {
+          state.nearbyOffers.forEach((offer) => {
+            if (offer.id === id) {
+              offer.isFavorite = isFavorite;
+            }
+          });
         }
       }),
   initialState,

@@ -1,20 +1,20 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment, Suspense, useEffect, useMemo, useRef } from 'react';
+import { Fragment, Suspense, useEffect, useRef } from 'react';
 import Image from './components/image';
-import classNames from 'classnames';
 import Rating from '../../components/shared/rating';
-import { AppRoute, CardVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants/app';
+import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants/app';
 import Features from './components/featiures';
 import Reviews from './components/reviews';
 import Card from '../../components/shared/card';
 import CitiesMap from '../../components/shared/lazy-cities-map';
-import { debounce, mapToPoint } from '../../utils/common';
+import { mapToPoint } from '../../utils/common';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import Spinner from '../../components/shared/spinner/spinner';
 import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectReviews } from '../../store/slices/detailedOffer';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/thunks/detailedOffer';
-import { postFavoriteAction } from '../../store/thunks/favorites';
+
+import FavoriteisButton from '../../components/shared/favorite-button';
 
 function Offer(): JSX.Element {
   const { id } = useParams<{ id: string }>();
@@ -27,17 +27,6 @@ function Offer(): JSX.Element {
 
   const offerRef = useRef<HTMLElement | null>(null);
   const previousOfferRef = useRef(id);
-
-  const handleFavoriteClick = useMemo(
-    () => debounce(() => {
-      if (!offerDescription) {
-        return;
-      }
-
-      dispatch(postFavoriteAction({ id: offerDescription.id, status: !offerDescription.isFavorite }));
-    }, 300),
-    [dispatch, offerDescription],
-  );
 
   useEffect(() => {
     if (previousOfferRef.current !== id) {
@@ -96,12 +85,7 @@ function Offer(): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <button className={classNames('offer__bookmark-button', 'button', { 'offer__bookmark-button--active': isFavorite })} type="button" onClick={handleFavoriteClick}>
-                  <svg className="offer__bookmark-icon" width="31" height="33">
-                    <use xlinkHref="#icon-bookmark"></use>
-                  </svg>
-                  <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
-                </button>
+                <FavoriteisButton isFavorite={isFavorite} id={id as string} variant={FavoriteButtonVariants.Offer} />
               </div>
               <Rating rating={rating} variant={RatingVariants.Offer} />
               <ul className="offer__features">
