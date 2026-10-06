@@ -1,6 +1,6 @@
 import type { City, OfferLocation } from './offer';
 
-type Host = {
+export type Host = {
   isPro: boolean;
   name: string;
   avatarUrl: string;

@@ -1,9 +1,9 @@
 import { Helmet } from 'react-helmet-async';
-import { Fragment, Suspense, useEffect, useRef } from 'react';
+import { Fragment, Suspense, useEffect, useMemo, useRef } from 'react';
 import Image from './components/image';
 import Rating from '../../components/shared/rating';
 import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants/app';
-import Features from './components/featiures';
+import Goods from './components/goods';
 import Reviews from './components/reviews';
 import Card from '../../components/shared/card';
 import CitiesMap from '../../components/shared/lazy-cities-map';
@@ -15,13 +15,15 @@ import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffe
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/thunks/detailedOffer';
 
 import FavoriteisButton from '../../components/shared/favorite-button';
+import Host from './components/host';
 
 function Offer(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const offerDescription = useAppSelector(selectDetailedOffer);
   const offerStatus = useAppSelector(selectDetailedOfferLoadingStatus);
-  const nearbyOffers = useAppSelector(selectNearbyOffers).slice(0, 3);
+  const allNearbyOffers = useAppSelector(selectNearbyOffers);
+  const nearbyOffers = useMemo(() => allNearbyOffers.slice(0, 3), [allNearbyOffers]);
   const nearbyOffersLoadingStatus = useAppSelector(selectNearbyOffersLoadingStatus);
   const reviews = useAppSelector(selectReviews);
 
@@ -103,24 +105,8 @@ function Offer(): JSX.Element {
                 <b className="offer__price-value">{price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
-              {goods && goods.length > 0 && <Features goods={goods} />}
-              <div className="offer__host">
-                <h2 className="offer__host-title">Meet the host</h2>
-                <div className="offer__host-user user">
-                  <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
-                    <img className="offer__avatar user__avatar" src={host.avatarUrl} width="74" height="74" alt="Host avatar" />
-                  </div>
-                  <span className="offer__user-name">
-                    {host.name}
-                  </span>
-                  {host.isPro && <span className="offer__user-status">Pro</span>}
-                </div>
-                <div className="offer__description">
-                  <p className="offer__text">
-                    {description}
-                  </p>
-                </div>
-              </div>
+              {goods && goods.length > 0 && <Goods goods={goods} />}
+              <Host host={host} description={description} />
               <Reviews reviews={reviews} />
             </div>
           </div>

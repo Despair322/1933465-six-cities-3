@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { ImageProps } from '../../../types/components';
 
 function Image({ src }: ImageProps): JSX.Element {
@@ -8,4 +9,7 @@ function Image({ src }: ImageProps): JSX.Element {
   );
 }
 
-export default Image;
+const MemoizedImage = memo(Image);
+
+export default MemoizedImage;
+

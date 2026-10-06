@@ -6,6 +6,7 @@ import { AuthorizationStatus, RequestStatus } from '../../../constants/app';
 import Spinner from '../../../components/shared/spinner/spinner';
 import { selectAuthorizationStatus } from '../../../store/slices/user';
 import { selectReviewsLoadingStatus } from '../../../store/slices/detailedOffer';
+import { memo } from 'react';
 
 function Reviews({ reviews }: ReviewsListProps): JSX.Element {
   const isAuth = useAppSelector(selectAuthorizationStatus) === AuthorizationStatus.Auth;
@@ -31,4 +32,6 @@ function Reviews({ reviews }: ReviewsListProps): JSX.Element {
   );
 }
 
-export default Reviews;
+const MemoizedReviews = memo(Reviews);
+
+export default MemoizedReviews;

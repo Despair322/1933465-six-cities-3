@@ -4,6 +4,7 @@ import { AppRoute, CardVariants, FavoriteButtonVariants, RatingVariants } from '
 import type { CardProps } from '../../types/components';
 import Rating from './rating';
 import FavoriteisButton from './favorite-button';
+import { memo } from 'react';
 
 function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.Element {
   const { id, isPremium, previewImage, price, isFavorite, rating, title, type } = offer;
@@ -59,4 +60,6 @@ function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.E
   );
 }
 
-export default Card;
+const MemoizedCard = memo(Card);
+
+export default MemoizedCard;

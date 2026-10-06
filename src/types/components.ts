@@ -1,6 +1,7 @@
 import type { Offer } from './offer';
 import type { CityName, CardVariant, MapVariant, Point, RatingVariant, FavoriteButtonVariant } from './types';
 import type { Review } from './review';
+import { Host } from './detailed-offer';
 
 export type PrivateRouteProps = {
   children: JSX.Element;
@@ -41,7 +42,7 @@ export type PlacesListProps = {
   onHover?: (offerId: string | null) => void;
 };
 
-export type FeatureProps = {
+export type GoodsProps = {
   goods: string[];
 };
 
@@ -76,3 +77,8 @@ export type FavoriteButtonProps = {
 export type LocationItemProps = {
   city: CityName;
 };
+
+export type HostProps = {
+  host: Host;
+  description: string;
+}

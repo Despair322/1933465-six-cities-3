@@ -78,6 +78,7 @@ const detailedOfferSlice = createSlice({
   },
   selectors: {
     selectDetailedOffer: (state) => state.detailedOffer,
+    selectDetailedOfferId: (state) => state.detailedOffer?.id,
     selectNearbyOffers: (state) => state.nearbyOffers,
     selectReviews: (state) => state.reviews,
     selectDetailedOfferLoadingStatus: (state) => state.loadingStatus.detailedOffer,
@@ -87,7 +88,7 @@ const detailedOfferSlice = createSlice({
 });
 
 export const { loadDetailedOffer, loadNearbyOffers, loadReviews } = detailedOfferSlice.actions;
-export const { selectDetailedOffer, selectDetailedOfferLoadingStatus,
+export const { selectDetailedOffer, selectDetailedOfferId, selectDetailedOfferLoadingStatus,
   selectNearbyOffers, selectNearbyOffersLoadingStatus,
   selectReviews, selectReviewsLoadingStatus } = detailedOfferSlice.selectors;
 

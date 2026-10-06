@@ -2,10 +2,14 @@ import classNames from 'classnames';
 import type { RatingProps } from '../../types/components';
 import { RatingVariants } from '../../constants/app';
 import { transformRatingToPercent } from '../../utils/common';
+import { memo, useMemo } from 'react';
 
 function Rating({ rating, variant }: RatingProps): JSX.Element {
   const isCard = variant === RatingVariants.Card;
   const isOffer = variant === RatingVariants.Offer;
+
+  const ratingMemo = useMemo(() => transformRatingToPercent(rating), [rating]);
+
   return (
     <div className={classNames(
       { 'place-card__rating': isCard },
@@ -17,11 +21,13 @@ function Rating({ rating, variant }: RatingProps): JSX.Element {
         { 'offer__stars': isOffer },
         'rating__stars',)}
       >
-        <span style={{ width: `${transformRatingToPercent(rating)}%` }}></span>
+        <span style={{ width: `${ratingMemo}%` }}></span>
         <span className="visually-hidden">Rating</span>
       </div>
     </div>
   );
 }
 
-export default Rating;
+const MemoizedRating = memo(Rating);
+
+export default MemoizedRating;
