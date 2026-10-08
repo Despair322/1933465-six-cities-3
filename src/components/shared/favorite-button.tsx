@@ -4,7 +4,7 @@ import { useAppDispatch } from '../../hooks';
 import { debounce } from '../../utils/common';
 import { postFavoriteAction } from '../../store/thunks/favorites';
 import { FavoriteButtonVariants } from '../../constants/app';
-import type { FavoriteButtonProps } from '../../types/components';
+import type { FavoriteButtonProps } from './types';
 
 function FavoriteButton({ isFavorite, id, variant }: FavoriteButtonProps): JSX.Element {
   const dispatch = useAppDispatch();

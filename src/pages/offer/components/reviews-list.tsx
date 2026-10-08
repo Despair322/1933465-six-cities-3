@@ -1,5 +1,5 @@
 import ReviewComponent from './review';
-import type { ReviewsListProps } from '../../../types/components';
+import type { ReviewsListProps } from './types';
 
 function ReviewsList({ reviews }: ReviewsListProps): JSX.Element {
   return (

@@ -1,6 +1,6 @@
 import Form from './form';
 import ReviewsList from './reviews-list';
-import type { ReviewsListProps } from '../../../types/components';
+import type { ReviewsListProps } from './types';
 import { useAppSelector } from '../../../hooks';
 import { AuthorizationStatus, RequestStatus } from '../../../constants/app';
 import Spinner from '../../../components/shared/spinner/spinner';

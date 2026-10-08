@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import type { StarProps } from '../../../types/components';
+import type { StarProps } from './types';
 
 function Star({ rating, title, onChange }: StarProps): JSX.Element {
   return (

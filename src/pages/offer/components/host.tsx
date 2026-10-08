@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { HostProps } from '../../../types/components';
+import { HostProps } from './types';
 
 function Host({ host, description }: HostProps): JSX.Element {
   const { avatarUrl, name, isPro } = host;

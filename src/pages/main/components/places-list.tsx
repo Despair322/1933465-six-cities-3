@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import Card from '../../../components/shared/card';
 import { CardVariants } from '../../../constants/app';
-import type { PlacesListProps } from '../../../types/components';
+import type { PlacesListProps } from './types';
 
 function PlacesList({ offers, onHover }: PlacesListProps): JSX.Element {
   return (

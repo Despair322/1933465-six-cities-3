@@ -1,6 +1,6 @@
 import { CityNames } from '../../../constants/cities';
 import LocationItem from './location-item';
-import type { LocationListProps } from '../../../types/components';
+import type { LocationListProps } from './types';
 import { memo } from 'react';
 
 function LocationsList({ activeCity, onClick }: LocationListProps): JSX.Element {

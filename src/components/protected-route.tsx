@@ -1,11 +1,11 @@
 import { Navigate } from 'react-router-dom';
-import type { PrivateRouteProps } from '../types/components';
+import type { ProtectedRouteProps } from './protected-route.types';
 
-function ProtectedRoute(props: PrivateRouteProps): JSX.Element {
+function ProtectedRoute(props: ProtectedRouteProps): JSX.Element {
   const { children, isNavigate, navigateTo } = props;
 
-  if(isNavigate){
-    return <Navigate to={navigateTo} replace/>;
+  if (isNavigate) {
+    return <Navigate to={navigateTo} replace />;
   }
   return children;
 }

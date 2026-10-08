@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../../constants/app';
-import { LocationItemProps } from '../../../types/components';
+import { LocationItemProps } from './location-item.types';
 import { useAppDispatch } from '../../../hooks';
 import { setActiveCity } from '../../../store/slices/catalog';
 

@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import { Icon, Marker, LayerGroup, layerGroup } from 'leaflet';
 import useMap from '../../hooks/use-map';
 import { MapVariants } from '../../constants/app';
-import type { MapProps } from '../../types/components';
+import type { MapProps } from './types';
 import 'leaflet/dist/leaflet.css';
 import classNames from 'classnames';
 

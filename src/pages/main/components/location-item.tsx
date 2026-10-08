@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../../constants/app';
-import type { LocationProps } from '../../../types/components';
+import type { LocationProps } from './types';
 
 function LocationItem({ city, isActive, onClick }: LocationProps): JSX.Element {
 
