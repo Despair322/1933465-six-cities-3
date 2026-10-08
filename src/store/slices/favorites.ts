@@ -8,14 +8,12 @@ interface FavoritesState {
   favorites: Offer[];
   oldFavorites: Offer[];
   loadingStatus: { favorites: RequestStatus };
-  favoritesCount: number;
 }
 
 const initialState: FavoritesState = {
   favorites: [],
   oldFavorites: [],
   loadingStatus: { favorites: RequestStatus.Idle },
-  favoritesCount: 0,
 };
 
 const favoritesSlice = createSlice({
@@ -27,7 +25,6 @@ const favoritesSlice = createSlice({
       .addCase(fetchFavoritesAction.fulfilled, (state, action: PayloadAction<Offer[]>) => {
         state.loadingStatus = { favorites: RequestStatus.Succeeded };
         state.favorites = action.payload;
-        state.favoritesCount = action.payload.length;
       })
       .addCase(fetchFavoritesAction.rejected, (state) => {
         state.loadingStatus = { favorites: RequestStatus.Failed };
@@ -50,7 +47,7 @@ const favoritesSlice = createSlice({
     selectFavorites: (state) => state.favorites,
     selectOldFavorites: (state) => state.oldFavorites,
     selectFavoritesLoadingStatus: (state) => state.loadingStatus.favorites,
-    selectFavoritesCount: (state) => state.favoritesCount,
+    selectFavoritesCount: (state) => state.favorites.length,
   }
 });
 

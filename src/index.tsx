@@ -7,11 +7,12 @@ import { getToken } from './services/token';
 import { AuthorizationStatus } from './constants/app';
 import { checkAuthAction } from './store/thunks/user';
 import { requireAuthorization } from './store/slices/user';
+import { BrowserRouter } from 'react-router-dom';
 
 const token = getToken();
 if (token) {
   store.dispatch(checkAuthAction());
-}else{
+} else {
   store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
 }
 
@@ -22,7 +23,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );

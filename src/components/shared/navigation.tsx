@@ -12,27 +12,28 @@ function Navigation(): JSX.Element | null {
   const isUnknown = authStatus === AuthorizationStatus.Unknown;
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const handleSignOut = (e: React.SyntheticEvent) => {
-    e.preventDefault();
+  const handleSignOut = () => {
     dispatch(logoutAction());
   };
+  const signOutPath = location.pathname === AppRoute.Favorites
+    ? AppRoute.Main
+    : `${location.pathname}${location.search}${location.hash}`;
 
   if (isUnknown) {
     return null;
   }
-
   return (
     <nav className="header__nav">
       <ul className="header__nav-list">
         <li className="header__nav-item user">
-          <Link className="header__nav-link header__nav-link--profile" to={isAuth ? AppRoute.Favorites : AppRoute.Login} state={{ from: location }} >
+          <Link className="header__nav-link header__nav-link--profile" to={isAuth ? AppRoute.Favorites : `${AppRoute.Login}?redirect=${location.pathname}`}>
             <div className="header__avatar-wrapper user__avatar-wrapper">
             </div>
             {
               isAuth ?
                 <>
                   <span className="header__user-name user__name">{user?.email}</span>
-                  <FavoriteCount/>
+                  <FavoriteCount />
                 </> :
                 <span className="header__login">Sign in</span>
             }
@@ -41,7 +42,7 @@ function Navigation(): JSX.Element | null {
         {
           isAuth &&
           <li className="header__nav-item">
-            <Link className="header__nav-link" to={location.pathname} onClick={handleSignOut}>
+            <Link className="header__nav-link" to={signOutPath} onClick={handleSignOut}>
               <span className="header__signout">Sign out</span>
             </Link>
           </li>

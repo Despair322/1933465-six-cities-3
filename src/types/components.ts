@@ -5,7 +5,8 @@ import { Host } from './detailed-offer';
 
 export type PrivateRouteProps = {
   children: JSX.Element;
-  isAuthorizationRequired?: boolean;
+  isNavigate: boolean;
+  navigateTo: string;
 };
 
 export type CardProps = {
