@@ -1,21 +1,21 @@
 import { Helmet } from 'react-helmet-async';
 import { Fragment, Suspense, useEffect, useMemo, useRef } from 'react';
 import Image from './components/image';
-import Rating from '../../components/shared/rating';
-import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants/app';
+import Rating from '../../components/rating';
 import Goods from './components/goods';
 import Reviews from './components/reviews';
-import Card from '../../components/shared/card';
-import CitiesMap from '../../components/shared/lazy-cities-map';
+import Card from '../../components/card';
+import CitiesMap from '../../components/cities-map';
+import Spinner from '../../components/spinner';
+import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants/app';
 import { mapToPoint } from '../../utils/common';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import Spinner from '../../components/shared/spinner/spinner';
 import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectReviews } from '../../store/slices/detailedOffer';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/thunks/detailedOffer';
 
-import FavoriteisButton from '../../components/shared/favorite-button';
-import Host from './components/host';
+import FavoriteisButton from '../../components/favorite-button/favorite-button';
+import Host from './components/host/host';
 
 function Offer(): JSX.Element {
   const { id } = useParams<{ id: string }>();

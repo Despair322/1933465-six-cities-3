@@ -1,15 +1,15 @@
 import { Helmet } from 'react-helmet-async';
 import { Fragment, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PlacesList from './components/places-list';
-import LocationsList from './components/locations-list';
-import CitiesMap from '../../components/shared/lazy-cities-map';
+import LocationsList from './components/location-list';
+import CitiesMap from '../../components/cities-map';
 import SortForm from './components/sort-form';
+import Spinner from '../../components/spinner';
 import { MapVariants, RequestStatus } from '../../constants/app';
 import { mapToPoint } from '../../utils/common';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { CityName } from '../../types/types';
 import { sortOffers } from '../../utils/sort-offers';
-import Spinner from '../../components/shared/spinner/spinner';
 import { selectActiveCity, selectOffers, selectOffersLoadingStatus, selectSortType, setActiveCity } from '../../store/slices/catalog';
 import { fetchOffersAction } from '../../store/thunks/catalog';
 

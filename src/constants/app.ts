@@ -1,6 +1,6 @@
 import type { StringRouteKeys } from '../types/types';
 
-export const numberOfStars = 5;
+export const NumberOfStars = 5;
 
 export const AppRoute = {
   Main: '/',

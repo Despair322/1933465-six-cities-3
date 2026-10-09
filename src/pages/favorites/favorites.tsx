@@ -1,10 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 import { Fragment, useEffect, useState } from 'react';
-import Card from '../../components/shared/card';
+import Card from '../../components/card';
 import { groupFavoritesByCity } from '../../utils/favorites';
 import { CardVariants, RequestStatus } from '../../constants/app';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import Spinner from '../../components/shared/spinner/spinner';
+import Spinner from '../../components/spinner/spinner';
 import { selectFavoritesLoadingStatus, selectOldFavorites, setOldFavorites } from '../../store/slices/favorites';
 import { fetchFavoritesAction } from '../../store/thunks/favorites';
 import LocationItem from './components/location-item';
