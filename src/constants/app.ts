@@ -22,7 +22,6 @@ export const CardVariants = {
   Near: 'near',
 } as const;
 
-
 export const RatingVariants = {
   Card: 'card',
   Offer: 'offer',

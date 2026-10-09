@@ -12,6 +12,7 @@ import { CityName } from '../../types/types';
 import { sortOffers } from '../../utils/sort-offers';
 import { selectActiveCity, selectOffers, selectOffersLoadingStatus, selectSortType, setActiveCity } from '../../store/slices/catalog';
 import { fetchOffersAction } from '../../store/thunks/catalog';
+import classNames from 'classnames';
 
 function Main(): JSX.Element {
   const offers = useAppSelector(selectOffers);
@@ -24,6 +25,8 @@ function Main(): JSX.Element {
 
   const placesRef = useRef<HTMLElement | null>(null);
   const previousCityRef = useRef(activeCity);
+
+  const isLoaded = offersStatus === RequestStatus.Succeeded;
 
   const cityOffers = useMemo(
     () => offers.filter((offer) => offer.city.name === activeCity),
@@ -73,7 +76,7 @@ function Main(): JSX.Element {
       <Helmet>
         <title>6 Cities</title>
       </Helmet>
-      <main className="page__main page__main--index">
+      <main className={classNames('page__main', 'page__main--index', { 'page__main--index-empty': !cityOffers.length && isLoaded })}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
@@ -81,21 +84,31 @@ function Main(): JSX.Element {
           </section>
         </div>
         <div className="cities">
-          <div className="cities__places-container container">
-            <section ref={placesRef} className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              {(offersStatus === RequestStatus.Idle || offersStatus === RequestStatus.Loading) && <Spinner label="Loading offers" />}
-              {offersStatus === RequestStatus.Failed && <p>Unable to load offers.</p>}
-              {offersStatus === RequestStatus.Succeeded && (
-                <>
-                  <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} places to stay in {activeCity}</b>
-                  {cityOffers.length > 0 && <SortForm />}
-                  {cityOffers.length > 0 && <PlacesList offers={sortedOffers} onHover={handleOfferHover} />}
-                </>
-              )}
-            </section>
+          <div className={classNames('cities__places-container', { 'cities__places-container--empty': !cityOffers.length }, 'container')}>
+            {isLoaded && !cityOffers.length ? (
+              <section className="cities__no-places">
+                <div className="cities__status-wrapper tabs__content">
+                  <b className="cities__status">No places to stay available</b>
+                  <p className="cities__status-description">We could not find any property available at the moment in {currentCityInfo.name}</p>
+                </div>
+              </section>
+            ) : (
+              <section ref={placesRef} className="cities__places places">
+                <h2 className="visually-hidden">Places</h2>
+                {(offersStatus === RequestStatus.Idle || offersStatus === RequestStatus.Loading) && <Spinner label="Loading offers" />}
+                {offersStatus === RequestStatus.Failed && <p>Unable to load offers.</p>}
+                {isLoaded && (
+                  <>
+                    <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} places to stay in {activeCity}</b>
+                    <SortForm />
+                    <PlacesList offers={sortedOffers} onHover={handleOfferHover} />
+                  </>
+                )}
+              </section>
+            )}
+
             <div className="cities__right-section">
-              {cityOffers.length > 0 ? (
+              {cityOffers.length > 0 && (
                 <Suspense fallback={<section className="cities__map map" />}>
                   <CitiesMap
                     city={currentCityInfo}
@@ -104,14 +117,12 @@ function Main(): JSX.Element {
                     variant={MapVariants.Main}
                   />
                 </Suspense>
-              ) : (
-                <section className="cities__map map" />
               )}
             </div>
           </div>
         </div>
-      </main>
-    </Fragment>
+      </main >
+    </Fragment >
   );
 }
 

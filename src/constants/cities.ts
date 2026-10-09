@@ -4,10 +4,8 @@ export const CityNames = [
   'Brussels',
   'Amsterdam',
   'Hamburg',
-  'Dusseldorf'
+  'Dusseldorf',
 ] as const;
 
 export const DefaultCity = CityNames[0];
-
-export const CityParam = 'city';
 
