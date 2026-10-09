@@ -36,9 +36,15 @@ function Main(): JSX.Element {
   );
 
   const sortedPoints = useMemo(
-    () => mapToPoint(sortedOffers),
-    [sortedOffers]
+    () => mapToPoint(cityOffers),
+    [cityOffers]
   );
+
+  const currentCityInfo = useMemo(() =>
+    cityOffers[0]?.city ?? {
+      name: activeCity,
+      location: { latitude: 48.85661, longitude: 2.351499, zoom: 13 }
+    }, [cityOffers, activeCity]);
 
   const handleOfferHover = useCallback((id: string | null) => {
     setActiveOfferId(id);
@@ -92,7 +98,7 @@ function Main(): JSX.Element {
               {cityOffers.length > 0 ? (
                 <Suspense fallback={<section className="cities__map map" />}>
                   <CitiesMap
-                    city={cityOffers[0].city}
+                    city={currentCityInfo}
                     points={sortedPoints}
                     selectedPoint={activeOfferId}
                     variant={MapVariants.Main}

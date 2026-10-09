@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, memo } from 'react';
 import { Icon, Marker, LayerGroup, layerGroup } from 'leaflet';
 import useMap from '../../hooks/use-map';
 import { MapVariants } from '../../constants/app';
@@ -22,7 +22,6 @@ const currentCustomIcon = new Icon({
 function CitiesMap(props: MapProps): JSX.Element {
   const { city, points, selectedPoint, variant } = props;
   const [isMapInteractive, setIsMapInteractive] = useState(variant !== MapVariants.Offer);
-
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
   const markerLayerRef = useRef<LayerGroup | null>(null);
@@ -136,4 +135,6 @@ function CitiesMap(props: MapProps): JSX.Element {
   );
 }
 
-export default CitiesMap;
+const memoCitiesMap = memo(CitiesMap);
+
+export default memoCitiesMap;

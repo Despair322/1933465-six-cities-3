@@ -48,6 +48,19 @@ function Offer(): JSX.Element {
     }
   }, [dispatch, id]);
 
+  const activePoint = useMemo(() => {
+    if (!offerDescription) {
+      return null;
+    }
+    return mapToPoint(offerDescription);
+  }, [offerDescription]);
+
+  const nearPoints = useMemo(() => mapToPoint(nearbyOffers), [nearbyOffers]);
+  const allPoints = useMemo(
+    () => activePoint ? [...nearPoints, activePoint] : nearPoints,
+    [nearPoints, activePoint]
+  );
+
   if (offerStatus === RequestStatus.Failed) {
     return <Navigate to={AppRoute.NotFound} replace />;
   }
@@ -57,9 +70,6 @@ function Offer(): JSX.Element {
   }
 
   const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city } = offerDescription;
-  const activePoint = mapToPoint(offerDescription);
-  const nearPoints = mapToPoint(nearbyOffers);
-  const allPoints = [...nearPoints, activePoint];
 
   return (
     <Fragment>
