@@ -32,7 +32,12 @@ function Form(): JSX.Element | null {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const ratingNumber = Number(formData.rating);
-    dispatch(postReviewAction({ id, comment: formData.review, rating: ratingNumber }));
+    dispatch(postReviewAction({ id, comment: formData.review, rating: ratingNumber })).unwrap().then(() => {
+      setFormData({
+        rating: '',
+        review: '',
+      });
+    });
   }
 
   return (
@@ -40,7 +45,7 @@ function Form(): JSX.Element | null {
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
         {Rating.map(({ value, title }) =>
-          <Star key={value} rating={value} title={title} onChange={handleInputChange} />
+          <Star key={value} rating={value} title={title} onChange={handleInputChange} checked={formData.rating === String(value)} />
         )}
       </div>
       <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved" value={formData.review} onChange={handleInputChange}></textarea>
