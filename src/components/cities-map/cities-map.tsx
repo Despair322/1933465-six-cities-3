@@ -89,6 +89,14 @@ function CitiesMap(props: MapProps): JSX.Element {
       return;
     }
 
+    const currentPointIds = new Set(points.map((point) => point.id));
+    markersRef.current.forEach((marker, id) => {
+      if (!currentPointIds.has(id)) {
+        markerLayer.removeLayer(marker);
+        markersRef.current.delete(id);
+      }
+    });
+
     points.forEach((point) => {
       let marker = markersRef.current.get(point.id);
       if (!marker) {
@@ -99,6 +107,11 @@ function CitiesMap(props: MapProps): JSX.Element {
         marker.addTo(markerLayer);
 
         markersRef.current.set(point.id, marker);
+      }else{
+        marker.setLatLng({
+          lat: point.location.latitude,
+          lng: point.location.longitude,
+        });
       }
 
       marker.setIcon(
