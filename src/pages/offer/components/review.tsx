@@ -1,6 +1,6 @@
 import type { Review } from '../../../types/review';
 import { transformDateToMonthYear, transformRatingToPercent } from '../../../utils/common';
-import type { ReviewProps } from '../../../types/components';
+import type { ReviewProps } from './types';
 
 function Review({ review }: ReviewProps): JSX.Element {
   const { comment, date, rating, user } = review;

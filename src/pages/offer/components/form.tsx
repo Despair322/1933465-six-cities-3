@@ -2,9 +2,10 @@ import { useState } from 'react';
 import Star from './star';
 import type { FormData } from '../../../types/form';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { postCommentAction } from '../../../store/api-action';
+import { postReviewAction } from '../../../store/thunks/detailedOffer';
+import { selectDetailedOfferId } from '../../../store/slices/detailedOffer';
 
-const rating = [
+const Rating = [
   { value: 5, title: 'perfect' },
   { value: 4, title: 'good' },
   { value: 3, title: 'not bad' },
@@ -14,7 +15,7 @@ const rating = [
 
 function Form(): JSX.Element | null {
   const dispatch = useAppDispatch();
-  const id = useAppSelector((state) => state.offer?.id) || '0';
+  const id = useAppSelector(selectDetailedOfferId) || '0';
   const [formData, setFormData] = useState<FormData>({
     rating: '',
     review: '',
@@ -31,14 +32,14 @@ function Form(): JSX.Element | null {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const ratingNumber = Number(formData.rating);
-    dispatch(postCommentAction({ id, comment: formData.review, rating: ratingNumber }));
+    dispatch(postReviewAction({ id, comment: formData.review, rating: ratingNumber }));
   }
 
   return (
     <form className="reviews__form form" action="#" method="post" onSubmit={handleSubmit}>
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
-        {rating.map(({ value, title }) =>
+        {Rating.map(({ value, title }) =>
           <Star key={value} rating={value} title={title} onChange={handleInputChange} />
         )}
       </div>

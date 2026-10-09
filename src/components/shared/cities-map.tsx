@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import { Icon, Marker, LayerGroup, layerGroup } from 'leaflet';
 import useMap from '../../hooks/use-map';
 import { MapVariants } from '../../constants/app';
-import type { MapProps } from '../../types/components';
+import type { MapProps } from './types';
 import 'leaflet/dist/leaflet.css';
 import classNames from 'classnames';
 
@@ -30,6 +30,17 @@ function CitiesMap(props: MapProps): JSX.Element {
 
   const isMain = variant === MapVariants.Main;
   const isOffer = variant === MapVariants.Offer;
+
+  function handleMapUnlock() {
+    setIsMapInteractive(true);
+  }
+
+  function handleMapUnlockKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleMapUnlock();
+    }
+  }
 
   useEffect(() => {
     if (!map) {
@@ -97,17 +108,6 @@ function CitiesMap(props: MapProps): JSX.Element {
       );
     });
   }, [map, points, selectedPoint]);
-
-  function handleMapUnlock() {
-    setIsMapInteractive(true);
-  }
-
-  function handleMapUnlockKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      handleMapUnlock();
-    }
-  }
 
   return (
     <section

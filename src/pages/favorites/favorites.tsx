@@ -2,25 +2,22 @@ import { Helmet } from 'react-helmet-async';
 import { Fragment, useEffect, useState } from 'react';
 import Card from '../../components/shared/card';
 import { groupFavoritesByCity } from '../../utils/favorites';
-import { AppRoute, CardVariants } from '../../constants/app';
-import { Link } from 'react-router-dom';
-import { CityName } from '../../types/types';
+import { CardVariants, RequestStatus } from '../../constants/app';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setActiveCity, setOldFavorites } from '../../store/action';
-import { fetchFavoritesAction } from '../../store/api-action';
 import Spinner from '../../components/shared/spinner/spinner';
+import { selectFavoritesLoadingStatus, selectOldFavorites, setOldFavorites } from '../../store/slices/favorites';
+import { fetchFavoritesAction } from '../../store/thunks/favorites';
+import LocationItem from './components/location-item';
 
 function Favorites(): JSX.Element {
-  const favoritesStatus = useAppSelector((state) => state.loadingStatus.favorites);
-  const oldFavorites = useAppSelector((state) => state.oldFavorites);
+  const favoritesStatus = useAppSelector(selectFavoritesLoadingStatus);
+  const oldFavorites = useAppSelector(selectOldFavorites);
   const dispatch = useAppDispatch();
 
   const [initialLoading, setInitialLoading] = useState(true);
 
   const groupedFavorites = groupFavoritesByCity(oldFavorites);
-  const handleClick = (city: CityName) => {
-    dispatch(setActiveCity(city));
-  };
+  const isEmpty = oldFavorites.length === 0;
 
   useEffect(() => {
     void dispatch(fetchFavoritesAction()).unwrap().then((loadedFavorites) => {
@@ -35,10 +32,9 @@ function Favorites(): JSX.Element {
     return <Spinner label="Loading favorites" />;
   }
 
-  if (favoritesStatus === 'failed') {
+  if (favoritesStatus === RequestStatus.Failed) {
     return <p>Unable to load favorites.</p>;
   }
-
   return (
     <Fragment>
       <Helmet>
@@ -46,31 +42,32 @@ function Favorites(): JSX.Element {
       </Helmet>
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
-          <section className="favorites">
-            <h1 className="favorites__title">{oldFavorites.length > 0 ? 'Saved listing' : 'Nothing yet saved.'}</h1>
-            <ul className="favorites__list">
-              {groupedFavorites.map(({ city, offers }) => (
-                city && offers && offers.length > 0 && (
-                  <li className="favorites__locations-items" key={city}>
-                    <div className="favorites__locations locations locations--current">
-                      <div className="locations__item">
-                        <Link className="locations__item-link" to={AppRoute.Main} onClick={() => {
-                          handleClick(city);
-                        }}
-                        >
-                          <span>{city}</span>
-                        </Link>
+          {isEmpty ? (
+            <section className='favorites favorites--empty'>
+              <h1 className="visually-hidden">Favorites (empty)</h1>
+              <div className="favorites__status-wrapper">
+                <b className="favorites__status">Nothing yet saved.</b>
+                <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
+              </div>
+            </section>
+          ) : (
+            <section className='favorites'>
+              <h1 className="favorites__title">Saved listing</h1>
+              <ul className="favorites__list">
+                {groupedFavorites.map(({ city, offers }) => (
+                  city && offers && offers.length > 0 && (
+                    <li className="favorites__locations-items" key={city}>
+                      <LocationItem city={city} />
+                      <div className="favorites__places">
+                        {offers.map((offer) => (
+                          <Card key={offer.id} offer={offer} variant={CardVariants.Favorites} />
+                        ))}
                       </div>
-                    </div>
-                    <div className="favorites__places">
-                      {offers.map((offer) => (
-                        <Card key={offer.id} offer={offer} variant={CardVariants.Favorites} />
-                      ))}
-                    </div>
-                  </li>
-                )))}
-            </ul>
-          </section>
+                    </li>
+                  )))}
+              </ul>
+            </section>
+          )}
         </div>
       </main >
     </Fragment >

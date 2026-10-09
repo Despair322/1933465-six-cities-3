@@ -1,6 +1,5 @@
 import type { StringRouteKeys } from '../types/types';
 
-
 export const numberOfStars = 5;
 
 export const AppRoute = {
@@ -17,12 +16,6 @@ export const PageClassesMap: Partial<Record<StringRouteKeys, readonly string[] |
   [AppRoute.Login]: ['page--gray', 'page--login'],
 };
 
-export const AuthorizationStatus = {
-  Auth: 'AUTH',
-  NoAuth: 'NO_AUTH',
-  Unknown: 'UNKNOWN',
-} as const;
-
 export const CardVariants = {
   Main: 'main',
   Favorites: 'favorites',
@@ -35,16 +28,15 @@ export const RatingVariants = {
   Offer: 'offer',
 } as const;
 
-export const URL_MARKER_DEFAULT =
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg';
-
-export const URL_MARKER_CURRENT =
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
-
 export const MapVariants = {
   Main: 'main',
   Offer: 'offer',
 } as const;
+
+export const FavoriteButtonVariants = {
+  Card: 'card',
+  Offer: 'offer',
+};
 
 export const SORT_OPTIONS = [
   { value: 'popular', title: 'Popular' },
@@ -60,9 +52,20 @@ export const APIRoute = {
     `/offers/${encodeURIComponent(id)}/nearby`,
   Favorites: '/favorite',
   setFavorite: (id: string, status: boolean) => `/favorite/${encodeURIComponent(id)}/${status ? 1 : 0}`,
-  Comments: (id: string) => `/comments/${encodeURIComponent(id)}`,
+  Reviews: (id: string) => `/comments/${encodeURIComponent(id)}`,
   Login: '/login',
   Logout: '/logout',
 } as const;
 
-export const TIMEOUT_SHOW_ERROR = 2000;
+export const enum RequestStatus {
+  Idle,
+  Loading,
+  Succeeded,
+  Failed,
+}
+
+export enum AuthorizationStatus {
+  Auth,
+  NoAuth,
+  Unknown,
+}

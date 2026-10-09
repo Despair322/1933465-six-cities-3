@@ -1,33 +1,46 @@
 import { FormEvent, Fragment, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
-import { AppRoute } from '../../constants/app';
+import { Link, Navigate, useLocation } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../constants/app';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { loginAction } from '../../store/api-action';
+import { selectActiveCity } from '../../store/slices/catalog';
+import { loginAction } from '../../store/thunks/user';
+import { LoginLocationState } from '../../types/pages';
+import { selectAuthorizationStatus } from '../../store/slices/user';
 
 function LoginScreen(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const activeCity = useAppSelector(selectActiveCity);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const location = useLocation();
+  const locationState = location.state as LoginLocationState | null;
+  const fromPage = locationState?.from?.pathname || AppRoute.Main;
+
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
-  const [loginError, setLoginError] = useState<string | null>(null);
-
-  const dispatch = useAppDispatch();
-  const activeCity = useAppSelector((state)=> state.city);
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     setLoginError(null);
-    if (loginRef.current !== null && passwordRef.current !== null){
+    if (loginRef.current !== null && passwordRef.current !== null) {
       void dispatch(loginAction({
         login: loginRef.current.value,
         password: passwordRef.current.value,
-      })).unwrap().catch((error: unknown) => {
-        if (typeof error === 'string') {
-          setLoginError(error);
-        }
-      });
+      })).unwrap().then(() => <Navigate to={fromPage} />
+      )
+        .catch((error: unknown) => {
+          if (typeof error === 'string') {
+            setLoginError(error);
+          }
+        });
     }
   };
+
+  if (authorizationStatus === AuthorizationStatus.Auth) {
+    return <Navigate to={fromPage} replace />;
+  }
 
   return (
     <Fragment>

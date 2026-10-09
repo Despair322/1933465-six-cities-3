@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { getToken } from './token';
 import { StatusCodes } from 'http-status-codes';
-import { processErrorHandle } from './process-error-handle';
 import { isHandledLocally } from '../utils/api';
+import { ShowErrorToast } from './notification';
 
 const BACKEND_URL = 'https://15.design.htmlacademy.pro/six-cities';
 const REQUEST_TIMEOUT = 5000;
@@ -22,8 +22,8 @@ const shouldDisplayError = (response: AxiosResponse) => !!StatusCodeMapping[resp
 
 export const createAPI = (): AxiosInstance => {
   const api = axios.create({
-    baseURL: BACKEND_URL,
-    timeout: REQUEST_TIMEOUT,
+    baseURL: BACKEND_URL as string,
+    timeout: REQUEST_TIMEOUT as number,
   });
 
   api.interceptors.request.use(
@@ -43,10 +43,10 @@ export const createAPI = (): AxiosInstance => {
     (error: AxiosError<DetailMessageType>) => {
       if (error.response && shouldDisplayError(error.response) && !isHandledLocally(error)) {
         if (error.response?.status as StatusCodes === StatusCodes.UNAUTHORIZED) {
-          processErrorHandle('You must be authorized');
+          ShowErrorToast('Unauthorized access. Please log in.');
         } else {
           const detailMessage = (error.response.data);
-          processErrorHandle(detailMessage.message);
+          ShowErrorToast(detailMessage.message);
         }
       }
       throw error;

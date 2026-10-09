@@ -1,20 +1,23 @@
 import Form from './form';
 import ReviewsList from './reviews-list';
-import type { ReviewsListProps } from '../../../types/components';
+import type { ReviewsListProps } from './types';
 import { useAppSelector } from '../../../hooks';
-import { AuthorizationStatus } from '../../../constants/app';
+import { AuthorizationStatus, RequestStatus } from '../../../constants/app';
 import Spinner from '../../../components/shared/spinner/spinner';
+import { selectAuthorizationStatus } from '../../../store/slices/user';
+import { selectReviewsLoadingStatus } from '../../../store/slices/detailedOffer';
+import { memo } from 'react';
 
 function Reviews({ reviews }: ReviewsListProps): JSX.Element {
-  const isAuth = useAppSelector((state) => state.authorizationStatus) === AuthorizationStatus.Auth;
-  const commentsStatus = useAppSelector((state) => state.loadingStatus.comments);
+  const isAuth = useAppSelector(selectAuthorizationStatus) === AuthorizationStatus.Auth;
+  const reviewsLoadingStatus = useAppSelector(selectReviewsLoadingStatus);
   const hasReviews = reviews && reviews.length > 0;
-  const isLoading = commentsStatus === 'idle' || commentsStatus === 'loading';
+  const isLoading = reviewsLoadingStatus === RequestStatus.Idle || reviewsLoadingStatus === RequestStatus.Loading;
   return (
     <section className="offer__reviews reviews">
       {isLoading && <Spinner label="Loading reviews" />}
-      {commentsStatus === 'failed' && <p>Unable to load reviews.</p>}
-      {commentsStatus === 'succeeded' && (
+      {reviewsLoadingStatus === RequestStatus.Failed && <p>Unable to load reviews.</p>}
+      {reviewsLoadingStatus === RequestStatus.Succeeded && (
         <>
           <h2 className="reviews__title">
             {hasReviews
@@ -29,4 +32,6 @@ function Reviews({ reviews }: ReviewsListProps): JSX.Element {
   );
 }
 
-export default Reviews;
+const MemoizedReviews = memo(Reviews);
+
+export default MemoizedReviews;

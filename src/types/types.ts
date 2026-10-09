@@ -1,4 +1,4 @@
-import { AppRoute, AuthorizationStatus, CardVariants, MapVariants, RatingVariants } from '../constants/app';
+import { AppRoute } from '../constants/app';
 import { CityNames } from '../constants/cities';
 import { SORT_OPTIONS } from '../constants/app';
 
@@ -8,12 +8,6 @@ export type StringRouteValues = Extract<
 >;
 
 export type StringRouteKeys = StringRouteValues | '*';
-
-export type CardVariant = (typeof CardVariants)[keyof typeof CardVariants];
-
-export type RatingVariant = (typeof RatingVariants)[keyof typeof RatingVariants];
-
-export type MapVariant = (typeof MapVariants)[keyof typeof MapVariants];
 
 export type Point = {
   id: string;
@@ -26,7 +20,3 @@ export type Point = {
 export type CityName = (typeof CityNames)[number];
 
 export type SortType = typeof SORT_OPTIONS[number]['value'];
-
-export type AuthorizationStatusType = (typeof AuthorizationStatus)[keyof typeof AuthorizationStatus];
-
-export type RequestStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
