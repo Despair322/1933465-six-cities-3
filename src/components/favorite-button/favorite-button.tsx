@@ -3,19 +3,25 @@ import { useMemo } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { debounce } from '../../utils/common';
 import { postFavoriteAction } from '../../store/thunks/favorites';
-import { FavoriteButtonVariants } from '../../constants/app';
+import { AppRoute, FavoriteButtonVariants } from '../../constants/app';
 import type { FavoriteButtonProps } from './favorite-button.types';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function FavoriteButton({ isFavorite, id, variant }: FavoriteButtonProps): JSX.Element {
   const dispatch = useAppDispatch();
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const isCard = variant === FavoriteButtonVariants.Card;
 
   const handleFavoriteClick = useMemo(
     () => debounce(() => {
-      dispatch(postFavoriteAction({ id, status: !isFavorite }));
+      dispatch(postFavoriteAction({ id, status: !isFavorite })).unwrap().catch((StatusCode) => {
+        if(StatusCode === 401) {
+          navigate(`${AppRoute.Login}?redirect=${location.pathname}`, { replace: true });
+        }
+      });
     }, 300),
-    [dispatch, id, isFavorite],
+    [dispatch, id, isFavorite, location, navigate],
   );
 
   return (

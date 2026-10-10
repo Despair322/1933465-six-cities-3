@@ -20,7 +20,7 @@ export const postFavoriteAction = createAsyncThunk<void, { id: string; status: b
   extra: AxiosInstance;
 }>(
   'data/postFavorites',
-  async ({ id, status }, { dispatch, extra: api }) => {
+  async ({ id, status }, { dispatch, extra: api, rejectWithValue }) => {
     try {
       const { data } = await api.post<DetailedOffer>(APIRoute.setFavorite(id, status));
       dispatch(favoriteStatusChanged({ id: data.id, isFavorite: data.isFavorite }));
@@ -36,9 +36,9 @@ export const postFavoriteAction = createAsyncThunk<void, { id: string; status: b
           }));
           return;
         }
-
-        throw error;
+        return rejectWithValue(error.response?.status ?? 500);
       }
+      throw error;
     }
   }
 );

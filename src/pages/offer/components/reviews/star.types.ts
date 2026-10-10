@@ -3,4 +3,5 @@ export type StarProps = {
   title: string;
   checked?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  isDisabled?: boolean;
 };

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RequestStatus } from '../../constants/app';
 import type { Offer } from '../../types/offer';
 import type { Review } from '../../types/review';
@@ -83,7 +83,7 @@ const detailedOfferSlice = createSlice({
     selectReviews: (state) => state.reviews,
     selectDetailedOfferLoadingStatus: (state) => state.loadingStatus.detailedOffer,
     selectNearbyOffersLoadingStatus: (state) => state.loadingStatus.nearbyOffers,
-    selectReviewsLoadingStatus: (state) => state.loadingStatus.reviews
+    selectReviewsLoadingStatus: (state) => state.loadingStatus.reviews,
   }
 });
 
@@ -91,5 +91,12 @@ export const { loadDetailedOffer, loadNearbyOffers, loadReviews } = detailedOffe
 export const { selectDetailedOffer, selectDetailedOfferId, selectDetailedOfferLoadingStatus,
   selectNearbyOffers, selectNearbyOffersLoadingStatus,
   selectReviews, selectReviewsLoadingStatus } = detailedOfferSlice.selectors;
+
+export const selectTopTenRecentReviews = createSelector(
+  [selectReviews],
+  (reviews) => [...reviews]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 10)
+);
 
 export default detailedOfferSlice.reducer;

@@ -27,6 +27,9 @@ export const isHandledLocally = (error: AxiosError): boolean => {
     method === 'post' &&
     url.startsWith(`${APIRoute.Favorites}/`);
 
+  if(isFavoriteMutation && status === StatusCodes.UNAUTHORIZED) {
+    return true;
+  }
   return isFavoriteMutation && (
     (status === StatusCodes.CONFLICT && url.endsWith('/1')) ||
     (status === StatusCodes.NOT_FOUND && url.endsWith('/0'))

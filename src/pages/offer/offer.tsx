@@ -11,7 +11,7 @@ import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVari
 import { mapToPoint } from '../../utils/common';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectReviews } from '../../store/slices/detailedOffer';
+import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectTopTenRecentReviews } from '../../store/slices/detailedOffer';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/thunks/detailedOffer';
 
 import FavoriteisButton from '../../components/favorite-button/favorite-button';
@@ -25,7 +25,7 @@ function Offer(): JSX.Element {
   const allNearbyOffers = useAppSelector(selectNearbyOffers);
   const nearbyOffers = useMemo(() => allNearbyOffers.slice(0, 3), [allNearbyOffers]);
   const nearbyOffersLoadingStatus = useAppSelector(selectNearbyOffersLoadingStatus);
-  const reviews = useAppSelector(selectReviews);
+  const reviews = useAppSelector(selectTopTenRecentReviews);
 
   const offerRef = useRef<HTMLElement | null>(null);
   const previousOfferRef = useRef(id);

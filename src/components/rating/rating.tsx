@@ -24,6 +24,7 @@ function Rating({ rating, variant }: RatingProps): JSX.Element {
         <span style={{ width: `${ratingMemo}%` }}></span>
         <span className="visually-hidden">Rating</span>
       </div>
+      {isOffer && <span className="offer__rating-value rating__value">{rating}</span>}
     </div>
   );
 }

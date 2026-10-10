@@ -2,7 +2,7 @@ import { NumberOfStars } from '../constants/app';
 import { Point } from '../types/types';
 
 function transformRatingToPercent(rating: number): number {
-  return (rating / NumberOfStars * 100);
+  return (Math.round(rating) / NumberOfStars * 100);
 }
 
 function transformDateToMonthYear(date: string): string {
