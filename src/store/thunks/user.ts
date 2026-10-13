@@ -4,6 +4,7 @@ import { UserData } from '../../types/user-data';
 import { APIRoute } from '../../constants/app';
 import { removeToken, saveToken } from '../../services/token';
 import { AuthData } from '../../types/auth-data';
+import { StatusCodes } from 'http-status-codes';
 
 export const checkAuthAction = createAsyncThunk<{ email: string }, undefined, {
   extra: AxiosInstance;
@@ -11,7 +12,9 @@ export const checkAuthAction = createAsyncThunk<{ email: string }, undefined, {
   'user/checkAuth',
   async (_arg, { extra: api }) => {
     try {
-      const { data: { email } } = await api.get<UserData>(APIRoute.Login);
+      const { data: { email } } = await api.get<UserData>(APIRoute.Login,
+        { localErrorStatuses: [StatusCodes.BAD_REQUEST] },
+      );
       return { email };
     } catch (error) {
       removeToken();
@@ -27,7 +30,15 @@ export const loginAction = createAsyncThunk<UserData, AuthData, {
   'user/login',
   async ({ login: email, password }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
+      const { data } = await api.post<UserData>(APIRoute.Login,
+        { email, password },
+        {
+          localErrorStatuses: [
+            StatusCodes.UNAUTHORIZED,
+            StatusCodes.BAD_REQUEST,
+          ]
+        },
+      );
       saveToken(data.token);
       return data;
     } catch (error) {

@@ -6,6 +6,7 @@ import { postFavoriteAction } from '../../store/thunks/favorites';
 import { AppRoute, FavoriteButtonVariants } from '../../constants/app';
 import type { FavoriteButtonProps } from './favorite-button.types';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { StatusCodes } from 'http-status-codes';
 
 function FavoriteButton({ isFavorite, id, variant }: FavoriteButtonProps): JSX.Element {
   const dispatch = useAppDispatch();
@@ -15,9 +16,10 @@ function FavoriteButton({ isFavorite, id, variant }: FavoriteButtonProps): JSX.E
 
   const handleFavoriteClick = useMemo(
     () => debounce(() => {
-      dispatch(postFavoriteAction({ id, status: !isFavorite })).unwrap().catch((StatusCode) => {
-        if(StatusCode === 401) {
-          navigate(`${AppRoute.Login}?redirect=${location.pathname}`, { replace: true });
+      dispatch(postFavoriteAction({ id, status: !isFavorite })).unwrap().catch((status: unknown) => {
+        if (status === StatusCodes.UNAUTHORIZED) {
+          navigate(`${AppRoute.Login}?redirect=${location.pathname}`,
+            { replace: true });
         }
       });
     }, 300),
