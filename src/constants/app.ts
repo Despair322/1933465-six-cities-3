@@ -1,6 +1,6 @@
 import type { StringRouteKeys } from '../types/types';
 
-export const numberOfStars = 5;
+export const NumberOfStars = 5;
 
 export const AppRoute = {
   Main: '/',
@@ -21,7 +21,6 @@ export const CardVariants = {
   Favorites: 'favorites',
   Near: 'near',
 } as const;
-
 
 export const RatingVariants = {
   Card: 'card',

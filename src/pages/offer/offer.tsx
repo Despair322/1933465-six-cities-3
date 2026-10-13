@@ -1,21 +1,21 @@
 import { Helmet } from 'react-helmet-async';
 import { Fragment, Suspense, useEffect, useMemo, useRef } from 'react';
 import Image from './components/image';
-import Rating from '../../components/shared/rating';
-import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants/app';
+import Rating from '../../components/rating';
 import Goods from './components/goods';
 import Reviews from './components/reviews';
-import Card from '../../components/shared/card';
-import CitiesMap from '../../components/shared/lazy-cities-map';
+import Card from '../../components/card';
+import CitiesMap from '../../components/cities-map';
+import Spinner from '../../components/spinner';
+import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants/app';
 import { mapToPoint } from '../../utils/common';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import Spinner from '../../components/shared/spinner/spinner';
-import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectReviews } from '../../store/slices/detailedOffer';
+import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectTopTenRecentReviews } from '../../store/slices/detailedOffer';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/thunks/detailedOffer';
 
-import FavoriteisButton from '../../components/shared/favorite-button';
-import Host from './components/host';
+import FavoriteisButton from '../../components/favorite-button/favorite-button';
+import Host from './components/host/host';
 
 function Offer(): JSX.Element {
   const { id } = useParams<{ id: string }>();
@@ -25,7 +25,7 @@ function Offer(): JSX.Element {
   const allNearbyOffers = useAppSelector(selectNearbyOffers);
   const nearbyOffers = useMemo(() => allNearbyOffers.slice(0, 3), [allNearbyOffers]);
   const nearbyOffersLoadingStatus = useAppSelector(selectNearbyOffersLoadingStatus);
-  const reviews = useAppSelector(selectReviews);
+  const reviews = useAppSelector(selectTopTenRecentReviews);
 
   const offerRef = useRef<HTMLElement | null>(null);
   const previousOfferRef = useRef(id);
@@ -48,6 +48,19 @@ function Offer(): JSX.Element {
     }
   }, [dispatch, id]);
 
+  const activePoint = useMemo(() => {
+    if (!offerDescription) {
+      return null;
+    }
+    return mapToPoint(offerDescription);
+  }, [offerDescription]);
+
+  const nearPoints = useMemo(() => mapToPoint(nearbyOffers), [nearbyOffers]);
+  const allPoints = useMemo(
+    () => activePoint ? [...nearPoints, activePoint] : nearPoints,
+    [nearPoints, activePoint]
+  );
+
   if (offerStatus === RequestStatus.Failed) {
     return <Navigate to={AppRoute.NotFound} replace />;
   }
@@ -57,9 +70,6 @@ function Offer(): JSX.Element {
   }
 
   const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city } = offerDescription;
-  const activePoint = mapToPoint(offerDescription);
-  const nearPoints = mapToPoint(nearbyOffers);
-  const allPoints = [...nearPoints, activePoint];
 
   return (
     <Fragment>

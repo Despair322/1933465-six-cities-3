@@ -2,9 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { Offer } from '../../types/offer';
 import { AxiosInstance, isAxiosError } from 'axios';
 import { APIRoute } from '../../constants/app';
-import { isAlreadyInRequestedState } from '../../utils/api';
 import { favoriteStatusChanged } from '../events/favorite';
 import { DetailedOffer } from '../../types/detailed-offer';
+import { StatusCodes } from 'http-status-codes';
 
 export const fetchFavoritesAction = createAsyncThunk<Offer[], undefined, {
   extra: AxiosInstance;
@@ -20,15 +20,26 @@ export const postFavoriteAction = createAsyncThunk<void, { id: string; status: b
   extra: AxiosInstance;
 }>(
   'data/postFavorites',
-  async ({ id, status }, { dispatch, extra: api }) => {
+  async ({ id, status }, { dispatch, extra: api, rejectWithValue }) => {
+    const alreadyInRequestedStateStatus = status
+      ? StatusCodes.CONFLICT
+      : StatusCodes.NOT_FOUND;
     try {
-      const { data } = await api.post<DetailedOffer>(APIRoute.setFavorite(id, status));
+      const { data } = await api.post<DetailedOffer>(
+        APIRoute.setFavorite(id, status),
+        undefined,
+        {
+          localErrorStatuses: [
+            StatusCodes.UNAUTHORIZED,
+            alreadyInRequestedStateStatus
+          ]
+        }
+      );
       dispatch(favoriteStatusChanged({ id: data.id, isFavorite: data.isFavorite }));
       dispatch(fetchFavoritesAction());
     } catch (error) {
       if (isAxiosError(error)) {
-        const alreadyInRequestedState = isAlreadyInRequestedState(error, status);
-        if (alreadyInRequestedState) {
+        if (error.response?.status === alreadyInRequestedStateStatus) {
           const favorites = await dispatch(fetchFavoritesAction()).unwrap();
           dispatch(favoriteStatusChanged({
             id,
@@ -36,9 +47,9 @@ export const postFavoriteAction = createAsyncThunk<void, { id: string; status: b
           }));
           return;
         }
-
-        throw error;
+        return rejectWithValue(error.response?.status ?? 500);
       }
+      throw error;
     }
   }
 );
