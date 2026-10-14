@@ -1,5 +1,8 @@
 import { memo } from 'react';
-import type { ImageProps } from './image.types';
+
+type ImageProps = {
+  src: string;
+};
 
 function Image({ src }: ImageProps): JSX.Element {
   return (

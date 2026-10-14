@@ -1,5 +1,8 @@
 import { memo } from 'react';
-import type { GoodsProps } from './goods.types';
+
+type GoodsProps = {
+  goods: string[];
+}
 
 function Goods({ goods }: GoodsProps): JSX.Element {
   return (

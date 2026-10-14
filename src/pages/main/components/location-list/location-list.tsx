@@ -1,7 +1,12 @@
 import { CityNames } from '../../../../constants/cities';
+import type { CityName } from '../../../../types/types';
 import LocationItem from './location-item';
-import type { LocationListProps } from './location-list.types';
 import { memo } from 'react';
+
+type LocationListProps = {
+  activeCity: CityName;
+  onClick: (city: CityName) => void;
+}
 
 function LocationsList({ activeCity, onClick }: LocationListProps): JSX.Element {
   return (

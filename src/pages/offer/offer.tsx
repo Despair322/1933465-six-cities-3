@@ -7,15 +7,14 @@ import Reviews from './components/reviews';
 import Card from '../../components/card';
 import CitiesMap from '../../components/cities-map';
 import Spinner from '../../components/spinner';
+import FavoriteisButton from '../../components/favorite-button';
+import OfferHost from './components/offer-host';
 import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants/app';
 import { mapToPoint } from '../../utils/common';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectTopTenRecentReviews } from '../../store/slices/detailedOffer';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/thunks/detailedOffer';
-
-import FavoriteisButton from '../../components/favorite-button/favorite-button';
-import Host from './components/host/host';
 
 function Offer(): JSX.Element {
   const { id } = useParams<{ id: string }>();
@@ -116,7 +115,7 @@ function Offer(): JSX.Element {
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
               {goods && goods.length > 0 && <Goods goods={goods} />}
-              <Host host={host} description={description} />
+              <OfferHost host={host} description={description} />
               <Reviews reviews={reviews} />
             </div>
           </div>

@@ -1,5 +1,10 @@
 import { Navigate } from 'react-router-dom';
-import type { ProtectedRouteProps } from './protected-route.types';
+
+type ProtectedRouteProps = {
+  children: JSX.Element;
+  isNavigate: boolean;
+  navigateTo: string;
+};
 
 function ProtectedRoute(props: ProtectedRouteProps): JSX.Element {
   const { children, isNavigate, navigateTo } = props;

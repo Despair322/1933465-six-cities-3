@@ -1,9 +1,13 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../../../constants/app';
-import { LocationItemProps } from './location-item.types';
 import { useAppDispatch } from '../../../../hooks';
 import { setActiveCity } from '../../../../store/slices/catalog';
+import type { CityName } from '../../../../types/types';
+
+type LocationItemProps = {
+  city: CityName;
+};
 
 function LocationItem({ city }: LocationItemProps): JSX.Element {
 

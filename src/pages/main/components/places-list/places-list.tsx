@@ -1,7 +1,12 @@
 import { memo } from 'react';
 import Card from '../../../../components/card/card';
 import { CardVariants } from '../../../../constants/app';
-import type { PlacesListProps } from './places-list.types';
+import type { Offer } from '../../../../types/offer';
+
+type PlacesListProps = {
+  offers: Offer[];
+  onHover?: (offerId: string | null) => void;
+};
 
 function PlacesList({ offers, onHover }: PlacesListProps): JSX.Element {
   return (

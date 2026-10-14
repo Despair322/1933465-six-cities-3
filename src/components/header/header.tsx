@@ -1,6 +1,9 @@
-import { HeaderProps } from './header.types';
 import Logo from './logo';
 import Navigation from './navigation';
+
+type HeaderProps = {
+  hasNavigation: boolean;
+};
 
 function Header({ hasNavigation }: HeaderProps): JSX.Element {
   return (
