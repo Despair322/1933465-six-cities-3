@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import Star from './star';
+import { Fragment, useState } from 'react';
 import type { FormData } from '../../../../types/form';
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import { postReviewAction } from '../../../../store/thunks/detailedOffer';
@@ -21,6 +20,7 @@ function Form(): JSX.Element | null {
     rating: '',
     review: '',
   });
+
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = event.target;
@@ -48,8 +48,15 @@ function Form(): JSX.Element | null {
     <form className="reviews__form form" action="#" method="post" onSubmit={handleSubmit}>
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
-        {Rating.map(({ value, title }) =>
-          <Star key={value} rating={value} title={title} onChange={handleInputChange} checked={formData.rating === String(value)} isDisabled={isDisabled}/>
+        {Rating.map(({ value, title }) => (
+          <Fragment key={value}>
+            <input className="form__rating-input visually-hidden" name="rating" value={value} id={`${value}-stars`} type="radio" onChange={handleInputChange} checked={formData.rating === String(value)} disabled={isDisabled} />
+            <label htmlFor={`${value}-stars`} className="reviews__rating-label form__rating-label" title={title} >
+              <svg className="form__star-image" width="37" height="33">
+                <use xlinkHref="#icon-star"></use>
+              </svg>
+            </label>
+          </Fragment>)
         )}
       </div>
       <textarea

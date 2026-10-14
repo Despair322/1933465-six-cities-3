@@ -38,7 +38,8 @@ const favoritesSlice = createSlice({
         });
       }),
   initialState,
-  name: 'favorites', reducers: {
+  name: 'favorites',
+  reducers: {
     setOldFavorites: (state, action: PayloadAction<Offer[]>) => {
       state.oldFavorites = action.payload;
     }

@@ -1,12 +1,16 @@
 import Form from './form';
-import ReviewsList from './reviews-list';
 import Spinner from '../../../../components/spinner';
-import type { ReviewsProps } from './reviews.types';
+import ReviewComponent from './review';
 import { useAppSelector } from '../../../../hooks';
 import { AuthorizationStatus, RequestStatus } from '../../../../constants/app';
 import { selectAuthorizationStatus } from '../../../../store/slices/user';
 import { selectReviewsLoadingStatus } from '../../../../store/slices/detailedOffer';
 import { memo } from 'react';
+import type { Review } from '../../../../types/review';
+
+type ReviewsProps = {
+  reviews: Review[];
+};
 
 function Reviews({ reviews }: ReviewsProps): JSX.Element {
   const isAuth = useAppSelector(selectAuthorizationStatus) === AuthorizationStatus.Auth;
@@ -24,10 +28,13 @@ function Reviews({ reviews }: ReviewsProps): JSX.Element {
               ? <>Reviews &middot; <span className="reviews__amount">{reviews.length}</span></>
               : 'There are no reviews yet'}
           </h2>
-          {hasReviews && <ReviewsList reviews={reviews} />}
+          {hasReviews &&
+            <ul className="reviews__list">
+              {reviews.map((review) => <ReviewComponent key={review.id} review={review} />)}
+            </ul>}
         </>
       )}
-      {isAuth && <Form/>}
+      {isAuth && <Form />}
     </section>
   );
 }

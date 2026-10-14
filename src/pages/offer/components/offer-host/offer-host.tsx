@@ -1,7 +1,12 @@
 import { memo } from 'react';
-import { HostProps } from './host.types';
+import type { Host } from '../../../../types/detailed-offer';
 
-function Host({ host, description }: HostProps): JSX.Element {
+type HostProps = {
+  host: Host;
+  description: string;
+}
+
+function OfferHost({ host, description }: HostProps): JSX.Element {
   const { avatarUrl, name, isPro } = host;
 
   return (
@@ -25,6 +30,6 @@ function Host({ host, description }: HostProps): JSX.Element {
   );
 }
 
-const MemoizedHost = memo(Host);
+const MemoizedOfferHost = memo(OfferHost);
 
-export default MemoizedHost;
+export default MemoizedOfferHost;
