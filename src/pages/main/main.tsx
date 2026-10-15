@@ -99,7 +99,7 @@ function Main(): JSX.Element {
                 {offersStatus === RequestStatus.Failed && <p>Unable to load offers.</p>}
                 {isLoaded && (
                   <>
-                    <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} places to stay in {activeCity}</b>
+                    <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} place{cityOffers.length > 1 ? 's' : ''} to stay in {activeCity}</b>
                     <SortForm />
                     <PlacesList offers={sortedOffers} onHover={handleOfferHover} />
                   </>

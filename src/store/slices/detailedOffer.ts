@@ -81,6 +81,7 @@ const detailedOfferSlice = createSlice({
     selectDetailedOfferId: (state) => state.detailedOffer?.id,
     selectNearbyOffers: (state) => state.nearbyOffers,
     selectReviews: (state) => state.reviews,
+    selectReviewsCount: (state) => state.reviews.length,
     selectDetailedOfferLoadingStatus: (state) => state.loadingStatus.detailedOffer,
     selectNearbyOffersLoadingStatus: (state) => state.loadingStatus.nearbyOffers,
     selectReviewsLoadingStatus: (state) => state.loadingStatus.reviews,
@@ -90,7 +91,7 @@ const detailedOfferSlice = createSlice({
 export const { loadDetailedOffer, loadNearbyOffers, loadReviews } = detailedOfferSlice.actions;
 export const { selectDetailedOffer, selectDetailedOfferId, selectDetailedOfferLoadingStatus,
   selectNearbyOffers, selectNearbyOffersLoadingStatus,
-  selectReviews, selectReviewsLoadingStatus } = detailedOfferSlice.selectors;
+  selectReviews, selectReviewsCount, selectReviewsLoadingStatus } = detailedOfferSlice.selectors;
 
 export const selectTopTenRecentReviews = createSelector(
   [selectReviews],

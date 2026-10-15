@@ -14,6 +14,7 @@ export const AppRoute = {
 export const PageClassesMap: Partial<Record<StringRouteKeys, readonly string[] | string>> = {
   [AppRoute.Main]: ['page--gray', 'page--main'],
   [AppRoute.Login]: ['page--gray', 'page--login'],
+  [AppRoute.Favorites]: 'page--favorites-empty',
 };
 
 export const CardVariants = {

@@ -3,14 +3,15 @@ import { Helmet } from 'react-helmet-async';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../constants/app';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectActiveCity } from '../../store/slices/catalog';
+import { setActiveCity } from '../../store/slices/catalog';
 import { loginAction } from '../../store/thunks/user';
 import { LoginLocationState } from '../../types/pages';
 import { selectAuthorizationStatus } from '../../store/slices/user';
+import { getRandomCity } from '../../utils/common';
 
 function LoginScreen(): JSX.Element {
   const dispatch = useAppDispatch();
-  const activeCity = useAppSelector(selectActiveCity);
+  const city = getRandomCity();
   const authorizationStatus = useAppSelector(selectAuthorizationStatus);
   const location = useLocation();
   const locationState = location.state as LoginLocationState | null;
@@ -20,6 +21,10 @@ function LoginScreen(): JSX.Element {
 
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+
+  const handleCityClick = () => {
+    dispatch(setActiveCity(city));
+  };
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -59,7 +64,7 @@ function LoginScreen(): JSX.Element {
               </div>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
-                <input ref={passwordRef} className="login__input form__input" type="password" name="password" placeholder="Password" required />
+                <input ref={passwordRef} className="login__input form__input" type="password" name="password" placeholder="Password" required minLength={2} />
               </div>
               {loginError && <p className="login__error" role="alert">{loginError}</p>}
               <button className="login__submit form__submit button" type="submit">Sign in</button>
@@ -67,8 +72,8 @@ function LoginScreen(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to={AppRoute.Main}>
-                <span>{activeCity}</span>
+              <Link className="locations__item-link" to={AppRoute.Main} onClick={handleCityClick}>
+                <span>{city}</span>
               </Link>
             </div>
           </section>

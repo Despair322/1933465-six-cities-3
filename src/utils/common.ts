@@ -1,5 +1,6 @@
 import { NumberOfStars } from '../constants/app';
-import { Point } from '../types/types';
+import { CityNames } from '../constants/cities';
+import { CityName, Point } from '../types/types';
 
 function transformRatingToPercent(rating: number): number {
   return (Math.round(rating) / NumberOfStars * 100);
@@ -43,4 +44,8 @@ function debounce<Args extends unknown[]>(
   };
 }
 
-export { transformRatingToPercent, transformDateToMonthYear, debounce };
+function getRandomCity(): CityName {
+  return CityNames[Math.floor(Math.random() * CityNames.length)];
+}
+
+export { transformRatingToPercent, transformDateToMonthYear, debounce, getRandomCity };

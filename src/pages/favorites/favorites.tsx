@@ -8,6 +8,7 @@ import Spinner from '../../components/spinner/spinner';
 import { selectFavoritesLoadingStatus, selectOldFavorites, setOldFavorites } from '../../store/slices/favorites';
 import { fetchFavoritesAction } from '../../store/thunks/favorites';
 import LocationItem from './components/location-item';
+import classNames from 'classnames';
 
 function Favorites(): JSX.Element {
   const favoritesStatus = useAppSelector(selectFavoritesLoadingStatus);
@@ -40,7 +41,7 @@ function Favorites(): JSX.Element {
       <Helmet>
         <title>Favorites</title>
       </Helmet>
-      <main className="page__main page__main--favorites">
+      <main className={classNames('page__main page__main--favorites', { ' page__main--favorites-empty': isEmpty })}>
         <div className="page__favorites-container container">
           {isEmpty ? (
             <section className='favorites favorites--empty'>
