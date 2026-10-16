@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { AppRoute } from '../../constants/app';
+import { AppRoute } from '../../constants';
 import classNames from 'classnames';
 
 function Logo(): JSX.Element {

@@ -1,4 +1,4 @@
-import { CityNames } from '../../../../constants/cities';
+import { CityNames } from '../../../../constants';
 import type { CityName } from '../../../../types/types';
 import LocationItem from './location-item';
 import { memo } from 'react';

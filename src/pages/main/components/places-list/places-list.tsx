@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import Card from '../../../../components/card/card';
-import { CardVariants } from '../../../../constants/app';
+import { CardVariants } from '../../../../constants';
 import type { Offer } from '../../../../types/offer';
 
 type PlacesListProps = {

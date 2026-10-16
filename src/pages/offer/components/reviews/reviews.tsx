@@ -2,7 +2,7 @@ import Form from './form';
 import Spinner from '../../../../components/spinner';
 import ReviewComponent from './review';
 import { useAppSelector } from '../../../../hooks';
-import { AuthorizationStatus, RequestStatus } from '../../../../constants/app';
+import { AuthorizationStatus, RequestStatus } from '../../../../constants';
 import { selectAuthorizationStatus } from '../../../../store/slices/user';
 import { selectReviewsLoadingStatus } from '../../../../store/slices/detailedOffer';
 import { memo } from 'react';
@@ -10,9 +10,10 @@ import type { Review } from '../../../../types/review';
 
 type ReviewsProps = {
   reviews: Review[];
+  reviewsCount: number;
 };
 
-function Reviews({ reviews }: ReviewsProps): JSX.Element {
+function Reviews({ reviews, reviewsCount }: ReviewsProps): JSX.Element {
   const isAuth = useAppSelector(selectAuthorizationStatus) === AuthorizationStatus.Auth;
   const reviewsLoadingStatus = useAppSelector(selectReviewsLoadingStatus);
   const hasReviews = reviews && reviews.length > 0;
@@ -25,7 +26,7 @@ function Reviews({ reviews }: ReviewsProps): JSX.Element {
         <>
           <h2 className="reviews__title">
             {hasReviews
-              ? <>Reviews &middot; <span className="reviews__amount">{reviews.length}</span></>
+              ? <>Reviews &middot; <span className="reviews__amount">{reviewsCount}</span></>
               : 'There are no reviews yet'}
           </h2>
           {hasReviews &&

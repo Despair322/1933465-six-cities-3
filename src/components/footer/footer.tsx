@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AppRoute } from '../../constants/app';
+import { AppRoute } from '../../constants';
 
 function Footer(): JSX.Element {
   return (

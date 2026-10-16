@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthorizationStatus } from '../../constants/app';
+import { AuthorizationStatus } from '../../constants';
 import { StoredUserData } from '../../types/user-data';
 import { checkAuthAction, loginAction, logoutAction } from '../thunks/user';
 
@@ -19,14 +19,16 @@ const userSlice = createSlice({
     builder
       .addCase(checkAuthAction.fulfilled, (state, action) => {
         state.authorizationStatus = AuthorizationStatus.Auth;
-        state.userData = { email: action.payload.email };
+        const { email, avatarUrl, isPro, name } = action.payload;
+        state.userData = { email, avatarUrl, isPro, name };
       })
       .addCase(checkAuthAction.rejected, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.userData = null;
       })
       .addCase(loginAction.fulfilled, (state, action) => {
-        state.userData = { email: action.payload.email };
+        const { email, avatarUrl, isPro, name } = action.payload;
+        state.userData = { email, avatarUrl, isPro, name };
         state.authorizationStatus = AuthorizationStatus.Auth;
       })
       .addCase(logoutAction.fulfilled, (state) => {

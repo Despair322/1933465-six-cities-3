@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { AppRoute, CardVariants, FavoriteButtonVariants, RatingVariants } from '../../constants/app';
+import { AppRoute, CardVariants, FavoriteButtonVariants, RatingVariants } from '../../constants';
 import type { CardProps } from './card.types';
 import Rating from '../rating/rating';
 import FavoriteisButton from '../favorite-button/favorite-button';

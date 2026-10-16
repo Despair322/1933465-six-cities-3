@@ -7,14 +7,15 @@ import Reviews from './components/reviews';
 import Card from '../../components/card';
 import CitiesMap from '../../components/cities-map';
 import Spinner from '../../components/spinner';
-import FavoriteisButton from '../../components/favorite-button';
+import FavoriteButton from '../../components/favorite-button';
 import OfferHost from './components/offer-host';
-import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants/app';
+import { AppRoute, AuthorizationStatus, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants';
 import { mapToPoint } from '../../utils/common';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectTopTenRecentReviews } from '../../store/slices/detailedOffer';
+import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectReviewsCount, selectTopTenRecentReviews } from '../../store/slices/detailedOffer';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/thunks/detailedOffer';
+import { selectAuthorizationStatus } from '../../store/slices/user';
 
 function Offer(): JSX.Element {
   const { id } = useParams<{ id: string }>();
@@ -25,27 +26,16 @@ function Offer(): JSX.Element {
   const nearbyOffers = useMemo(() => allNearbyOffers.slice(0, 3), [allNearbyOffers]);
   const nearbyOffersLoadingStatus = useAppSelector(selectNearbyOffersLoadingStatus);
   const reviews = useAppSelector(selectTopTenRecentReviews);
-
+  const reviewsCount = useAppSelector(selectReviewsCount);
+  const isAuth = useAppSelector(selectAuthorizationStatus) === AuthorizationStatus.Auth;
   const offerRef = useRef<HTMLElement | null>(null);
-  const previousOfferRef = useRef(id);
 
-  useEffect(() => {
-    if (previousOfferRef.current !== id) {
-      offerRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-      previousOfferRef.current = id;
-    }
-  }, [id]);
-
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchOfferAction(id));
-      dispatch(fetchNearbyOffersAction(id));
-      dispatch(fetchReviewsAction(id));
-    }
-  }, [dispatch, id]);
+  const images = useMemo(() =>
+    offerDescription?.images ?? [], [offerDescription?.images]
+  );
+  const slicedImages = useMemo(() =>
+    images.slice(0, 6), [images]
+  );
 
   const activePoint = useMemo(() => {
     if (!offerDescription) {
@@ -54,21 +44,40 @@ function Offer(): JSX.Element {
     return mapToPoint(offerDescription);
   }, [offerDescription]);
 
-  const nearPoints = useMemo(() => mapToPoint(nearbyOffers), [nearbyOffers]);
+  const nearPoints = useMemo(() =>
+    Array.isArray(nearbyOffers) ? nearbyOffers.map(mapToPoint) : [], [nearbyOffers]);
+
   const allPoints = useMemo(
     () => activePoint ? [...nearPoints, activePoint] : nearPoints,
     [nearPoints, activePoint]
   );
 
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchOfferAction(id));
+      dispatch(fetchNearbyOffersAction(id));
+    }
+  }, [isAuth, id, dispatch]);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchReviewsAction(id));
+    }
+    offerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [dispatch, id]);
+
   if (offerStatus === RequestStatus.Failed) {
     return <Navigate to={AppRoute.NotFound} replace />;
   }
 
-  if (offerStatus === RequestStatus.Idle || offerStatus === RequestStatus.Loading || !offerDescription) {
+  if (offerStatus === RequestStatus.Idle || !offerDescription) {
     return <Spinner label="Loading offer" />;
   }
 
-  const { title, description, type, price, images, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city } = offerDescription;
+  const isBackgroundLoading = offerDescription.id !== id || offerStatus === RequestStatus.Loading;
+
+
+  const { title, description, type, price, goods, host, isFavorite, isPremium, rating, bedrooms, maxAdults, city } = offerDescription;
 
   return (
     <Fragment>
@@ -77,12 +86,18 @@ function Offer(): JSX.Element {
         <title>Offer</title>
       </Helmet>
 
-      <main className="page__main page__main--offer">
+      <main className="page__main page__main--offer"
+        style={{
+          opacity: isBackgroundLoading ? 0.5 : 1,
+          transition: 'opacity 0.2s ease-in-out',
+          pointerEvents: isBackgroundLoading ? 'none' : 'auto' // отключаем клики во время загрузки
+        }}
+      >
         <section ref={offerRef} className="offer">
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
-              {images && images.length > 0
-                && images.map((image) => <Image key={image} src={image} />)}
+              {slicedImages.length > 0
+                && slicedImages.map((image) => <Image key={image} src={image} />)}
             </div>
           </div>
           <div className="offer__container container">
@@ -96,7 +111,7 @@ function Offer(): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <FavoriteisButton isFavorite={isFavorite} id={id as string} variant={FavoriteButtonVariants.Offer} />
+                <FavoriteButton isFavorite={isFavorite} id={id as string} variant={FavoriteButtonVariants.Offer} />
               </div>
               <Rating rating={rating} variant={RatingVariants.Offer} />
               <ul className="offer__features">
@@ -104,23 +119,23 @@ function Offer(): JSX.Element {
                   {type}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
-                  {bedrooms} Bedrooms
+                  {bedrooms} {bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}
                 </li>
                 <li className="offer__feature offer__feature--adults">
-                  Max {maxAdults} adults
+                  Max {maxAdults} {maxAdults === 1 ? 'adult' : 'adults'}
                 </li>
               </ul>
               <div className="offer__price">
-                <b className="offer__price-value">{price}</b>
+                <b className="offer__price-value">&euro;{price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
               {goods && goods.length > 0 && <Goods goods={goods} />}
               <OfferHost host={host} description={description} />
-              <Reviews reviews={reviews} />
+              <Reviews reviews={reviews} reviewsCount={reviewsCount} />
             </div>
           </div>
           <Suspense fallback={<section className="offer__map map" />}>
-            <CitiesMap city={city} points={allPoints} variant={MapVariants.Offer} selectedPoint={id ?? null} />
+            <CitiesMap city={city} points={allPoints} variant={MapVariants.Offer} selectedPoint={offerDescription.id === id ? id : null} />
           </Suspense>
         </section>
         <div className="container">

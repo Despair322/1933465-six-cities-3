@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import type { RatingProps } from './rating.types';
-import { RatingVariants } from '../../constants/app';
+import { RatingVariants } from '../../constants';
 import { transformRatingToPercent } from '../../utils/common';
 import { memo, useMemo } from 'react';
 

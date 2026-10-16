@@ -5,7 +5,7 @@ import LocationsList from './components/location-list';
 import CitiesMap from '../../components/cities-map';
 import SortForm from './components/sort-form';
 import Spinner from '../../components/spinner';
-import { MapVariants, RequestStatus } from '../../constants/app';
+import { AuthorizationStatus, MapVariants, RequestStatus } from '../../constants';
 import { mapToPoint } from '../../utils/common';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { CityName } from '../../types/types';
@@ -13,12 +13,14 @@ import { sortOffers } from '../../utils/sort-offers';
 import { selectActiveCity, selectOffers, selectOffersLoadingStatus, selectSortType, setActiveCity } from '../../store/slices/catalog';
 import { fetchOffersAction } from '../../store/thunks/catalog';
 import classNames from 'classnames';
+import { selectAuthorizationStatus } from '../../store/slices/user';
 
 function Main(): JSX.Element {
   const offers = useAppSelector(selectOffers);
   const offersStatus = useAppSelector(selectOffersLoadingStatus);
   const activeCity = useAppSelector(selectActiveCity);
   const activeSortType = useAppSelector(selectSortType);
+  const isAuth = useAppSelector(selectAuthorizationStatus) === AuthorizationStatus.Auth;
   const dispatch = useAppDispatch();
 
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
@@ -58,6 +60,10 @@ function Main(): JSX.Element {
   }, [dispatch]);
 
   useEffect(() => {
+    dispatch(fetchOffersAction());
+  }, [isAuth, dispatch]);
+
+  useEffect(() => {
     if (previousCityRef.current !== activeCity) {
       placesRef.current?.scrollTo({
         top: 0,
@@ -66,10 +72,6 @@ function Main(): JSX.Element {
       previousCityRef.current = activeCity;
     }
   }, [activeCity]);
-
-  useEffect(() => {
-    dispatch(fetchOffersAction());
-  }, [dispatch]);
 
   return (
     <Fragment>
@@ -99,7 +101,7 @@ function Main(): JSX.Element {
                 {offersStatus === RequestStatus.Failed && <p>Unable to load offers.</p>}
                 {isLoaded && (
                   <>
-                    <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} places to stay in {activeCity}</b>
+                    <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} place{cityOffers.length > 1 ? 's' : ''} to stay in {activeCity}</b>
                     <SortForm />
                     <PlacesList offers={sortedOffers} onHover={handleOfferHover} />
                   </>

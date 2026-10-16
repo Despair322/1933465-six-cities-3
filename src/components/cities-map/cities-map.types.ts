@@ -1,5 +1,5 @@
 import type { Offer } from '../../types/offer';
-import { MapVariants } from '../../constants/app';
+import { MapVariants } from '../../constants';
 import type { Point } from '../../types/types';
 
 export type MapVariant = (typeof MapVariants)[keyof typeof MapVariants];

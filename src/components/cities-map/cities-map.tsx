@@ -1,11 +1,10 @@
 import { useRef, useEffect, useState, memo } from 'react';
 import { Icon, Marker, LayerGroup, layerGroup } from 'leaflet';
-import useMap from '../../hooks/use-map';
-import { MapVariants } from '../../constants/app';
+import { useMap } from '../../hooks';
+import { CURRENT_ICON_URL, DEFAULT_ICON_URL, ICON_ANCHOR, ICON_SIZE, MapVariants } from '../../constants';
 import type { MapProps } from './cities-map.types';
 import 'leaflet/dist/leaflet.css';
 import classNames from 'classnames';
-import { CURRENT_ICON_URL, DEFAULT_ICON_URL, ICON_ANCHOR, ICON_SIZE } from '../../constants/map';
 
 const defaultCustomIcon = new Icon({
   iconUrl: DEFAULT_ICON_URL,
@@ -107,7 +106,7 @@ function CitiesMap(props: MapProps): JSX.Element {
         marker.addTo(markerLayer);
 
         markersRef.current.set(point.id, marker);
-      }else{
+      } else {
         marker.setLatLng({
           lat: point.location.latitude,
           lng: point.location.longitude,

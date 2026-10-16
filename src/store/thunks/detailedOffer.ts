@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
-import { APIRoute } from '../../constants/app';
+import { APIRoute } from '../../constants';
 import { Offer } from '../../types/offer';
 import { Review } from '../../types/review';
 import { loadDetailedOffer, loadNearbyOffers, loadReviews } from '../slices/detailedOffer';

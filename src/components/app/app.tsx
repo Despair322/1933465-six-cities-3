@@ -1,6 +1,6 @@
 import { lazy, useEffect } from 'react';
 import { Route, Routes, useSearchParams } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus } from '../../constants/app';
+import { AppRoute, AuthorizationStatus } from '../../constants';
 import ProtectedRoute from '../protected-route';
 import Layout from '../layout';
 import { HelmetProvider } from 'react-helmet-async';

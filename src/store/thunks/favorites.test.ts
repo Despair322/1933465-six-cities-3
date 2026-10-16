@@ -1,0 +1,185 @@
+import { configureStore, type Middleware } from '@reduxjs/toolkit';
+import axios, { type AxiosInstance } from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { StatusCodes } from 'http-status-codes';
+import { APIRoute, RequestStatus } from '../../constants';
+import type { DetailedOffer } from '../../types/detailed-offer';
+import type { Offer } from '../../types/offer';
+import { favoriteStatusChanged } from '../events/favorite';
+import favoritesReducer, { setOldFavorites } from '../slices/favorites';
+import { fetchFavoritesAction, postFavoriteAction } from './favorites';
+
+describe('Favorites thunks', () => {
+  let api: AxiosInstance;
+  let mockApi: MockAdapter;
+  let actions: unknown[];
+  let store: ReturnType<typeof createTestStore>;
+
+  const makeOffer = (id: string, isFavorite = true): Offer => ({
+    id,
+    title: `Offer ${id}`,
+    type: 'apartment',
+    price: 100,
+    previewImage: 'image.jpg',
+    city: {
+      name: 'Paris',
+      location: { latitude: 48.8566, longitude: 2.3522, zoom: 13 },
+    },
+    location: { latitude: 48.8566, longitude: 2.3522, zoom: 13 },
+    isFavorite,
+    isPremium: false,
+    rating: 4,
+  });
+
+  const makeDetailedOffer = (id: string, isFavorite: boolean): DetailedOffer => ({
+    ...makeOffer(id, isFavorite),
+    description: 'A comfortable place to stay.',
+    images: ['image.jpg'],
+    goods: ['Heating'],
+    host: { isPro: true, name: 'Host', avatarUrl: 'avatar.jpg' },
+    bedrooms: 1,
+    maxAdults: 2,
+  });
+
+  function createTestStore(testApi: AxiosInstance) {
+    const actionRecorder: Middleware = () => (next) => (action) => {
+      actions.push(action);
+      return next(action);
+    };
+
+    return configureStore({
+      reducer: { favorites: favoritesReducer },
+      middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({ thunk: { extraArgument: testApi } }).concat(actionRecorder),
+    });
+  }
+
+  beforeEach(() => {
+    api = axios.create();
+    mockApi = new MockAdapter(api);
+    actions = [];
+    store = createTestStore(api);
+  });
+
+  afterEach(() => {
+    mockApi.restore();
+    vi.restoreAllMocks();
+  });
+
+  describe('fetchFavoritesAction', () => {
+    it('should return favorites received from the API', async () => {
+      const favorites = [makeOffer('offer-1'), makeOffer('offer-2')];
+      mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, favorites);
+
+      const result = await store.dispatch(fetchFavoritesAction());
+
+      expect(fetchFavoritesAction.fulfilled.match(result)).toBe(true);
+      if (fetchFavoritesAction.fulfilled.match(result)) {
+        expect(result.payload).toEqual(favorites);
+      }
+      expect(mockApi.history.get).toHaveLength(1);
+      expect(mockApi.history.get[0].url).toBe(APIRoute.Favorites);
+      expect(store.getState().favorites.favorites).toEqual(favorites);
+    });
+
+    it('should reject when the API request fails', async () => {
+      mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.INTERNAL_SERVER_ERROR);
+
+      const result = await store.dispatch(fetchFavoritesAction());
+
+      expect(fetchFavoritesAction.rejected.match(result)).toBe(true);
+      expect(store.getState().favorites.loadingStatus.favorites).toBe(RequestStatus.Failed);
+    });
+  });
+
+  describe('postFavoriteAction', () => {
+    it('should post the favorite status and dispatch status change and favorites refresh on success', async () => {
+      const offerId = 'offer-1';
+      const detailedOffer = makeDetailedOffer(offerId, true);
+      mockApi.onPost(APIRoute.setFavorite(offerId, true)).reply(StatusCodes.OK, detailedOffer);
+      mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, [makeOffer(offerId)]);
+      store.dispatch(setOldFavorites([makeOffer(offerId, false)]));
+
+      const result = await store.dispatch(postFavoriteAction({ id: offerId, status: true }));
+      await store.dispatch(fetchFavoritesAction());
+
+      expect(postFavoriteAction.fulfilled.match(result)).toBe(true);
+      expect(mockApi.history.post[0].url).toBe(APIRoute.setFavorite(offerId, true));
+      expect(actions.some((action) => favoriteStatusChanged.match(action))).toBe(true);
+      expect(actions.some((action) => fetchFavoritesAction.pending.match(action))).toBe(true);
+      expect(store.getState().favorites.oldFavorites[0].isFavorite).toBe(true);
+      expect(store.getState().favorites.favorites).toEqual([makeOffer(offerId)]);
+    });
+
+    it('should refresh favorites and reconcile status after a conflict response', async () => {
+      const offerId = 'offer-1';
+      mockApi.onPost(APIRoute.setFavorite(offerId, true)).reply(StatusCodes.CONFLICT);
+      mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, [makeOffer(offerId)]);
+      store.dispatch(setOldFavorites([makeOffer(offerId, false)]));
+
+      const result = await store.dispatch(postFavoriteAction({ id: offerId, status: true }));
+
+      expect(postFavoriteAction.fulfilled.match(result)).toBe(true);
+      expect(store.getState().favorites.favorites).toEqual([makeOffer(offerId)]);
+      expect(store.getState().favorites.oldFavorites[0].isFavorite).toBe(true);
+      expect(actions.some((action) => favoriteStatusChanged.match(action))).toBe(true);
+      expect(mockApi.history.get).toHaveLength(1);
+    });
+
+    it('should mark the offer as not favorite after a not-found response when it is absent from refreshed favorites', async () => {
+      const offerId = 'offer-1';
+      mockApi.onPost(APIRoute.setFavorite(offerId, false)).reply(StatusCodes.NOT_FOUND);
+      mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, []);
+      store.dispatch(setOldFavorites([makeOffer(offerId)]));
+
+      const result = await store.dispatch(postFavoriteAction({ id: offerId, status: false }));
+
+      expect(postFavoriteAction.fulfilled.match(result)).toBe(true);
+      expect(store.getState().favorites.favorites).toEqual([]);
+      expect(store.getState().favorites.oldFavorites[0].isFavorite).toBe(false);
+    });
+
+    it('should reject with the HTTP status for other API errors', async () => {
+      mockApi.onPost(APIRoute.setFavorite('offer-1', true)).reply(StatusCodes.UNAUTHORIZED);
+
+      const result = await store.dispatch(
+        postFavoriteAction({ id: 'offer-1', status: true })
+      );
+
+      expect(postFavoriteAction.rejected.match(result)).toBe(true);
+      if (postFavoriteAction.rejected.match(result)) {
+        expect(result.payload).toBe(StatusCodes.UNAUTHORIZED);
+      }
+      expect(mockApi.history.get).toHaveLength(0);
+    });
+
+    it('should use 500 as the rejection payload when the error has no HTTP response', async () => {
+      mockApi.onPost(APIRoute.setFavorite('offer-1', true)).networkError();
+
+      const result = await store.dispatch(
+        postFavoriteAction({ id: 'offer-1', status: true })
+      );
+
+      expect(postFavoriteAction.rejected.match(result)).toBe(true);
+      if (postFavoriteAction.rejected.match(result)) {
+        expect(result.payload).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+      }
+    });
+
+    it('should rethrow non-Axios errors', async () => {
+      const unexpectedError = new Error('Unexpected failure');
+      vi.spyOn(api, 'post').mockRejectedValue(unexpectedError);
+
+      const result = await store.dispatch(
+        postFavoriteAction({ id: 'offer-1', status: true })
+      );
+
+      expect(postFavoriteAction.rejected.match(result)).toBe(true);
+      if (postFavoriteAction.rejected.match(result)) {
+        expect(result.error.message).toBe(unexpectedError.message);
+        expect(result.payload).toBeUndefined();
+      }
+    });
+  });
+});
