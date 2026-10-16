@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance, isAxiosError } from 'axios';
 import { UserData } from '../../types/user-data';
-import { APIRoute } from '../../constants/app';
+import { APIRoute } from '../../constants';
 import { removeToken, saveToken } from '../../services/token';
 import { AuthData } from '../../types/auth-data';
 import { StatusCodes } from 'http-status-codes';
@@ -43,7 +43,7 @@ export const loginAction = createAsyncThunk<UserData, AuthData, {
       return data;
     } catch (error) {
       if (isAxiosError<{ details?: { messages?: string[] }[] }>(error)) {
-        const validationMessage = error.response?.data.details?.[0]?.messages?.[0];
+        const validationMessage = error.response?.data?.details?.[0]?.messages?.[0];
 
         if (validationMessage) {
           return rejectWithValue(validationMessage);

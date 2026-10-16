@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { Offer } from '../../types/offer';
 import { AxiosInstance, isAxiosError } from 'axios';
-import { APIRoute } from '../../constants/app';
+import { APIRoute } from '../../constants';
 import { favoriteStatusChanged } from '../events/favorite';
 import { DetailedOffer } from '../../types/detailed-offer';
 import { StatusCodes } from 'http-status-codes';

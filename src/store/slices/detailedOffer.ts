@@ -1,5 +1,5 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RequestStatus } from '../../constants/app';
+import { RequestStatus } from '../../constants';
 import type { Offer } from '../../types/offer';
 import type { Review } from '../../types/review';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../thunks/detailedOffer';

@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { debounce } from '../../utils/common';
 import { postFavoriteAction } from '../../store/thunks/favorites';
-import { AppRoute, FavoriteButtonVariants } from '../../constants/app';
+import { AppRoute, FavoriteButtonVariants } from '../../constants';
 import type { FavoriteButtonProps } from './favorite-button.types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';

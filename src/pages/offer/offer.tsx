@@ -9,7 +9,7 @@ import CitiesMap from '../../components/cities-map';
 import Spinner from '../../components/spinner';
 import FavoriteButton from '../../components/favorite-button';
 import OfferHost from './components/offer-host';
-import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants/app';
+import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants';
 import { mapToPoint } from '../../utils/common';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';

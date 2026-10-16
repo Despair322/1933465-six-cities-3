@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus } from '../../constants/app';
+import { AppRoute, AuthorizationStatus } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logoutAction } from '../../store/thunks/user';
 import { selectAuthorizationStatus, selectUserData } from '../../store/slices/user';

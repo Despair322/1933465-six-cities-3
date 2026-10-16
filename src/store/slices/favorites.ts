@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RequestStatus } from '../../constants/app';
+import { RequestStatus } from '../../constants';
 import { Offer } from '../../types/offer';
 import { fetchFavoritesAction } from '../thunks/favorites';
 import { favoriteStatusChanged } from '../events/favorite';

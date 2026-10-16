@@ -1,7 +1,7 @@
 import { FormEvent, Fragment, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, Navigate, useLocation } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus } from '../../constants/app';
+import { AppRoute, AuthorizationStatus } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setActiveCity } from '../../store/slices/catalog';
 import { loginAction } from '../../store/thunks/user';

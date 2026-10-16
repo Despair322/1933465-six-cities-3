@@ -1,6 +1,4 @@
-import { AppRoute } from '../constants/app';
-import { CityNames } from '../constants/cities';
-import { SORT_OPTIONS } from '../constants/app';
+import { AppRoute, CityNames, SORT_OPTIONS } from '../constants';
 
 export type StringRouteValues = Extract<
   (typeof AppRoute)[keyof typeof AppRoute],

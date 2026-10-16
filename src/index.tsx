@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import App from './components/app';
 import { store } from './store';
 import { getToken } from './services/token';
-import { AuthorizationStatus } from './constants/app';
+import { AuthorizationStatus } from './constants';
 import { checkAuthAction } from './store/thunks/user';
 import { requireAuthorization } from './store/slices/user';
 import { BrowserRouter } from 'react-router-dom';

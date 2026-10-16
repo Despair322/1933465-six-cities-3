@@ -1,4 +1,4 @@
-import { AppRoute } from '../constants/app';
+import { AppRoute } from '../constants';
 import type { StringRouteKeys, StringRouteValues } from '../types/types';
 export function getRouteKey(pathname: string): StringRouteKeys {
   if (pathname.startsWith('/offer/')) {
@@ -11,4 +11,3 @@ export function getRouteKey(pathname: string): StringRouteKeys {
 
   return route ?? '*';
 }
-

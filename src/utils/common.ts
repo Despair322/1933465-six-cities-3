@@ -1,5 +1,4 @@
-import { NumberOfStars } from '../constants/app';
-import { CityNames } from '../constants/cities';
+import { CityNames, NumberOfStars } from '../constants';
 import { CityName, Point } from '../types/types';
 
 function transformRatingToPercent(rating: number): number {

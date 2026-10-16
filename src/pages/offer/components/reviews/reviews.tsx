@@ -2,7 +2,7 @@ import Form from './form';
 import Spinner from '../../../../components/spinner';
 import ReviewComponent from './review';
 import { useAppSelector } from '../../../../hooks';
-import { AuthorizationStatus, RequestStatus } from '../../../../constants/app';
+import { AuthorizationStatus, RequestStatus } from '../../../../constants';
 import { selectAuthorizationStatus } from '../../../../store/slices/user';
 import { selectReviewsLoadingStatus } from '../../../../store/slices/detailedOffer';
 import { memo } from 'react';

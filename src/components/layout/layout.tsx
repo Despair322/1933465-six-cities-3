@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Header from '../header';
-import { AppRoute, PageClassesMap } from '../../constants/app';
+import { AppRoute, PageClassesMap } from '../../constants';
 import { getRouteKey } from '../../utils/route';
 import Footer from '../footer';
 import { ToastContainer } from 'react-toastify';

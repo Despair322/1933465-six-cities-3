@@ -1,4 +1,4 @@
-import { RatingVariants } from '../../constants/app';
+import { RatingVariants } from '../../constants';
 
 export type RatingVariant = (typeof RatingVariants)[keyof typeof RatingVariants];
 

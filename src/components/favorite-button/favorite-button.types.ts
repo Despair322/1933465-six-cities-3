@@ -1,4 +1,4 @@
-import { FavoriteButtonVariants } from '../../constants/app';
+import { FavoriteButtonVariants } from '../../constants';
 
 export type FavoriteButtonVariant = typeof FavoriteButtonVariants[keyof typeof FavoriteButtonVariants];
 

@@ -5,7 +5,7 @@ import LocationsList from './components/location-list';
 import CitiesMap from '../../components/cities-map';
 import SortForm from './components/sort-form';
 import Spinner from '../../components/spinner';
-import { MapVariants, RequestStatus } from '../../constants/app';
+import { MapVariants, RequestStatus } from '../../constants';
 import { mapToPoint } from '../../utils/common';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { CityName } from '../../types/types';
