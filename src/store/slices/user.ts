@@ -19,14 +19,14 @@ const userSlice = createSlice({
     builder
       .addCase(checkAuthAction.fulfilled, (state, action) => {
         state.authorizationStatus = AuthorizationStatus.Auth;
-        state.userData = { email: action.payload.email };
+        state.userData = action.payload;
       })
       .addCase(checkAuthAction.rejected, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.userData = null;
       })
       .addCase(loginAction.fulfilled, (state, action) => {
-        state.userData = { email: action.payload.email };
+        state.userData = action.payload;
         state.authorizationStatus = AuthorizationStatus.Auth;
       })
       .addCase(logoutAction.fulfilled, (state) => {

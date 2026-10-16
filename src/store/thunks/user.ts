@@ -6,16 +6,16 @@ import { removeToken, saveToken } from '../../services/token';
 import { AuthData } from '../../types/auth-data';
 import { StatusCodes } from 'http-status-codes';
 
-export const checkAuthAction = createAsyncThunk<{ email: string }, undefined, {
+export const checkAuthAction = createAsyncThunk<UserData, undefined, {
   extra: AxiosInstance;
 }>(
   'user/checkAuth',
   async (_arg, { extra: api }) => {
     try {
-      const { data: { email } } = await api.get<UserData>(APIRoute.Login,
+      const { data } = await api.get<UserData>(APIRoute.Login,
         { localErrorStatuses: [StatusCodes.BAD_REQUEST] },
       );
-      return { email };
+      return data;
     } catch (error) {
       removeToken();
       throw error;

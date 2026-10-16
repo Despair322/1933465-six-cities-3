@@ -27,12 +27,13 @@ function Navigation(): JSX.Element | null {
       <ul className="header__nav-list">
         <li className="header__nav-item user">
           <Link className="header__nav-link header__nav-link--profile" to={isAuth ? AppRoute.Favorites : `${AppRoute.Login}?redirect=${location.pathname}`}>
-            <div className="header__avatar-wrapper user__avatar-wrapper">
-            </div>
+            <div className="header__avatar-wrapper user__avatar-wrapper"
+              style={user?.avatarUrl ? { backgroundImage: `url(${user.avatarUrl})` } : undefined}
+            />
             {
               isAuth ?
                 <>
-                  <span className="header__user-name user__name">{user?.email}</span>
+                  <span className="header__user-name user__name">{user?.name}</span>
                   <FavoriteCount />
                 </> :
                 <span className="header__login">Sign in</span>

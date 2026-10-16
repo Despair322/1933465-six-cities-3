@@ -1,10 +1,12 @@
-export type UserData = {
-  id: number;
-  email: string;
-  token: string;
-};
+
 
 export type StoredUserData = {
   email: string;
+  avatarUrl: string;
+  isPro: boolean;
+  name: string;
 };
 
+export type UserData = StoredUserData & {
+  token: string;
+};
