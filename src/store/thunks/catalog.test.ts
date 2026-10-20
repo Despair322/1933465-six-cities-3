@@ -1,10 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import axios, { type AxiosInstance } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { StatusCodes } from 'http-status-codes';
 import { APIRoute, RequestStatus } from '../../constants';
-import type { Offer } from '../../types/offer';
+import { makeFakeOffer } from '../../mocks/data/offer';
 import catalogReducer from '../slices/catalog';
 import { fetchOffersAction } from './catalog';
 
@@ -12,22 +11,6 @@ describe('Catalog thunks', () => {
   let api: AxiosInstance;
   let mockApi: MockAdapter;
   let store: ReturnType<typeof createTestStore>;
-
-  const makeOffer = (id: string): Offer => ({
-    id,
-    title: `Offer ${id}`,
-    type: 'apartment',
-    price: 100,
-    previewImage: 'image.jpg',
-    city: {
-      name: 'Paris',
-      location: { latitude: 48.8566, longitude: 2.3522, zoom: 13 },
-    },
-    location: { latitude: 48.8566, longitude: 2.3522, zoom: 13 },
-    isFavorite: false,
-    isPremium: false,
-    rating: 4,
-  });
 
   function createTestStore(testApi: AxiosInstance) {
     return configureStore({
@@ -49,7 +32,7 @@ describe('Catalog thunks', () => {
 
   describe('fetchOffersAction', () => {
     it('should return offers received from the API', async () => {
-      const offers = [makeOffer('offer-1'), makeOffer('offer-2')];
+      const offers = [makeFakeOffer({ id: 'offer-1' }), makeFakeOffer({ id: 'offer-2' })];
       mockApi.onGet(APIRoute.Offers).reply(StatusCodes.OK, offers);
 
       const result = await store.dispatch(fetchOffersAction());

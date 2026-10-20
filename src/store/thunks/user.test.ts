@@ -1,10 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import axios, { type AxiosInstance } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { StatusCodes } from 'http-status-codes';
 import { APIRoute, AuthorizationStatus } from '../../constants';
-import type { UserData } from '../../types/user-data';
+import { makeFakeUserData } from '../../mocks/data/user';
 import { getToken, saveToken } from '../../services/token';
 import userReducer from '../slices/user';
 import { checkAuthAction, loginAction, logoutAction } from './user';
@@ -14,13 +13,7 @@ describe('User thunks', () => {
   let mockApi: MockAdapter;
   let store: ReturnType<typeof createTestStore>;
 
-  const userData: UserData = {
-    email: 'user@test.com',
-    avatarUrl: 'avatar.jpg',
-    isPro: true,
-    name: 'Test User',
-    token: 'user-token',
-  };
+  const userData = makeFakeUserData();
 
   function createTestStore(testApi: AxiosInstance) {
     return configureStore({
