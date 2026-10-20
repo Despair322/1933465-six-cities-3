@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { createAPI } from '../services/api';
 import catalogReducer from './slices/catalog';
 import favoritesReducer from './slices/favorites';
@@ -7,14 +7,16 @@ import detailedOfferReducer from './slices/detailedOffer';
 
 export const api = createAPI();
 
-export const store = configureStore({
-  reducer: {
-    catalog: catalogReducer,
-    favorites: favoritesReducer,
-    user: userReducer,
-    detailedOffer: detailedOfferReducer,
-  },
+export const rootReducer = combineReducers({
+  catalog: catalogReducer,
+  favorites: favoritesReducer,
+  user: userReducer,
+  detailedOffer: detailedOfferReducer,
+});
 
+export const createTestStore = (preloadedState?: Partial<RootState>) => configureStore({
+  reducer: rootReducer,
+  preloadedState,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: {
@@ -22,3 +24,17 @@ export const store = configureStore({
       }
     }),
 });
+
+// Оригинальный рабочий стор для приложения остается прежним
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: api,
+      }
+    }),
+});
+
+// Экспортируйте тип корневого состояния, если его еще нет
+export type RootState = ReturnType<typeof store.getState>;
