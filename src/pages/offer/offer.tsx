@@ -83,7 +83,7 @@ function Offer(): JSX.Element {
         style={{
           opacity: isBackgroundLoading ? 0.5 : 1,
           transition: 'opacity 0.2s ease-in-out',
-          pointerEvents: isBackgroundLoading ? 'none' : 'auto' // отключаем клики во время загрузки
+          pointerEvents: isBackgroundLoading ? 'none' : 'auto'
         }}
       >
         <section ref={offerRef} className="offer">

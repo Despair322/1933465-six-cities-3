@@ -1,4 +1,4 @@
-import { DetailedOffer } from '../types/detailed-offer'; // Импортируйте ваш тип DetailedOffer
+import { DetailedOffer } from '../types/detailed-offer';
 
 export const makeFakeDetailedOffer = (overrides?: Partial<DetailedOffer>): DetailedOffer => ({
   id: 'offer-1',

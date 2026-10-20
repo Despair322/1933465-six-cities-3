@@ -25,7 +25,6 @@ export const createTestStore = (preloadedState?: Partial<RootState>) => configur
     }),
 });
 
-// Оригинальный рабочий стор для приложения остается прежним
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
@@ -36,5 +35,4 @@ export const store = configureStore({
     }),
 });
 
-// Экспортируйте тип корневого состояния, если его еще нет
 export type RootState = ReturnType<typeof store.getState>;
