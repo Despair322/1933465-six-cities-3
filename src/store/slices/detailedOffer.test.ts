@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest';
 import { RequestStatus } from '../../constants';
 import type { DetailedOffer } from '../../types/detailed-offer';
 import type { Offer } from '../../types/offer';

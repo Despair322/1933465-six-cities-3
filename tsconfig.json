@@ -21,6 +21,7 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
   },
-  "include": ["src", "vite.config.ts"],
+  "include": ["src", "vite.config.ts", "playwright/index.tsx"],
+  "exclude": ["**/*.pwt.spec.ts", "**/*.pwt.spec.tsx", "playwright-ct.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

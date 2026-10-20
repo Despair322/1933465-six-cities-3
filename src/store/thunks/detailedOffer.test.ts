@@ -1,12 +1,10 @@
 import { configureStore, type Middleware } from '@reduxjs/toolkit';
 import axios, { type AxiosInstance } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { StatusCodes } from 'http-status-codes';
 import { APIRoute, RequestStatus } from '../../constants';
-import type { DetailedOffer } from '../../types/detailed-offer';
-import type { Offer } from '../../types/offer';
-import type { Review } from '../../types/review';
+import { makeFakeOffer, makeFakeDetailedOffer } from '../../mocks/data/offer';
+import { makeFakeReview } from '../../mocks/data/review';
 import detailedOfferReducer, {
   loadDetailedOffer,
   loadNearbyOffers,
@@ -24,40 +22,6 @@ describe('Detailed offer thunks', () => {
   let mockApi: MockAdapter;
   let actions: unknown[];
   let store: ReturnType<typeof createTestStore>;
-
-  const makeOffer = (id: string): Offer => ({
-    id,
-    title: `Offer ${id}`,
-    type: 'apartment',
-    price: 100,
-    previewImage: 'image.jpg',
-    city: {
-      name: 'Paris',
-      location: { latitude: 48.8566, longitude: 2.3522, zoom: 13 },
-    },
-    location: { latitude: 48.8566, longitude: 2.3522, zoom: 13 },
-    isFavorite: false,
-    isPremium: false,
-    rating: 4,
-  });
-
-  const makeDetailedOffer = (id: string): DetailedOffer => ({
-    ...makeOffer(id),
-    description: 'A comfortable place to stay.',
-    images: ['image.jpg'],
-    goods: ['Heating'],
-    host: { isPro: true, name: 'Host', avatarUrl: 'avatar.jpg' },
-    bedrooms: 1,
-    maxAdults: 2,
-  });
-
-  const makeReview = (): Review => ({
-    id: 'review-1',
-    comment: 'A lovely place.',
-    date: '2024-01-01T00:00:00.000Z',
-    rating: 5,
-    user: { name: 'Reviewer', avatarUrl: 'avatar.jpg', isPro: false },
-  });
 
   function createTestStore(testApi: AxiosInstance) {
     const actionRecorder: Middleware = () => (next) => (action) => {
@@ -85,7 +49,7 @@ describe('Detailed offer thunks', () => {
 
   describe('fetchOfferAction', () => {
     it('should fetch and load the detailed offer', async () => {
-      const offer = makeDetailedOffer('offer/1');
+      const offer = makeFakeDetailedOffer({ id: 'offer/1' });
       mockApi.onGet(APIRoute.OfferById('offer/1')).reply(StatusCodes.OK, offer);
 
       const result = await store.dispatch(fetchOfferAction('offer/1'));
@@ -109,7 +73,7 @@ describe('Detailed offer thunks', () => {
 
   describe('fetchNearbyOffersAction', () => {
     it('should fetch and load nearby offers', async () => {
-      const offers = [makeOffer('offer-2')];
+      const offers = [makeFakeOffer({ id: 'offer-2' })];
       mockApi.onGet(APIRoute.NearbyOffers('offer-1')).reply(StatusCodes.OK, offers);
 
       const result = await store.dispatch(fetchNearbyOffersAction('offer-1'));
@@ -133,7 +97,7 @@ describe('Detailed offer thunks', () => {
 
   describe('fetchReviewsAction', () => {
     it('should fetch and load reviews', async () => {
-      const reviews = [makeReview()];
+      const reviews = [makeFakeReview()];
       mockApi.onGet(APIRoute.Reviews('offer-1')).reply(StatusCodes.OK, reviews);
 
       const result = await store.dispatch(fetchReviewsAction('offer-1'));
@@ -157,12 +121,13 @@ describe('Detailed offer thunks', () => {
 
   describe('postReviewAction', () => {
     it('should post a review and trigger reviews refresh', async () => {
-      const reviewData = { id: 'offer-1', comment: 'A lovely place.', rating: 5 };
+      const review = makeFakeReview();
+      const reviewData = { id: 'offer-1', comment: review.comment, rating: review.rating };
       mockApi.onPost(APIRoute.Reviews(reviewData.id), {
         comment: reviewData.comment,
         rating: reviewData.rating,
       }).reply(StatusCodes.CREATED);
-      mockApi.onGet(APIRoute.Reviews(reviewData.id)).reply(StatusCodes.OK, [makeReview()]);
+      mockApi.onGet(APIRoute.Reviews(reviewData.id)).reply(StatusCodes.OK, [review]);
 
       const result = await store.dispatch(postReviewAction(reviewData));
 
@@ -177,7 +142,8 @@ describe('Detailed offer thunks', () => {
     });
 
     it('should reject when posting the review fails', async () => {
-      const reviewData = { id: 'offer-1', comment: 'A lovely place.', rating: 5 };
+      const review = makeFakeReview();
+      const reviewData = { id: 'offer-1', comment: review.comment, rating: review.rating };
       mockApi.onPost(APIRoute.Reviews(reviewData.id)).reply(StatusCodes.BAD_REQUEST);
 
       const result = await store.dispatch(postReviewAction(reviewData));

@@ -8,6 +8,8 @@ export const ICON_ANCHOR = {
   y: 40,
 };
 
-export const DEFAULT_ICON_URL = `${import.meta.env.BASE_URL}img/pin.svg`;
+const BASE_URL = import.meta.env?.BASE_URL ?? '/';
 
-export const CURRENT_ICON_URL = `${import.meta.env.BASE_URL}img/pin-active.svg`;
+export const DEFAULT_ICON_URL = `${BASE_URL}img/pin.svg`;
+
+export const CURRENT_ICON_URL = `${BASE_URL}img/pin-active.svg`;

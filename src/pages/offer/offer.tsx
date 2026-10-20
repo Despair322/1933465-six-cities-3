@@ -9,13 +9,12 @@ import CitiesMap from '../../components/cities-map';
 import Spinner from '../../components/spinner';
 import FavoriteButton from '../../components/favorite-button';
 import OfferHost from './components/offer-host';
-import { AppRoute, AuthorizationStatus, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants';
+import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants';
 import { mapToPoint } from '../../utils/common';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectReviewsCount, selectTopTenRecentReviews } from '../../store/slices/detailedOffer';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/thunks/detailedOffer';
-import { selectAuthorizationStatus } from '../../store/slices/user';
 
 function Offer(): JSX.Element {
   const { id } = useParams<{ id: string }>();
@@ -27,7 +26,6 @@ function Offer(): JSX.Element {
   const nearbyOffersLoadingStatus = useAppSelector(selectNearbyOffersLoadingStatus);
   const reviews = useAppSelector(selectTopTenRecentReviews);
   const reviewsCount = useAppSelector(selectReviewsCount);
-  const isAuth = useAppSelector(selectAuthorizationStatus) === AuthorizationStatus.Auth;
   const offerRef = useRef<HTMLElement | null>(null);
 
   const images = useMemo(() =>
@@ -54,14 +52,9 @@ function Offer(): JSX.Element {
 
   useEffect(() => {
     if (id) {
+      dispatch(fetchReviewsAction(id));
       dispatch(fetchOfferAction(id));
       dispatch(fetchNearbyOffersAction(id));
-    }
-  }, [isAuth, id, dispatch]);
-
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchReviewsAction(id));
     }
     offerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, [dispatch, id]);

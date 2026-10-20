@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest';
 import { DefaultCity, RequestStatus } from '../../constants';
 import type { Offer } from '../../types/offer';
 import { favoriteStatusChanged } from '../events/favorite';

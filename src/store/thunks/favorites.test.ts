@@ -1,11 +1,9 @@
 import { configureStore, type Middleware } from '@reduxjs/toolkit';
 import axios, { type AxiosInstance } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { StatusCodes } from 'http-status-codes';
 import { APIRoute, RequestStatus } from '../../constants';
-import type { DetailedOffer } from '../../types/detailed-offer';
-import type { Offer } from '../../types/offer';
+import { makeFakeOffer, makeFakeDetailedOffer } from '../../mocks/data/offer';
 import { favoriteStatusChanged } from '../events/favorite';
 import favoritesReducer, { setOldFavorites } from '../slices/favorites';
 import { fetchFavoritesAction, postFavoriteAction } from './favorites';
@@ -15,32 +13,6 @@ describe('Favorites thunks', () => {
   let mockApi: MockAdapter;
   let actions: unknown[];
   let store: ReturnType<typeof createTestStore>;
-
-  const makeOffer = (id: string, isFavorite = true): Offer => ({
-    id,
-    title: `Offer ${id}`,
-    type: 'apartment',
-    price: 100,
-    previewImage: 'image.jpg',
-    city: {
-      name: 'Paris',
-      location: { latitude: 48.8566, longitude: 2.3522, zoom: 13 },
-    },
-    location: { latitude: 48.8566, longitude: 2.3522, zoom: 13 },
-    isFavorite,
-    isPremium: false,
-    rating: 4,
-  });
-
-  const makeDetailedOffer = (id: string, isFavorite: boolean): DetailedOffer => ({
-    ...makeOffer(id, isFavorite),
-    description: 'A comfortable place to stay.',
-    images: ['image.jpg'],
-    goods: ['Heating'],
-    host: { isPro: true, name: 'Host', avatarUrl: 'avatar.jpg' },
-    bedrooms: 1,
-    maxAdults: 2,
-  });
 
   function createTestStore(testApi: AxiosInstance) {
     const actionRecorder: Middleware = () => (next) => (action) => {
@@ -69,7 +41,7 @@ describe('Favorites thunks', () => {
 
   describe('fetchFavoritesAction', () => {
     it('should return favorites received from the API', async () => {
-      const favorites = [makeOffer('offer-1'), makeOffer('offer-2')];
+      const favorites = [makeFakeOffer({ id: 'offer-1' }), makeFakeOffer({ id: 'offer-2' })];
       mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, favorites);
 
       const result = await store.dispatch(fetchFavoritesAction());
@@ -96,10 +68,10 @@ describe('Favorites thunks', () => {
   describe('postFavoriteAction', () => {
     it('should post the favorite status and dispatch status change and favorites refresh on success', async () => {
       const offerId = 'offer-1';
-      const detailedOffer = makeDetailedOffer(offerId, true);
+      const detailedOffer = makeFakeDetailedOffer({ id: offerId, isFavorite: true });
       mockApi.onPost(APIRoute.setFavorite(offerId, true)).reply(StatusCodes.OK, detailedOffer);
-      mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, [makeOffer(offerId)]);
-      store.dispatch(setOldFavorites([makeOffer(offerId, false)]));
+      mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, [makeFakeOffer({ id: offerId })]);
+      store.dispatch(setOldFavorites([makeFakeOffer({ id: offerId, isFavorite: false })]));
 
       const result = await store.dispatch(postFavoriteAction({ id: offerId, status: true }));
       await store.dispatch(fetchFavoritesAction());
@@ -109,19 +81,19 @@ describe('Favorites thunks', () => {
       expect(actions.some((action) => favoriteStatusChanged.match(action))).toBe(true);
       expect(actions.some((action) => fetchFavoritesAction.pending.match(action))).toBe(true);
       expect(store.getState().favorites.oldFavorites[0].isFavorite).toBe(true);
-      expect(store.getState().favorites.favorites).toEqual([makeOffer(offerId)]);
+      expect(store.getState().favorites.favorites).toEqual([makeFakeOffer({ id: offerId })]);
     });
 
     it('should refresh favorites and reconcile status after a conflict response', async () => {
       const offerId = 'offer-1';
       mockApi.onPost(APIRoute.setFavorite(offerId, true)).reply(StatusCodes.CONFLICT);
-      mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, [makeOffer(offerId)]);
-      store.dispatch(setOldFavorites([makeOffer(offerId, false)]));
+      mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, [makeFakeOffer({ id: offerId })]);
+      store.dispatch(setOldFavorites([makeFakeOffer({ id: offerId, isFavorite: false })]));
 
       const result = await store.dispatch(postFavoriteAction({ id: offerId, status: true }));
 
       expect(postFavoriteAction.fulfilled.match(result)).toBe(true);
-      expect(store.getState().favorites.favorites).toEqual([makeOffer(offerId)]);
+      expect(store.getState().favorites.favorites).toEqual([makeFakeOffer({ id: offerId })]);
       expect(store.getState().favorites.oldFavorites[0].isFavorite).toBe(true);
       expect(actions.some((action) => favoriteStatusChanged.match(action))).toBe(true);
       expect(mockApi.history.get).toHaveLength(1);
@@ -131,7 +103,7 @@ describe('Favorites thunks', () => {
       const offerId = 'offer-1';
       mockApi.onPost(APIRoute.setFavorite(offerId, false)).reply(StatusCodes.NOT_FOUND);
       mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, []);
-      store.dispatch(setOldFavorites([makeOffer(offerId)]));
+      store.dispatch(setOldFavorites([makeFakeOffer({ id: offerId })]));
 
       const result = await store.dispatch(postFavoriteAction({ id: offerId, status: false }));
 
