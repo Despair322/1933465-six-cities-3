@@ -5,7 +5,7 @@ import LocationsList from './components/location-list';
 import CitiesMap from '../../components/cities-map';
 import SortForm from './components/sort-form';
 import Spinner from '../../components/spinner';
-import { AuthorizationStatus, MapVariants, RequestStatus } from '../../constants';
+import { MapVariants, RequestStatus } from '../../constants';
 import { mapToPoint } from '../../utils/common';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { CityName } from '../../types/types';
@@ -13,14 +13,12 @@ import { sortOffers } from '../../utils/sort-offers';
 import { selectActiveCity, selectOffers, selectOffersLoadingStatus, selectSortType, setActiveCity } from '../../store/slices/catalog';
 import { fetchOffersAction } from '../../store/thunks/catalog';
 import classNames from 'classnames';
-import { selectAuthorizationStatus } from '../../store/slices/user';
 
 function Main(): JSX.Element {
   const offers = useAppSelector(selectOffers);
   const offersStatus = useAppSelector(selectOffersLoadingStatus);
   const activeCity = useAppSelector(selectActiveCity);
   const activeSortType = useAppSelector(selectSortType);
-  const isAuth = useAppSelector(selectAuthorizationStatus) === AuthorizationStatus.Auth;
   const dispatch = useAppDispatch();
 
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
@@ -61,7 +59,7 @@ function Main(): JSX.Element {
 
   useEffect(() => {
     dispatch(fetchOffersAction());
-  }, [isAuth, dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (previousCityRef.current !== activeCity) {

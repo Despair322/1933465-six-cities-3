@@ -1,14 +1,16 @@
 import classNames from 'classnames';
 import { useMemo } from 'react';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { debounce } from '../../utils/common';
 import { postFavoriteAction } from '../../store/thunks/favorites';
-import { AppRoute, FavoriteButtonVariants } from '../../constants';
+import { AppRoute, AuthorizationStatus, FavoriteButtonVariants } from '../../constants';
 import type { FavoriteButtonProps } from './favorite-button.types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';
+import { selectAuthorizationStatus } from '../../store/slices/user';
 
 function FavoriteButton({ isFavorite, id, variant }: FavoriteButtonProps): JSX.Element {
+  const isAuth = useAppSelector(selectAuthorizationStatus) === AuthorizationStatus.Auth;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,8 +35,8 @@ function FavoriteButton({ isFavorite, id, variant }: FavoriteButtonProps): JSX.E
           { 'place-card__bookmark-button': isCard },
           { 'offer__bookmark-button': !isCard },
           'button',
-          { 'place-card__bookmark-button--active': isFavorite && isCard },
-          { 'offer__bookmark-button--active': isFavorite && !isCard },
+          { 'place-card__bookmark-button--active': isAuth && isFavorite && isCard },
+          { 'offer__bookmark-button--active': isAuth && isFavorite && !isCard },
         )
       }
       type="button"
@@ -47,7 +49,7 @@ function FavoriteButton({ isFavorite, id, variant }: FavoriteButtonProps): JSX.E
       >
         <use xlinkHref="#icon-bookmark" > </use>
       </svg>
-      <span className="visually-hidden" > {isFavorite ? 'In bookmarks' : 'To bookmarks'} </span>
+      <span className="visually-hidden" > {isAuth && isFavorite ? 'In bookmarks' : 'To bookmarks'} </span>
     </button>
   );
 }
