@@ -1,5 +1,4 @@
-import type { Offer } from '../types/offer';
-import type { CityName } from '../types/types';
+import type { Offer, CityName } from '../types';
 import { CITY_NAMES } from '../constants';
 import { groupFavoritesByCity } from './favorites';
 

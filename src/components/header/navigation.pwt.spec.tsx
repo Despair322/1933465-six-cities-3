@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import { AuthorizationStatus, RequestStatus, APIRoute } from '../../constants';
-import { makeFakeOffer } from '../../mocks/data/offer';
-import { makeFakeStoredUserData } from '../../mocks/data/user';
+import { makeFakeOffer, makeFakeStoredUserData } from '../../mocks';
 import Navigation from './navigation';
 
 const userData = makeFakeStoredUserData();

@@ -1,4 +1,4 @@
-import type { StringRouteKeys } from '../types/types';
+import type { StringRouteKeys } from '../types';
 
 export const NUMBER_OF_STARS = 5;
 

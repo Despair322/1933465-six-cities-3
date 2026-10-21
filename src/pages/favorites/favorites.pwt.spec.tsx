@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import App from '../../components/app/app';
 import { APIRoute, AppRoute, AuthorizationStatus } from '../../constants';
-import { makeFakeOffer } from '../../mocks/data/offer';
+import { makeFakeOffer } from '../../mocks';
 
 test.describe('Favorites', () => {
   test('shows a loading indicator while favorites are being fetched', async ({ mount, page }) => {

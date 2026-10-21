@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { getToken } from './token';
+import { getToken } from './';
 import { StatusCodes } from 'http-status-codes';
-import { isHandledLocally } from '../utils/api';
-import { showErrorToast } from './notification';
+import { isHandledLocally } from '../utils';
+import { showErrorToast } from './';
 
 const BACKEND_URL = 'https://15.design.htmlacademy.pro/six-cities';
 const REQUEST_TIMEOUT = 5000;

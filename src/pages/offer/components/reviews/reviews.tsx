@@ -6,7 +6,7 @@ import { AuthorizationStatus, RequestStatus } from '../../../../constants';
 import { selectAuthorizationStatus } from '../../../../store/slices/user';
 import { selectReviewsLoadingStatus } from '../../../../store/slices/detailedOffer';
 import { memo } from 'react';
-import type { Review } from '../../../../types/review';
+import type { Review } from '../../../../types';
 
 type ReviewsProps = {
   reviews: Review[];

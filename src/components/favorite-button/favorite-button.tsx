@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { debounce } from '../../utils/common';
+import { debounce } from '../../utils';
 import { postFavoriteAction } from '../../store/thunks/favorites';
 import { AppRoute, AuthorizationStatus, FavoriteButtonVariants } from '../../constants';
 import type { FavoriteButtonProps } from './favorite-button.types';

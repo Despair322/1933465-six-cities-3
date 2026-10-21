@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import { CardVariants } from '../../constants';
-import { makeFakeOffer } from '../../mocks/data/offer';
+import { makeFakeOffer } from '../../mocks';
 import Card from './card';
 
 test.describe('Card', () => {

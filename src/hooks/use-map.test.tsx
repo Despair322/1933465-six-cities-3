@@ -1,7 +1,7 @@
 import type { MutableRefObject } from 'react';
 import { renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { City } from '../types/offer';
+import type { City } from '../types';
 import useMap from './use-map';
 
 const { mapInstance, mapLayer, MapConstructor, TileLayerConstructor } = vi.hoisted(() => ({

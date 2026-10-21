@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import App from '../../components/app/app';
 import { APIRoute, AppRoute, AuthorizationStatus, CITY_NAMES } from '../../constants';
-import { makeFakeUserData } from '../../mocks/data/user';
+import { makeFakeUserData } from '../../mocks';
 
 test.describe('Login', () => {
   test('renders required credential fields and a link for a random city', async ({ mount }) => {

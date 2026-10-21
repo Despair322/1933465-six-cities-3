@@ -1,9 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import type { Offer } from '../../types/offer';
+import type { Offer, DetailedOffer } from '../../types';
 import { AxiosInstance, isAxiosError } from 'axios';
 import { APIRoute } from '../../constants';
 import { favoriteStatusChanged } from '../events/favorite';
-import { DetailedOffer } from '../../types/detailed-offer';
 import { StatusCodes } from 'http-status-codes';
 
 export const fetchFavoritesAction = createAsyncThunk<Offer[], undefined, {

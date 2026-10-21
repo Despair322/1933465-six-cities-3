@@ -3,8 +3,7 @@ import axios, { type AxiosInstance } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { StatusCodes } from 'http-status-codes';
 import { APIRoute, RequestStatus } from '../../constants';
-import { makeFakeOffer, makeFakeDetailedOffer } from '../../mocks/data/offer';
-import { makeFakeReview } from '../../mocks/data/review';
+import { makeFakeOffer, makeFakeDetailedOffer, makeFakeReview } from '../../mocks';
 import detailedOfferReducer, {
   loadDetailedOffer,
   loadNearbyOffers,

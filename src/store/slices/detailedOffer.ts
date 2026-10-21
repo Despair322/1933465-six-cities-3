@@ -1,9 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RequestStatus } from '../../constants';
-import type { Offer } from '../../types/offer';
-import type { Review } from '../../types/review';
+import type { Offer, Review, DetailedOffer } from '../../types';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../thunks/detailedOffer';
-import type { DetailedOffer } from '../../types/detailed-offer';
 import { favoriteStatusChanged } from '../events/favorite';
 
 

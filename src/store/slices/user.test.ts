@@ -1,5 +1,5 @@
 import { AuthorizationStatus } from '../../constants';
-import type { StoredUserData, UserData } from '../../types/user-data';
+import type { StoredUserData, UserData } from '../../types';
 import { checkAuthAction, loginAction, logoutAction } from '../thunks/user';
 import userSlice, {
   requireAuthorization,

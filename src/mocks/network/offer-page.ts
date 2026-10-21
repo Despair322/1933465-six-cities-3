@@ -1,8 +1,6 @@
 import type { Page } from 'playwright';
-import { makeFakeDetailedOffer } from '../data/offer';
-import type { DetailedOffer } from '../../types/detailed-offer';
-import type { Offer } from '../../types/offer';
-import type { Review } from '../../types/review';
+import { makeFakeDetailedOffer } from '../data';
+import type { DetailedOffer, Offer, Review } from '../../types';
 
 interface MockOfferPageOptions {
   offerOverrides?: Partial<DetailedOffer>;

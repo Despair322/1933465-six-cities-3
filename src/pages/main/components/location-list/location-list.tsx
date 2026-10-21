@@ -1,5 +1,5 @@
 import { CITY_NAMES } from '../../../../constants';
-import type { CityName } from '../../../../types/types';
+import type { CityName } from '../../../../types';
 import LocationItem from './location-item';
 import { memo } from 'react';
 

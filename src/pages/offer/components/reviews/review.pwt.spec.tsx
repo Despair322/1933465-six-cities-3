@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/experimental-ct-react';
-import { makeFakeReview } from '../../../../mocks/data/review';
+import { makeFakeReview } from '../../../../mocks';
 import ReviewComponent from './review';
 
 test('renders reviewer details, comment, rating and formatted date', async ({ mount }) => {

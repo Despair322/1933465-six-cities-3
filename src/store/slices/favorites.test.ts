@@ -1,5 +1,5 @@
 import { RequestStatus } from '../../constants';
-import type { Offer } from '../../types/offer';
+import type { Offer } from '../../types';
 import { favoriteStatusChanged } from '../events/favorite';
 import { fetchFavoritesAction } from '../thunks/favorites';
 import favoritesSlice, {

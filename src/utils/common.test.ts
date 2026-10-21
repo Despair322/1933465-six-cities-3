@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { CITY_NAMES } from '../constants';
-import type { Point } from '../types/types';
+import type { Point } from '../types';
 import { debounce, getRandomCity, mapToPoint, transformDateToMonthYear, transformRatingToPercent } from './common';
 
 afterEach(() => {

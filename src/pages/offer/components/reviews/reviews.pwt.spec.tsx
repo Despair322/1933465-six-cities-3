@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import { AuthorizationStatus, RequestStatus } from '../../../../constants';
-import { makeFakeReview } from '../../../../mocks/data/review';
+import { makeFakeReview } from '../../../../mocks';
 import Reviews from './reviews';
 
 const loadedReview = makeFakeReview({

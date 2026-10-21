@@ -1,5 +1,5 @@
 import { AppRoute } from '../constants';
-import type { StringRouteKeys, StringRouteValues } from '../types/types';
+import type { StringRouteKeys, StringRouteValues } from '../types';
 export function getRouteKey(pathname: string): StringRouteKeys {
   if (pathname.startsWith('/offer/')) {
     return AppRoute.Offer;

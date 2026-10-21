@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { CityName, SortType } from '../../types/types';
+import type { CityName, SortType, Offer } from '../../types';
 import { fetchOffersAction } from '../thunks/catalog';
-import type { Offer } from '../../types/offer';
 import { DEFAULT_CITY, RequestStatus } from '../../constants';
 import { favoriteStatusChanged } from '../events/favorite';
 

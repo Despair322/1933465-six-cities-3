@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './protected-route';
-import BackButton from '../../mocks/components/back-button';
+import { BackButton } from '../../mocks';
 
 test.describe('ProtectedRoute', () => {
 

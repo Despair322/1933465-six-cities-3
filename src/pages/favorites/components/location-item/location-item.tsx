@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { AppRoute } from '../../../../constants';
 import { useAppDispatch } from '../../../../hooks';
 import { setActiveCity } from '../../../../store/slices/catalog';
-import type { CityName } from '../../../../types/types';
+import type { CityName } from '../../../../types';
 
 type LocationItemProps = {
   city: CityName;

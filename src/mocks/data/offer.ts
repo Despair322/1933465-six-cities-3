@@ -1,5 +1,4 @@
-import type { DetailedOffer } from '../../types/detailed-offer';
-import type { Offer } from '../../types/offer';
+import type { DetailedOffer, Offer } from '../../types';
 
 export const makeFakeDetailedOffer = (overrides?: Partial<DetailedOffer>): DetailedOffer => ({
   id: 'offer-1',

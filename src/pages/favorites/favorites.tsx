@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { Fragment, useEffect, useState } from 'react';
 import Card from '../../components/card';
-import { groupFavoritesByCity } from '../../utils/favorites';
+import { groupFavoritesByCity } from '../../utils';
 import { CardVariants, RequestStatus } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import Spinner from '../../components/spinner/spinner';

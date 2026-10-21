@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/experimental-ct-react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './layout';
 import { AuthorizationStatus, RequestStatus } from '../../constants';
-import { makeFakeOffer } from '../../mocks/data/offer';
+import { makeFakeOffer } from '../../mocks';
 
 function layoutRoute(): JSX.Element {
   return (

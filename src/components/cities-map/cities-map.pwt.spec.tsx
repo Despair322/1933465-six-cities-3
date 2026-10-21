@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import { CURRENT_ICON_URL, DEFAULT_ICON_URL, MapVariants } from '../../constants';
-import type { City } from '../../types/offer';
-import type { Point } from '../../types/types';
+import type { City, Point } from '../../types';
 import CitiesMap from './cities-map';
 
 const city: City = {

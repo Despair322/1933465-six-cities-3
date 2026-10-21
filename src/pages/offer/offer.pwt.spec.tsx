@@ -1,9 +1,7 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import App from '../../components/app/app';
 import { APIRoute, AuthorizationStatus } from '../../constants';
-import { makeFakeOffer } from '../../mocks/data/offer';
-import { makeFakeReview } from '../../mocks/data/review';
-import { mockOfferPageRequests } from '../../mocks/network/offer-page';
+import { makeFakeOffer, makeFakeReview, mockOfferPageRequests } from '../../mocks';
 
 test.describe('Offer page', () => {
   test('shows a loading indicator while the offer is being fetched', async ({ mount, page }) => {

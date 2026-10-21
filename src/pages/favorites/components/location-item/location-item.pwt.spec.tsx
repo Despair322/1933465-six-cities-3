@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/experimental-ct-react';
-import LocationItemTestStory from '../../../../mocks/components/location-item-test-story';
+import { LocationItemTestStory } from '../../../../mocks';
 
 test.describe('Favorites LocationItem', () => {
   test('links to the main page and selects its city when clicked', async ({ mount }) => {

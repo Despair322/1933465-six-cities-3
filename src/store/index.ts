@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { createAPI } from '../services/api';
+import { createAPI } from '../services';
 import catalogReducer from './slices/catalog';
 import favoritesReducer from './slices/favorites';
 import userReducer from './slices/user';

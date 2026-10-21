@@ -1,5 +1,5 @@
 import { sortOffers } from './sort-offers';
-import type { Offer } from '../types/offer';
+import type { Offer } from '../types';
 
 const mockOffers = [
   { id: '1', title: 'Offer 1', price: 100, rating: 4.5 },

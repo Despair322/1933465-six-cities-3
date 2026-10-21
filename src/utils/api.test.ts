@@ -1,6 +1,6 @@
 import { AxiosError, AxiosHeaders } from 'axios';
 import type { AxiosResponse } from 'axios';
-import { isHandledLocally } from './api';
+import { isHandledLocally } from './';
 
 function createAxiosError(status?: number, localErrorStatuses?: number[]): AxiosError {
   const headers = new AxiosHeaders();

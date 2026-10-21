@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './components/app';
 import { store } from './store';
-import { getToken } from './services/token';
+import { getToken } from './services';
 import { AuthorizationStatus } from './constants';
 import { checkAuthAction } from './store/thunks/user';
 import { requireAuthorization } from './store/slices/user';

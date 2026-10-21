@@ -3,7 +3,7 @@ import axios, { type AxiosInstance } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { StatusCodes } from 'http-status-codes';
 import { APIRoute, RequestStatus } from '../../constants';
-import { makeFakeOffer } from '../../mocks/data/offer';
+import { makeFakeOffer } from '../../mocks';
 import catalogReducer from '../slices/catalog';
 import { fetchOffersAction } from './catalog';
 

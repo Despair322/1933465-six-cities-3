@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import { APIRoute, RequestStatus } from '../../../../constants';
-import { makeFakeDetailedOffer } from '../../../../mocks/data/offer';
+import { makeFakeDetailedOffer } from '../../../../mocks';
 import Form from './form';
 
 test.describe('Review Form', () => {

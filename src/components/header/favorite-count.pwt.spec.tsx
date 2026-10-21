@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import { RequestStatus } from '../../constants';
-import { makeFakeOffer } from '../../mocks/data/offer';
+import { makeFakeOffer } from '../../mocks';
 import FavoriteCount from './favorite-count';
 
 test.describe('FavoriteCount', () => {

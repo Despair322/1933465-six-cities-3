@@ -1,8 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import { StatusCodes } from 'http-status-codes';
-import { createAPI } from './api';
-import { showErrorToast } from './notification';
-import { saveToken } from './token';
+import { createAPI, showErrorToast, saveToken } from './';
 
 vi.mock('./notification', () => ({
   showErrorToast: vi.fn(),

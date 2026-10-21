@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/experimental-ct-react';
-import { makeFakeOffer } from '../../../../mocks/data/offer';
+import { makeFakeOffer } from '../../../../mocks';
 import PlacesList from './places-list';
 
 test.describe('PlacesList', () => {

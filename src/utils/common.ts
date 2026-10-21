@@ -1,5 +1,5 @@
 import { CITY_NAMES, NUMBER_OF_STARS } from '../constants';
-import { CityName, Point } from '../types/types';
+import type { CityName, Point } from '../types';
 
 function transformRatingToPercent(rating: number): number {
   return (Math.round(rating) / NUMBER_OF_STARS * 100);

@@ -1,4 +1,4 @@
-import type { Review } from '../../types/review';
+import type { Review } from '../../types';
 
 export const makeFakeReview = (overrides: Partial<Review> = {}): Review => ({
   id: 'review-1',

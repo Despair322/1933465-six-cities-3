@@ -1,7 +1,5 @@
 import { RequestStatus } from '../../constants';
-import type { DetailedOffer } from '../../types/detailed-offer';
-import type { Offer } from '../../types/offer';
-import type { Review } from '../../types/review';
+import type { DetailedOffer, Offer, Review } from '../../types';
 import { favoriteStatusChanged } from '../events/favorite';
 import {
   fetchNearbyOffersAction,

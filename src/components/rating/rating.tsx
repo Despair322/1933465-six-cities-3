@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import type { RatingProps } from './rating.types';
 import { RatingVariants } from '../../constants';
-import { transformRatingToPercent } from '../../utils/common';
+import { transformRatingToPercent } from '../../utils';
 import { memo, useMemo } from 'react';
 
 function Rating({ rating, variant }: RatingProps): JSX.Element {

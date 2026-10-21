@@ -1,5 +1,5 @@
 import { DEFAULT_CITY, RequestStatus } from '../../constants';
-import type { Offer } from '../../types/offer';
+import type { Offer } from '../../types';
 import { favoriteStatusChanged } from '../events/favorite';
 import { fetchOffersAction } from '../thunks/catalog';
 import catalogReducer, {

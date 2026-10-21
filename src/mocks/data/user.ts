@@ -1,4 +1,4 @@
-import type { StoredUserData, UserData } from '../../types/user-data';
+import type { StoredUserData, UserData } from '../../types';
 
 export const makeFakeStoredUserData = (
   overrides: Partial<StoredUserData> = {}

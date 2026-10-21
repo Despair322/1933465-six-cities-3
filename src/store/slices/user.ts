@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthorizationStatus } from '../../constants';
-import { StoredUserData } from '../../types/user-data';
+import type { StoredUserData } from '../../types';
 import { checkAuthAction, loginAction, logoutAction } from '../thunks/user';
 
 

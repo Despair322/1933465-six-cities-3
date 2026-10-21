@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { memo, useEffect, useState } from 'react';
 import { SORT_OPTIONS } from '../../../../constants';
-import type { SortType } from '../../../../types/types';
+import type { SortType } from '../../../../types';
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import { selectSortType, setSortType } from '../../../../store/slices/catalog';
 

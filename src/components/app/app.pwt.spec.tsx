@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import { AuthorizationStatus, APIRoute } from '../../constants';
 import App from './app';
-import { mockOfferPageRequests } from '../../mocks/network/offer-page';
+import { mockOfferPageRequests } from '../../mocks';
 
 test.describe('App Routes', () => {
 

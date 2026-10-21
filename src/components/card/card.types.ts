@@ -1,5 +1,5 @@
 import { CardVariants } from '../../constants';
-import type { Offer } from '../../types/offer';
+import type { Offer } from '../../types';
 
 export type CardVariant = (typeof CardVariants)[keyof typeof CardVariants];
 

@@ -5,9 +5,9 @@ import { AppRoute, AuthorizationStatus } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setActiveCity } from '../../store/slices/catalog';
 import { loginAction } from '../../store/thunks/user';
-import { LoginLocationState } from '../../types/pages';
+import type { LoginLocationState } from '../../types';
 import { selectAuthorizationStatus } from '../../store/slices/user';
-import { getRandomCity } from '../../utils/common';
+import { getRandomCity } from '../../utils';
 
 function LoginScreen(): JSX.Element {
   const dispatch = useAppDispatch();

@@ -3,8 +3,8 @@ import axios, { type AxiosInstance } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { StatusCodes } from 'http-status-codes';
 import { APIRoute, AuthorizationStatus } from '../../constants';
-import { makeFakeUserData } from '../../mocks/data/user';
-import { getToken, saveToken } from '../../services/token';
+import { makeFakeUserData } from '../../mocks';
+import { getToken, saveToken } from '../../services';
 import userReducer from '../slices/user';
 import { checkAuthAction, loginAction, logoutAction } from './user';
 

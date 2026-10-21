@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { Host } from '../../../../types/detailed-offer';
+import type { Host } from '../../../../types';
 import classNames from 'classnames';
 
 type HostProps = {

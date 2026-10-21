@@ -1,5 +1,4 @@
-import type { SortType } from '../types/types';
-import type { Offer } from '../types/offer';
+import type { SortType, Offer } from '../types';
 
 export function sortOffers(offers: Offer[], sortType: SortType): Offer[] {
   return [...offers].sort((firstOffer, secondOffer) => {

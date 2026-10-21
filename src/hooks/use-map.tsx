@@ -1,5 +1,5 @@
 import { useEffect, useState, MutableRefObject, useRef } from 'react';
-import type { City } from '../types/offer';
+import type { City } from '../types';
 import { Map, TileLayer } from 'leaflet';
 
 const TILE_LAYER_URL = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_44ed_1_e1a13ff66092994678c0a819';

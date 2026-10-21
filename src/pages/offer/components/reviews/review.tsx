@@ -1,5 +1,5 @@
-import type { Review } from '../../../../types/review';
-import { transformDateToMonthYear, transformRatingToPercent } from '../../../../utils/common';
+import type { Review } from '../../../../types';
+import { transformDateToMonthYear, transformRatingToPercent } from '../../../../utils';
 
 type ReviewProps = {
   review: Review;

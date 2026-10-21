@@ -1,4 +1,4 @@
-import type { CityName } from './types';
+import type { CityName } from './app';
 
 export type OfferLocation = {
   latitude: number;
