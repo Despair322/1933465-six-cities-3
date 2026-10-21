@@ -76,13 +76,22 @@ test.describe('Offer page', () => {
   });
 
   test('redirects to not found when the offer request fails', async ({ mount, page }) => {
+    let nearbyRequests = 0;
+    let reviewRequests = 0;
+
     await page.route(`**${APIRoute.OfferById('offer-1')}`, async (route) => {
-      await route.fulfill({ status: 500, contentType: 'application/json', body: '{}' });
+      await route.fulfill({
+        status: 404,
+        contentType: 'application/json',
+        body: JSON.stringify({ type: 'error', message: 'Offer not found' }),
+      });
     });
     await page.route(`**${APIRoute.NearbyOffers('offer-1')}`, async (route) => {
+      nearbyRequests += 1;
       await route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
     });
     await page.route(`**${APIRoute.Reviews('offer-1')}`, async (route) => {
+      reviewRequests += 1;
       await route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
     });
 
@@ -96,5 +105,8 @@ test.describe('Offer page', () => {
     });
 
     await expect(app.getByRole('heading', { name: '404 Not found' })).toBeVisible();
+    await expect(app.getByText('Offer not found')).toHaveCount(1);
+    expect(nearbyRequests).toBe(0);
+    expect(reviewRequests).toBe(0);
   });
 });

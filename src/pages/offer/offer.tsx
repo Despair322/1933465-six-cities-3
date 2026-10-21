@@ -16,13 +16,16 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectReviewsCount, selectTopTenRecentReviews } from '../../store/slices/detailedOffer';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/thunks/detailedOffer';
 
+const MAX_NEARBY_OFFERS = 3;
+const MAX_IMAGES = 6;
+
 function Offer(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const offerDescription = useAppSelector(selectDetailedOffer);
   const offerStatus = useAppSelector(selectDetailedOfferLoadingStatus);
   const allNearbyOffers = useAppSelector(selectNearbyOffers);
-  const nearbyOffers = useMemo(() => allNearbyOffers.slice(0, 3), [allNearbyOffers]);
+  const nearbyOffers = useMemo(() => allNearbyOffers.slice(0, MAX_NEARBY_OFFERS), [allNearbyOffers]);
   const nearbyOffersLoadingStatus = useAppSelector(selectNearbyOffersLoadingStatus);
   const reviews = useAppSelector(selectTopTenRecentReviews);
   const reviewsCount = useAppSelector(selectReviewsCount);
@@ -32,7 +35,7 @@ function Offer(): JSX.Element {
     offerDescription?.images ?? [], [offerDescription?.images]
   );
   const slicedImages = useMemo(() =>
-    images.slice(0, 6), [images]
+    images.slice(0, MAX_IMAGES), [images]
   );
 
   const activePoint = useMemo(() => {
@@ -52,9 +55,22 @@ function Offer(): JSX.Element {
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchReviewsAction(id));
-      dispatch(fetchOfferAction(id));
-      dispatch(fetchNearbyOffersAction(id));
+      let isActive = true;
+      const loadOfferData = async () => {
+        const result = await dispatch(fetchOfferAction(id));
+
+        if (isActive && fetchOfferAction.fulfilled.match(result)) {
+          dispatch(fetchReviewsAction(id));
+          dispatch(fetchNearbyOffersAction(id));
+        }
+      };
+
+      void loadOfferData();
+
+      offerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return () => {
+        isActive = false;
+      };
     }
     offerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, [dispatch, id]);
