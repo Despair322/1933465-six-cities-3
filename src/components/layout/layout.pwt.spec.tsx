@@ -59,7 +59,6 @@ test.describe('Layout', () => {
         initialState: {
           favorites: {
             favorites: [makeFakeOffer({ isFavorite: true })],
-            oldFavorites: [],
             loadingStatus: { favorites: RequestStatus.Succeeded },
           },
         },

@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 import { APIRoute, RequestStatus } from '../../constants';
 import { makeFakeOffer, makeFakeDetailedOffer } from '../../mocks/data/offer';
 import { favoriteStatusChanged } from '../events/favorite';
-import favoritesReducer, { setOldFavorites } from '../slices/favorites';
+import favoritesReducer from '../slices/favorites';
 import { fetchFavoritesAction, postFavoriteAction } from './favorites';
 
 describe('Favorites thunks', () => {
@@ -71,7 +71,6 @@ describe('Favorites thunks', () => {
       const detailedOffer = makeFakeDetailedOffer({ id: offerId, isFavorite: true });
       mockApi.onPost(APIRoute.setFavorite(offerId, true)).reply(StatusCodes.OK, detailedOffer);
       mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, [makeFakeOffer({ id: offerId })]);
-      store.dispatch(setOldFavorites([makeFakeOffer({ id: offerId, isFavorite: false })]));
 
       const result = await store.dispatch(postFavoriteAction({ id: offerId, status: true }));
       await store.dispatch(fetchFavoritesAction());
@@ -80,7 +79,6 @@ describe('Favorites thunks', () => {
       expect(mockApi.history.post[0].url).toBe(APIRoute.setFavorite(offerId, true));
       expect(actions.some((action) => favoriteStatusChanged.match(action))).toBe(true);
       expect(actions.some((action) => fetchFavoritesAction.pending.match(action))).toBe(true);
-      expect(store.getState().favorites.oldFavorites[0].isFavorite).toBe(true);
       expect(store.getState().favorites.favorites).toEqual([makeFakeOffer({ id: offerId })]);
     });
 
@@ -88,13 +86,11 @@ describe('Favorites thunks', () => {
       const offerId = 'offer-1';
       mockApi.onPost(APIRoute.setFavorite(offerId, true)).reply(StatusCodes.CONFLICT);
       mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, [makeFakeOffer({ id: offerId })]);
-      store.dispatch(setOldFavorites([makeFakeOffer({ id: offerId, isFavorite: false })]));
 
       const result = await store.dispatch(postFavoriteAction({ id: offerId, status: true }));
 
       expect(postFavoriteAction.fulfilled.match(result)).toBe(true);
       expect(store.getState().favorites.favorites).toEqual([makeFakeOffer({ id: offerId })]);
-      expect(store.getState().favorites.oldFavorites[0].isFavorite).toBe(true);
       expect(actions.some((action) => favoriteStatusChanged.match(action))).toBe(true);
       expect(mockApi.history.get).toHaveLength(1);
     });
@@ -103,13 +99,11 @@ describe('Favorites thunks', () => {
       const offerId = 'offer-1';
       mockApi.onPost(APIRoute.setFavorite(offerId, false)).reply(StatusCodes.NOT_FOUND);
       mockApi.onGet(APIRoute.Favorites).reply(StatusCodes.OK, []);
-      store.dispatch(setOldFavorites([makeFakeOffer({ id: offerId })]));
 
       const result = await store.dispatch(postFavoriteAction({ id: offerId, status: false }));
 
       expect(postFavoriteAction.fulfilled.match(result)).toBe(true);
       expect(store.getState().favorites.favorites).toEqual([]);
-      expect(store.getState().favorites.oldFavorites[0].isFavorite).toBe(false);
     });
 
     it('should reject with the HTTP status for other API errors', async () => {

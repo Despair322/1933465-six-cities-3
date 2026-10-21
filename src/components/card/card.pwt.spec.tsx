@@ -40,21 +40,27 @@ test.describe('Card', () => {
     await expect(card.locator('.favorites__card-info')).toBeVisible();
   });
 
-  test('calls onHover with the offer id when the pointer enters the card', async ({ mount }) => {
+  test('calls mouse enter and leave handlers', async ({ mount }) => {
     let hoveredOfferId: string | null = null;
+    let hasMouseLeft = false;
     const card = await mount(
       <Card
         offer={makeFakeOffer({ id: 'hovered-offer' })}
         variant={CardVariants.Near}
-        onHover={(id) => {
+        onMouseEnter={(id) => {
           hoveredOfferId = id;
+        }}
+        onMouseLeave={() => {
+          hasMouseLeft = true;
         }}
       />
     );
 
     await expect(card).toHaveClass(/near-places__card/);
     await card.hover();
-
     expect(hoveredOfferId).toBe('hovered-offer');
+
+    await card.dispatchEvent('mouseout');
+    expect(hasMouseLeft).toBe(true);
   });
 });

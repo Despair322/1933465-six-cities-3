@@ -6,14 +6,11 @@ import favoritesSlice, {
   selectFavorites,
   selectFavoritesCount,
   selectFavoritesLoadingStatus,
-  selectOldFavorites,
-  setOldFavorites,
 } from './favorites';
 
 describe('Favorites Slice', () => {
   const initialState = {
     favorites: [],
-    oldFavorites: [],
     loadingStatus: { favorites: RequestStatus.Idle },
   };
 
@@ -74,43 +71,38 @@ describe('Favorites Slice', () => {
     });
   });
 
-  describe('setOldFavorites', () => {
-    it('should replace oldFavorites with the action payload', () => {
-      const mockFavorites = [makeOffer('offer-1')];
-      const result = favoritesSlice(initialState, setOldFavorites(mockFavorites));
-
-      expect(result.oldFavorites).toEqual(mockFavorites);
-    });
-  });
-
   describe('favoriteStatusChanged', () => {
-    it('should update favorite status only for the matching old favorite', () => {
-      const favorites = [makeOffer('offer-1')];
-      const oldFavorites = [makeOffer('offer-1'), makeOffer('offer-2')];
-      const state = { ...initialState, favorites, oldFavorites };
+    it('should remove the matching favorite when its status changes to false', () => {
+      const favorites = [makeOffer('offer-1'), makeOffer('offer-2')];
+      const state = { ...initialState, favorites };
       const action = favoriteStatusChanged({ id: 'offer-2', isFavorite: false });
       const result = favoritesSlice(state, action);
 
-      expect(result.oldFavorites.map(({ isFavorite }) => isFavorite)).toEqual([true, false]);
-      expect(result.favorites).toEqual(favorites);
+      expect(result.favorites).toEqual([makeOffer('offer-1')]);
+    });
+
+    it('should not change favorites when status changes to true or the id is missing', () => {
+      const state = { ...initialState, favorites: [makeOffer('offer-1')] };
+      const result = favoritesSlice(state, favoriteStatusChanged({
+        id: 'offer-1',
+        isFavorite: true,
+      }));
+
+      expect(result.favorites).toEqual(state.favorites);
       expect(favoritesSlice(result, favoriteStatusChanged({
         id: 'missing',
         isFavorite: false,
-      }))).toEqual(result);
+      })).favorites).toEqual(result.favorites);
     });
   });
 
   describe('selectors', () => {
-    it('should select favorites, old favorites, loading status and favorites count', () => {
+    it('should select favorites, loading status and favorites count', () => {
       const favorites = [makeOffer('offer-1'), makeOffer('offer-2')];
-      const state = favoritesSlice(
-        favoritesSlice(initialState, fetchFavoritesAction.fulfilled(favorites, 'request-id', undefined)),
-        setOldFavorites([makeOffer('old-offer')])
-      );
+      const state = favoritesSlice(initialState, fetchFavoritesAction.fulfilled(favorites, 'request-id', undefined));
       const rootState = { favorites: state };
 
       expect(selectFavorites(rootState)).toEqual(favorites);
-      expect(selectOldFavorites(rootState)).toEqual([makeOffer('old-offer')]);
       expect(selectFavoritesLoadingStatus(rootState)).toBe(RequestStatus.Succeeded);
       expect(selectFavoritesCount(rootState)).toBe(2);
     });

@@ -38,7 +38,6 @@ test.describe('Navigation', () => {
           user: { authorizationStatus: AuthorizationStatus.Auth, userData },
           favorites: {
             favorites: [makeFakeOffer({ id: 'offer-1' }), makeFakeOffer({ id: 'offer-2' })],
-            oldFavorites: [],
             loadingStatus: { favorites: RequestStatus.Succeeded },
           },
         },
