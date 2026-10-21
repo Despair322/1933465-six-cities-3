@@ -1,5 +1,5 @@
 import type { MutableRefObject } from 'react';
-import { renderHook } from '@testing-library/react';
+import { renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { City } from '../types';
 import useMap from './use-map';
@@ -40,12 +40,17 @@ describe('useMap', () => {
     vi.clearAllMocks();
   });
 
-  it('should create a Leaflet map with the city location and add the tile layer', () => {
+  it('should create a Leaflet map with the city location and add the tile layer', async () => {
     const element = document.createElement('div');
     const mapRef: MutableRefObject<HTMLElement | null> = { current: element };
     const city = makeCity('Paris', 48.8566, 2.3522, 13);
 
     const { result } = renderHook(() => useMap(mapRef, city));
+
+    await waitFor(() => {
+      expect(MapConstructor).toHaveBeenCalledOnce();
+      expect(result.current).toBe(mapInstance);
+    });
 
     expect(MapConstructor).toHaveBeenCalledOnce();
     expect(MapConstructor).toHaveBeenCalledWith(element, {
@@ -62,7 +67,7 @@ describe('useMap', () => {
     expect(result.current).toBe(mapInstance);
   });
 
-  it('should update the existing map view when the city changes', () => {
+  it('should update the existing map view when the city changes', async () => {
     const mapRef: MutableRefObject<HTMLElement | null> = {
       current: document.createElement('div'),
     };
@@ -74,7 +79,16 @@ describe('useMap', () => {
       { initialProps: { city: initialCity } }
     );
 
+    await waitFor(() => {
+      expect(MapConstructor).toHaveBeenCalledOnce();
+      expect(result.current).toBe(mapInstance);
+    });
+
     rerender({ city: nextCity });
+
+    await waitFor(() => {
+      expect(mapInstance.setView).toHaveBeenLastCalledWith([52.3676, 4.9041], 11);
+    });
 
     expect(MapConstructor).toHaveBeenCalledOnce();
     expect(TileLayerConstructor).toHaveBeenCalledOnce();

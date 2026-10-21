@@ -1,6 +1,6 @@
 import { useEffect, useState, MutableRefObject, useRef } from 'react';
+import type { Map as LeafletMap } from 'leaflet';
 import type { City } from '../types';
-import { Map, TileLayer } from 'leaflet';
 
 const TILE_LAYER_URL = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_44ed_1_e1a13ff66092994678c0a819';
 const TILE_LAYER_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
@@ -8,34 +8,47 @@ const TILE_LAYER_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/co
 function useMap(
   mapRef: MutableRefObject<HTMLElement | null>,
   city: City,
-): Map | null {
-  const [map, setMap] = useState<Map | null>(null);
+): LeafletMap | null {
+  const [map, setMap] = useState<LeafletMap | null>(null);
   const isRenderedRef = useRef<boolean>(false);
   const { latitude, longitude, zoom } = city.location;
 
   useEffect(() => {
+    let isCancelled = false;
+
     if (mapRef.current !== null && !isRenderedRef.current) {
-      const instance = new Map(mapRef.current, {
-        center: {
-          lat: latitude,
-          lng: longitude,
-        },
-        zoom,
-      });
-
-      const layer = new TileLayer(
-        TILE_LAYER_URL,
-        {
-          attribution:
-            TILE_LAYER_ATTRIBUTION
+      void (async () => {
+        const { Map: LeafletMapConstructor, TileLayer } = await import('leaflet');
+        if (isCancelled || !mapRef.current || isRenderedRef.current) {
+          return;
         }
-      );
 
-      instance.addLayer(layer);
+        const instance = new LeafletMapConstructor(mapRef.current, {
+          center: {
+            lat: latitude,
+            lng: longitude,
+          },
+          zoom,
+        });
 
-      setMap(instance);
-      isRenderedRef.current = true;
+        const layer = new TileLayer(
+          TILE_LAYER_URL,
+          {
+            attribution:
+              TILE_LAYER_ATTRIBUTION
+          }
+        );
+
+        instance.addLayer(layer);
+
+        setMap(instance);
+        isRenderedRef.current = true;
+      })();
     }
+
+    return () => {
+      isCancelled = true;
+    };
   }, [mapRef, latitude, longitude, zoom]);
 
   useEffect(() => {
