@@ -5,14 +5,15 @@ import type { Offer } from '../../../../types/offer';
 
 type PlacesListProps = {
   offers: Offer[];
-  onHover?: (offerId: string | null) => void;
+  onMouseEnter?: (offerId: string | null) => void;
+  onMouseLeave?: () => void;
 };
 
-function PlacesList({ offers, onHover }: PlacesListProps): JSX.Element {
+function PlacesList({ offers, onMouseEnter, onMouseLeave}: PlacesListProps): JSX.Element {
   return (
     <div className="cities__places-list places__list tabs__content">
       {offers.map((offer) => (
-        <Card key={offer.id} offer={offer} onHover={onHover} variant={CardVariants.Main} />
+        <Card key={offer.id} offer={offer} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} variant={CardVariants.Main} />
       ))}
     </div>
   );
