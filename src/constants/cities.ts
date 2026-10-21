@@ -1,4 +1,4 @@
-export const CityNames = [
+export const CITY_NAMES = [
   'Paris',
   'Cologne',
   'Brussels',
@@ -7,5 +7,5 @@ export const CityNames = [
   'Dusseldorf',
 ] as const;
 
-export const DefaultCity = CityNames[0];
+export const DEFAULT_CITY = CITY_NAMES[0];
 

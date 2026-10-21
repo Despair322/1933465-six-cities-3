@@ -6,7 +6,7 @@ import Rating from '../rating/rating';
 import FavoriteisButton from '../favorite-button/favorite-button';
 import { memo } from 'react';
 
-function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.Element {
+function Card({ offer, onMouseEnter, onMouseLeave, variant = CardVariants.Main }: CardProps): JSX.Element {
   const { id, isPremium, previewImage, price, isFavorite, rating, title, type } = offer;
   const offerPath = AppRoute.OfferById(id);
   const isMain = variant === CardVariants.Main;
@@ -22,7 +22,8 @@ function Card({ offer, onHover, variant = CardVariants.Main }: CardProps): JSX.E
         { 'favorites__card': isFavorites },
         { 'near-places__card': isNear },
         'place-card')}
-      onMouseEnter={onHover ? () => onHover(offer?.id) : undefined}
+      onMouseEnter={onMouseEnter ? () => onMouseEnter(offer?.id) : undefined}
+      onMouseLeave={onMouseLeave}
     >
       {isPremium && (
         <div className="place-card__mark">

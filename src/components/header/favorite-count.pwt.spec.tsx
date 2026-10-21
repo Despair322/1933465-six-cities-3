@@ -10,7 +10,6 @@ test.describe('FavoriteCount', () => {
         initialState: {
           favorites: {
             favorites: [makeFakeOffer({ id: 'offer-1' }), makeFakeOffer({ id: 'offer-2' })],
-            oldFavorites: [],
             loadingStatus: { favorites: RequestStatus.Succeeded },
           },
         },

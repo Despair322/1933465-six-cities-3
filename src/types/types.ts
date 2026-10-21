@@ -1,4 +1,4 @@
-import { AppRoute, CityNames, SORT_OPTIONS } from '../constants';
+import { AppRoute, CITY_NAMES, SORT_OPTIONS } from '../constants';
 
 export type StringRouteValues = Extract<
   (typeof AppRoute)[keyof typeof AppRoute],
@@ -15,6 +15,6 @@ export type Point = {
   };
 }
 
-export type CityName = (typeof CityNames)[number];
+export type CityName = (typeof CITY_NAMES)[number];
 
 export type SortType = typeof SORT_OPTIONS[number]['value'];

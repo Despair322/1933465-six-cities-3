@@ -4,13 +4,16 @@ import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import { postReviewAction } from '../../../../store/thunks/detailedOffer';
 import { selectDetailedOfferId, } from '../../../../store/slices/detailedOffer';
 
-const Rating = [
+const RATINGS = [
   { value: 5, title: 'perfect' },
   { value: 4, title: 'good' },
   { value: 3, title: 'not bad' },
   { value: 2, title: 'badly' },
   { value: 1, title: 'terribly' },
 ];
+
+const MIN_LENGTH = 50;
+const MAX_LENGTH = 300;
 
 function Form(): JSX.Element | null {
   const dispatch = useAppDispatch();
@@ -30,7 +33,7 @@ function Form(): JSX.Element | null {
     }));
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const ratingNumber = Number(formData.rating);
     setIsDisabled(true);
@@ -45,10 +48,10 @@ function Form(): JSX.Element | null {
   }
 
   return (
-    <form className="reviews__form form" action="#" method="post" onSubmit={handleSubmit}>
+    <form className="reviews__form form" action="#" method="post" onSubmit={handleFormSubmit}>
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
-        {Rating.map(({ value, title }) => (
+        {RATINGS.map(({ value, title }) => (
           <Fragment key={value}>
             <input className="form__rating-input visually-hidden" name="rating" value={value} id={`${value}-stars`} type="radio" onChange={handleInputChange} checked={formData.rating === String(value)} disabled={isDisabled} />
             <label htmlFor={`${value}-stars`} className="reviews__rating-label form__rating-label" title={title} >
@@ -71,10 +74,10 @@ function Form(): JSX.Element | null {
       </textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
-          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
+          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">{MIN_LENGTH} characters</b>.
         </p>
         <button className="reviews__submit form__submit button" type="submit"
-          disabled={formData.rating.length === 0 || formData.review.length < 50 || formData.review.length > 300 || isDisabled}
+          disabled={formData.rating.length === 0 || formData.review.length < MIN_LENGTH || formData.review.length > MAX_LENGTH || isDisabled}
         >
           Submit
         </button>

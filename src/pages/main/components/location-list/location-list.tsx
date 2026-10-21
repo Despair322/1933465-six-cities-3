@@ -1,4 +1,4 @@
-import { CityNames } from '../../../../constants';
+import { CITY_NAMES } from '../../../../constants';
 import type { CityName } from '../../../../types/types';
 import LocationItem from './location-item';
 import { memo } from 'react';
@@ -11,7 +11,7 @@ type LocationListProps = {
 function LocationsList({ activeCity, onClick }: LocationListProps): JSX.Element {
   return (
     <ul className="locations__list tabs__list">
-      {CityNames.map((city) => (
+      {CITY_NAMES.map((city) => (
         <LocationItem key={city} city={city} isActive={city === activeCity} onClick={onClick} />
       ))}
     </ul>

@@ -1,8 +1,8 @@
-import { CityNames, NumberOfStars } from '../constants';
+import { CITY_NAMES, NUMBER_OF_STARS } from '../constants';
 import { CityName, Point } from '../types/types';
 
 function transformRatingToPercent(rating: number): number {
-  return (Math.round(rating) / NumberOfStars * 100);
+  return (Math.round(rating) / NUMBER_OF_STARS * 100);
 }
 
 function transformDateToMonthYear(date: string): string {
@@ -44,7 +44,7 @@ function debounce<Args extends unknown[]>(
 }
 
 function getRandomCity(): CityName {
-  return CityNames[Math.floor(Math.random() * CityNames.length)];
+  return CITY_NAMES[Math.floor(Math.random() * CITY_NAMES.length)];
 }
 
 export { transformRatingToPercent, transformDateToMonthYear, debounce, getRandomCity };

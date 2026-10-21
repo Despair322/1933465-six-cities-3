@@ -21,6 +21,8 @@ const initialState: DetailedOfferState = {
   loadingStatus: { detailedOffer: RequestStatus.Idle, nearbyOffers: RequestStatus.Idle, reviews: RequestStatus.Idle },
 };
 
+const MAX_RECENT_REVIEWS = 10;
+
 const detailedOfferSlice = createSlice({
   extraReducers: (builder) =>
     builder
@@ -96,8 +98,8 @@ export const { selectDetailedOffer, selectDetailedOfferId, selectDetailedOfferLo
 export const selectTopTenRecentReviews = createSelector(
   [selectReviews],
   (reviews) => [...reviews]
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 10)
+    .sort((firstReview, secondReview) => new Date(secondReview.date).getTime() - new Date(firstReview.date).getTime())
+    .slice(0, MAX_RECENT_REVIEWS)
 );
 
 export default detailedOfferSlice.reducer;

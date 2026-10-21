@@ -1,6 +1,6 @@
 import type { StringRouteKeys } from '../types/types';
 
-export const NumberOfStars = 5;
+export const NUMBER_OF_STARS = 5;
 
 export const AppRoute = {
   Main: '/',
@@ -36,7 +36,7 @@ export const MapVariants = {
 export const FavoriteButtonVariants = {
   Card: 'card',
   Offer: 'offer',
-};
+} as const;
 
 export const SORT_OPTIONS = [
   { value: 'popular', title: 'Popular' },

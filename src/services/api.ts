@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestCo
 import { getToken } from './token';
 import { StatusCodes } from 'http-status-codes';
 import { isHandledLocally } from '../utils/api';
-import { ShowErrorToast } from './notification';
+import { showErrorToast } from './notification';
 
 const BACKEND_URL = 'https://15.design.htmlacademy.pro/six-cities';
 const REQUEST_TIMEOUT = 5000;
@@ -43,10 +43,10 @@ export const createAPI = (): AxiosInstance => {
     (error: AxiosError<DetailMessageType>) => {
       if (error.response && shouldDisplayError(error.response) && !isHandledLocally(error)) {
         if (error.response?.status as StatusCodes === StatusCodes.UNAUTHORIZED) {
-          ShowErrorToast('Unauthorized access. Please log in.');
+          showErrorToast('Unauthorized access. Please log in.');
         } else {
           const detailMessage = (error.response.data);
-          ShowErrorToast(detailMessage.message);
+          showErrorToast(detailMessage.message);
         }
       }
       throw error;

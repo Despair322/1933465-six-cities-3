@@ -10,16 +10,16 @@ const mockOffers = [
 describe('Function sortOffers', () => {
   it('Should sort by price low-to-high', () => {
     const result = sortOffers(mockOffers, 'price');
-    expect(result.map((o) => o.id)).toEqual(['2', '1', '3']);
+    expect(result.map((offer) => offer.id)).toEqual(['2', '1', '3']);
   });
 
   it('Should sort by price high-to-low', () => {
     const result = sortOffers(mockOffers, 'price-high-to-low');
-    expect(result.map((o) => o.id)).toEqual(['3', '1', '2']);
+    expect(result.map((offer) => offer.id)).toEqual(['3', '1', '2']);
   });
 
   it('Should sort by top-rated', () => {
     const result = sortOffers(mockOffers, 'top-rated');
-    expect(result.map((o) => o.id)).toEqual(['2', '1', '3']);
+    expect(result.map((offer) => offer.id)).toEqual(['2', '1', '3']);
   });
 });

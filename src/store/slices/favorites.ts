@@ -6,13 +6,11 @@ import { favoriteStatusChanged } from '../events/favorite';
 
 interface FavoritesState {
   favorites: Offer[];
-  oldFavorites: Offer[];
   loadingStatus: { favorites: RequestStatus };
 }
 
 const initialState: FavoritesState = {
   favorites: [],
-  oldFavorites: [],
   loadingStatus: { favorites: RequestStatus.Idle },
 };
 
@@ -31,28 +29,22 @@ const favoritesSlice = createSlice({
       })
       .addCase(favoriteStatusChanged, (state, action: PayloadAction<{ id: string; isFavorite: boolean }>) => {
         const { id, isFavorite } = action.payload;
-        state.oldFavorites.forEach((offer) => {
-          if (offer.id === id) {
-            offer.isFavorite = isFavorite;
-          }
-        });
+        if (!isFavorite) {
+          state.favorites = state.favorites.filter((offer) => offer.id !== id);
+        }
       }),
   initialState,
   name: 'favorites',
   reducers: {
-    setOldFavorites: (state, action: PayloadAction<Offer[]>) => {
-      state.oldFavorites = action.payload;
-    }
   },
   selectors: {
     selectFavorites: (state) => state.favorites,
-    selectOldFavorites: (state) => state.oldFavorites,
     selectFavoritesLoadingStatus: (state) => state.loadingStatus.favorites,
     selectFavoritesCount: (state) => state.favorites.length,
   }
 });
 
-export const { selectFavorites, selectOldFavorites, selectFavoritesLoadingStatus, selectFavoritesCount } = favoritesSlice.selectors;
-export const { setOldFavorites } = favoritesSlice.actions;
+export const { selectFavorites, selectFavoritesLoadingStatus, selectFavoritesCount } = favoritesSlice.selectors;
+
 
 export default favoritesSlice.reducer;

@@ -49,8 +49,12 @@ function Main(): JSX.Element {
       location: { latitude: 48.85661, longitude: 2.351499, zoom: 13 }
     }, [cityOffers, activeCity]);
 
-  const handleOfferHover = useCallback((id: string | null) => {
+  const handleOfferMouseEnter = useCallback((id: string | null) => {
     setActiveOfferId(id);
+  }, []);
+
+  const handleOfferMouseLeave = useCallback(() => {
+    setActiveOfferId(null);
   }, []);
 
   const handleCityClick = useCallback((city: CityName) => {
@@ -101,7 +105,7 @@ function Main(): JSX.Element {
                   <>
                     <b className="places__found">{cityOffers.length ? cityOffers.length : 'No'} place{cityOffers.length > 1 ? 's' : ''} to stay in {activeCity}</b>
                     <SortForm />
-                    <PlacesList offers={sortedOffers} onHover={handleOfferHover} />
+                    <PlacesList offers={sortedOffers} onMouseEnter={handleOfferMouseEnter} onMouseLeave={handleOfferMouseLeave} />
                   </>
                 )}
               </section>

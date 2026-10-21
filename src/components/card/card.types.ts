@@ -5,6 +5,7 @@ export type CardVariant = (typeof CardVariants)[keyof typeof CardVariants];
 
 export type CardProps = {
   offer: Offer;
-  onHover?: (offerId: string | null) => void;
+  onMouseEnter?: (offerId: string | null) => void;
+  onMouseLeave?: () => void;
   variant?: CardVariant;
 };

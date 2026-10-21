@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { CityNames } from '../constants';
+import { CITY_NAMES } from '../constants';
 import type { Point } from '../types/types';
 import { debounce, getRandomCity, mapToPoint, transformDateToMonthYear, transformRatingToPercent } from './common';
 
@@ -70,12 +70,12 @@ describe('getRandomCity', () => {
   it('returns the first city when random is zero', () => {
     vi.spyOn(Math, 'random').mockReturnValue(0);
 
-    expect(getRandomCity()).toBe(CityNames[0]);
+    expect(getRandomCity()).toBe(CITY_NAMES[0]);
   });
 
   it('can return the last city', () => {
     vi.spyOn(Math, 'random').mockReturnValue(0.999);
 
-    expect(getRandomCity()).toBe(CityNames[CityNames.length - 1]);
+    expect(getRandomCity()).toBe(CITY_NAMES[CITY_NAMES.length - 1]);
   });
 });

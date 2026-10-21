@@ -11,8 +11,8 @@ type LocationProps = {
 
 function LocationItem({ city, isActive, onClick }: LocationProps): JSX.Element {
 
-  const handleClick = (e: React.SyntheticEvent) => {
-    e.preventDefault();
+  const handleClick = (evt: React.SyntheticEvent) => {
+    evt.preventDefault();
     onClick(city);
   };
 

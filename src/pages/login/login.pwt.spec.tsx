@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import App from '../../components/app/app';
-import { APIRoute, AppRoute, AuthorizationStatus, CityNames } from '../../constants';
+import { APIRoute, AppRoute, AuthorizationStatus, CITY_NAMES } from '../../constants';
 import { makeFakeUserData } from '../../mocks/data/user';
 
 test.describe('Login', () => {
@@ -19,9 +19,9 @@ test.describe('Login', () => {
     await expect(app.getByPlaceholder('Password')).toHaveAttribute('required', '');
     await expect(app.getByPlaceholder('Password')).toHaveAttribute('minlength', '2');
 
-    const cityLink = app.getByRole('link').filter({ hasText: new RegExp(CityNames.join('|')) });
+    const cityLink = app.getByRole('link').filter({ hasText: new RegExp(CITY_NAMES.join('|')) });
     await expect(cityLink).toHaveAttribute('href', '/');
-    expect(CityNames).toContain(await cityLink.innerText());
+    expect(CITY_NAMES).toContain(await cityLink.innerText());
   });
 
   test('submits credentials and redirects after successful login', async ({ mount, page }) => {

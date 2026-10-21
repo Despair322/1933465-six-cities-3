@@ -30,14 +30,14 @@ function CitiesMap(props: MapProps): JSX.Element {
   const isMain = variant === MapVariants.Main;
   const isOffer = variant === MapVariants.Offer;
 
-  function handleMapUnlock() {
+  function handleMapOverlayKeyDown() {
     setIsMapInteractive(true);
   }
 
   function handleMapUnlockKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
-      handleMapUnlock();
+      handleMapOverlayKeyDown();
     }
   }
 
@@ -134,7 +134,7 @@ function CitiesMap(props: MapProps): JSX.Element {
           role="button"
           tabIndex={0}
           aria-label="Enable map interaction"
-          onClick={handleMapUnlock}
+          onClick={handleMapOverlayKeyDown}
           onKeyDown={handleMapUnlockKeyDown}
           style={{
             position: 'absolute',

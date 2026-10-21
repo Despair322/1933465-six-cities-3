@@ -5,26 +5,23 @@ import { groupFavoritesByCity } from '../../utils/favorites';
 import { CardVariants, RequestStatus } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import Spinner from '../../components/spinner/spinner';
-import { selectFavoritesLoadingStatus, selectOldFavorites, setOldFavorites } from '../../store/slices/favorites';
+import { selectFavorites, selectFavoritesLoadingStatus } from '../../store/slices/favorites';
 import { fetchFavoritesAction } from '../../store/thunks/favorites';
 import LocationItem from './components/location-item';
 import classNames from 'classnames';
 
 function Favorites(): JSX.Element {
   const favoritesStatus = useAppSelector(selectFavoritesLoadingStatus);
-  const oldFavorites = useAppSelector(selectOldFavorites);
+  const favorites = useAppSelector(selectFavorites);
   const dispatch = useAppDispatch();
 
   const [initialLoading, setInitialLoading] = useState(true);
 
-  const groupedFavorites = groupFavoritesByCity(oldFavorites);
-  const isEmpty = oldFavorites.length === 0;
+  const groupedFavorites = groupFavoritesByCity(favorites);
+  const isEmpty = favorites.length === 0;
 
   useEffect(() => {
-    void dispatch(fetchFavoritesAction()).unwrap().then((loadedFavorites) => {
-      dispatch(setOldFavorites(loadedFavorites));
-      setInitialLoading(false);
-    }).catch(() => {
+    void dispatch(fetchFavoritesAction()).unwrap().finally(() => {
       setInitialLoading(false);
     });
   }, [dispatch]);
