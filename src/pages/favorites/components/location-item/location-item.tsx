@@ -12,14 +12,14 @@ type LocationItemProps = {
 function LocationItem({ city }: LocationItemProps): JSX.Element {
 
   const dispatch = useAppDispatch();
-  const handleClick = () => {
+  const handleLocationClick = () => {
     dispatch(setActiveCity(city));
   };
 
   return (
     <div className="favorites__locations locations locations--current">
       <div className="locations__item">
-        <Link className="locations__item-link" to={AppRoute.Main} onClick={handleClick}>
+        <Link className="locations__item-link" to={AppRoute.Main} onClick={handleLocationClick}>
           <span>{city}</span>
         </Link>
       </div>

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import App from '../../components/app/app';
-import { APIRoute, AuthorizationStatus, DefaultCity } from '../../constants';
+import { APIRoute, AuthorizationStatus, DEFAULT_CITY } from '../../constants';
 import { makeFakeOffer } from '../../mocks/data/offer';
 
 test.describe('Main page', () => {
@@ -72,7 +72,7 @@ test.describe('Main page', () => {
     });
 
     await expect(app.getByText('No places to stay available')).toBeVisible();
-    await expect(app.getByText(`We could not find any property available at the moment in ${DefaultCity}`)).toBeVisible();
+    await expect(app.getByText(`We could not find any property available at the moment in ${DEFAULT_CITY}`)).toBeVisible();
     await expect(app.locator('.cities__map')).toHaveCount(0);
   });
 

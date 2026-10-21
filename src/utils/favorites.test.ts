@@ -1,6 +1,6 @@
 import type { Offer } from '../types/offer';
 import type { CityName } from '../types/types';
-import { CityNames } from '../constants';
+import { CITY_NAMES } from '../constants';
 import { groupFavoritesByCity } from './favorites';
 
 const createMockOffer = (city: CityName, id: string) : Offer => ({
@@ -29,7 +29,7 @@ const mockOffers = [
 describe('Function groupFavoritesByCity', () => {
   it('Should group offers by city', () => {
     const result = groupFavoritesByCity(mockOffers);
-    expect(result.map((group) => group.city)).toEqual(CityNames);
+    expect(result.map((group) => group.city)).toEqual(CITY_NAMES);
   });
 
   it('Should sort offers by city', () => {

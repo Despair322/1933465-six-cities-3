@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { CityName, SortType } from '../../types/types';
 import { fetchOffersAction } from '../thunks/catalog';
 import type { Offer } from '../../types/offer';
-import { DefaultCity, RequestStatus } from '../../constants';
+import { DEFAULT_CITY, RequestStatus } from '../../constants';
 import { favoriteStatusChanged } from '../events/favorite';
 
 interface CatalogState {
@@ -13,7 +13,7 @@ interface CatalogState {
 }
 
 const initialState: CatalogState = {
-  city: DefaultCity,
+  city: DEFAULT_CITY,
   sortType: 'popular',
   offers: [],
   loadingStatus: {offers: RequestStatus.Idle},

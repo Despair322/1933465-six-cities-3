@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/experimental-ct-react';
-import { CityNames } from '../../../../constants';
+import { CITY_NAMES } from '../../../../constants';
 import LocationList from './location-list';
 
 test.describe('LocationList', () => {
   test('renders every city and marks the active city', async ({ mount }) => {
     const list = await mount(<LocationList activeCity="Paris" onClick={() => undefined} />);
 
-    await expect(list.getByRole('link')).toHaveCount(CityNames.length);
+    await expect(list.getByRole('link')).toHaveCount(CITY_NAMES.length);
     await expect(list.getByRole('link', { name: 'Paris' })).toHaveClass(/tabs__item--active/);
     await expect(list.getByRole('link', { name: 'Cologne' })).not.toHaveClass(/tabs__item--active/);
   });

@@ -11,20 +11,20 @@ function SortForm(): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
 
-  const handleClick = () => {
+  const handleSortDropDownClick = () => {
     setIsOpen(true);
   };
 
-  const handleClickOutside = (evt: MouseEvent) => {
+  const handleSortDropdownClickOutside = (evt: MouseEvent) => {
     if (evt.target !== document.querySelector('.places__sorting-type')) {
       setIsOpen(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('click', handleSortDropdownClickOutside);
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('click', handleSortDropdownClickOutside);
     };
   }, []);
 
@@ -37,7 +37,7 @@ function SortForm(): JSX.Element {
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
-      <span className="places__sorting-type" tabIndex={0} onClick={handleClick}>
+      <span className="places__sorting-type" tabIndex={0} onClick={handleSortDropDownClick}>
         {activeSortText}
         <svg className="places__sorting-arrow" width="7" height="4">
           <use xlinkHref="#icon-arrow-select"></use>

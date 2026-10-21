@@ -1,11 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
 import { StatusCodes } from 'http-status-codes';
 import { createAPI } from './api';
-import { ShowErrorToast } from './notification';
+import { showErrorToast } from './notification';
 import { saveToken } from './token';
 
 vi.mock('./notification', () => ({
-  ShowErrorToast: vi.fn(),
+  showErrorToast: vi.fn(),
 }));
 
 describe('createAPI', () => {
@@ -47,7 +47,7 @@ describe('createAPI', () => {
       response: { status: StatusCodes.UNAUTHORIZED },
     });
 
-    expect(ShowErrorToast).toHaveBeenCalledWith('Unauthorized access. Please log in.');
+    expect(showErrorToast).toHaveBeenCalledWith('Unauthorized access. Please log in.');
   });
 
   it('should show the API validation message for 400 responses', async () => {
@@ -61,7 +61,7 @@ describe('createAPI', () => {
       response: { status: StatusCodes.BAD_REQUEST },
     });
 
-    expect(ShowErrorToast).toHaveBeenCalledWith(message);
+    expect(showErrorToast).toHaveBeenCalledWith(message);
   });
 
   it('should not show a toast when the error is handled locally', async () => {
@@ -74,6 +74,6 @@ describe('createAPI', () => {
       response: { status: StatusCodes.UNAUTHORIZED },
     });
 
-    expect(ShowErrorToast).not.toHaveBeenCalled();
+    expect(showErrorToast).not.toHaveBeenCalled();
   });
 });

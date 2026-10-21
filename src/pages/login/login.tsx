@@ -26,7 +26,7 @@ function LoginScreen(): JSX.Element {
     dispatch(setActiveCity(city));
   };
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     setLoginError(null);
     if (loginRef.current !== null && passwordRef.current !== null) {
@@ -57,7 +57,7 @@ function LoginScreen(): JSX.Element {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <form className="login__form form" action="#" method="post" onSubmit={handleSubmit}>
+            <form className="login__form form" action="#" method="post" onSubmit={handleFormSubmit}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
                 <input ref={loginRef} className="login__input form__input" type="email" name="email" placeholder="Email" required />

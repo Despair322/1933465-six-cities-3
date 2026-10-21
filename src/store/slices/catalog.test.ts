@@ -1,4 +1,4 @@
-import { DefaultCity, RequestStatus } from '../../constants';
+import { DEFAULT_CITY, RequestStatus } from '../../constants';
 import type { Offer } from '../../types/offer';
 import { favoriteStatusChanged } from '../events/favorite';
 import { fetchOffersAction } from '../thunks/catalog';
@@ -30,7 +30,7 @@ const makeOffer = (id: string, isFavorite = false): Offer => ({
 describe('catalog reducer', () => {
   it('returns the initial state', () => {
     expect(catalogReducer(undefined, { type: 'unknown' })).toEqual({
-      city: DefaultCity,
+      city: DEFAULT_CITY,
       sortType: 'popular',
       offers: [],
       loadingStatus: { offers: RequestStatus.Idle },
