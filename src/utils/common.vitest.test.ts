@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { CITY_NAMES } from '../constants';
 import type { Point } from '../types';
-import { debounce, getRandomCity, mapToPoint, transformDateToMonthYear, transformRatingToPercent } from './common';
+import { capitalize, debounce, getRandomCity, mapToPoint, transformDateToMonthYear, transformRatingToPercent } from './common';
 
 afterEach(() => {
   vi.useRealTimers();
@@ -77,5 +77,15 @@ describe('getRandomCity', () => {
     vi.spyOn(Math, 'random').mockReturnValue(0.999);
 
     expect(getRandomCity()).toBe(CITY_NAMES[CITY_NAMES.length - 1]);
+  });
+});
+
+describe('capitalize', () => {
+  it('capitalizes the first letter of a string', () => {
+    expect(capitalize('hello')).toBe('Hello');
+  });
+
+  it('does not capitalize an empty string', () => {
+    expect(capitalize('')).toBe('');
   });
 });

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import { RequestStatus } from '../../constants';
 import type { Offer } from '../../types';
 import { fetchFavoritesAction } from '../thunks/favorites';
@@ -14,37 +14,30 @@ const initialState: FavoritesState = {
   loadingStatus: { favorites: RequestStatus.Idle },
 };
 
-const favoritesSlice = createSlice({
-  extraReducers: (builder) =>
-    builder
-      .addCase(fetchFavoritesAction.pending, (state) => {
-        state.loadingStatus = { favorites: RequestStatus.Loading };
-      })
-      .addCase(fetchFavoritesAction.fulfilled, (state, action: PayloadAction<Offer[]>) => {
-        state.loadingStatus = { favorites: RequestStatus.Succeeded };
-        state.favorites = action.payload;
-      })
-      .addCase(fetchFavoritesAction.rejected, (state) => {
-        state.loadingStatus = { favorites: RequestStatus.Failed };
-      })
-      .addCase(favoriteStatusChanged, (state, action: PayloadAction<{ id: string; isFavorite: boolean }>) => {
-        const { id, isFavorite } = action.payload;
-        if (!isFavorite) {
-          state.favorites = state.favorites.filter((offer) => offer.id !== id);
-        }
-      }),
-  initialState,
-  name: 'favorites',
-  reducers: {
-  },
-  selectors: {
-    selectFavorites: (state) => state.favorites,
-    selectFavoritesLoadingStatus: (state) => state.loadingStatus.favorites,
-    selectFavoritesCount: (state) => state.favorites.length,
-  }
-});
+const favoritesReducer = createReducer(initialState, (builder) =>
+  builder
+    .addCase(fetchFavoritesAction.pending, (state) => {
+      state.loadingStatus = { favorites: RequestStatus.Loading };
+    })
+    .addCase(fetchFavoritesAction.fulfilled, (state, action) => {
+      state.loadingStatus = { favorites: RequestStatus.Succeeded };
+      state.favorites = action.payload;
+    })
+    .addCase(fetchFavoritesAction.rejected, (state) => {
+      state.loadingStatus = { favorites: RequestStatus.Failed };
+    })
+    .addCase(favoriteStatusChanged, (state, action) => {
+      const { id, isFavorite } = action.payload;
+      if (!isFavorite) {
+        state.favorites = state.favorites.filter((offer) => offer.id !== id);
+      }
+    })
+);
 
-export const { selectFavorites, selectFavoritesLoadingStatus, selectFavoritesCount } = favoritesSlice.selectors;
+type FavoritesRootState = { favorites: FavoritesState };
 
+export const selectFavorites = (state: FavoritesRootState) => state.favorites.favorites;
+export const selectFavoritesLoadingStatus = (state: FavoritesRootState) => state.favorites.loadingStatus.favorites;
+export const selectFavoritesCount = (state: FavoritesRootState) => state.favorites.favorites.length;
 
-export default favoritesSlice.reducer;
+export default favoritesReducer;

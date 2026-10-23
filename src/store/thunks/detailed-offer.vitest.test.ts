@@ -8,13 +8,18 @@ import detailedOfferReducer, {
   loadDetailedOffer,
   loadNearbyOffers,
   loadReviews,
-} from '../slices/detailedOffer';
+} from '../slices/detailed-offer';
+import { showErrorToast } from '../../services';
 import {
   fetchNearbyOffersAction,
   fetchOfferAction,
   fetchReviewsAction,
   postReviewAction,
-} from './detailedOffer';
+} from './detailed-offer';
+
+vi.mock('../../services', () => ({
+  showErrorToast: vi.fn(),
+}));
 
 describe('Detailed offer thunks', () => {
   let api: AxiosInstance;
@@ -143,12 +148,16 @@ describe('Detailed offer thunks', () => {
     it('should reject when posting the review fails', async () => {
       const review = makeFakeReview();
       const reviewData = { id: 'offer-1', comment: review.comment, rating: review.rating };
-      mockApi.onPost(APIRoute.Reviews(reviewData.id)).reply(StatusCodes.BAD_REQUEST);
+      mockApi.onPost(APIRoute.Reviews(reviewData.id)).reply(StatusCodes.NOT_FOUND, {
+        type: 'error',
+        message: 'Offer with id 1234 not found',
+      });
 
       const result = await store.dispatch(postReviewAction(reviewData));
 
       expect(postReviewAction.rejected.match(result)).toBe(true);
       expect(mockApi.history.get).toHaveLength(0);
+      expect(showErrorToast).toHaveBeenCalledWith('Failed to send review.');
     });
   });
 });

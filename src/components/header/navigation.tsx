@@ -33,7 +33,7 @@ function Navigation(): JSX.Element | null {
             {
               isAuth ?
                 <>
-                  <span className="header__user-name user__name">{user?.name}</span>
+                  <span className="header__user-name user__name">{user?.email}</span>
                   <FavoriteCount />
                 </> :
                 <span className="header__login">Sign in</span>

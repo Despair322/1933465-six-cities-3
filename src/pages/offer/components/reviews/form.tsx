@@ -1,8 +1,8 @@
 import { Fragment, useState } from 'react';
 import type { FormData } from '../../../../types';
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
-import { postReviewAction } from '../../../../store/thunks/detailedOffer';
-import { selectDetailedOfferId, } from '../../../../store/slices/detailedOffer';
+import { postReviewAction } from '../../../../store/thunks/detailed-offer';
+import { selectDetailedOfferId, } from '../../../../store/slices/detailed-offer';
 
 const RATINGS = [
   { value: 5, title: 'perfect' },
@@ -12,8 +12,10 @@ const RATINGS = [
   { value: 1, title: 'terribly' },
 ];
 
-const MIN_LENGTH = 50;
-const MAX_LENGTH = 300;
+const PasswordConstraints = {
+  MIN_LENGTH: 50,
+  MAX_LENGTH: 300,
+};
 
 function Form(): JSX.Element | null {
   const dispatch = useAppDispatch();
@@ -74,10 +76,10 @@ function Form(): JSX.Element | null {
       </textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
-          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">{MIN_LENGTH} characters</b>.
+          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">{PasswordConstraints.MIN_LENGTH} characters</b>.
         </p>
         <button className="reviews__submit form__submit button" type="submit"
-          disabled={formData.rating.length === 0 || formData.review.length < MIN_LENGTH || formData.review.length > MAX_LENGTH || isDisabled}
+          disabled={formData.rating.length === 0 || formData.review.length < PasswordConstraints.MIN_LENGTH || formData.review.length > PasswordConstraints.MAX_LENGTH || isDisabled}
         >
           Submit
         </button>

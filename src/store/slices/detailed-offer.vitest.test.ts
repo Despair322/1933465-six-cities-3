@@ -5,7 +5,7 @@ import {
   fetchNearbyOffersAction,
   fetchOfferAction,
   fetchReviewsAction,
-} from '../thunks/detailedOffer';
+} from '../thunks/detailed-offer';
 import detailedOfferReducer, {
   loadDetailedOffer,
   loadNearbyOffers,
@@ -19,7 +19,7 @@ import detailedOfferReducer, {
   selectReviewsCount,
   selectReviewsLoadingStatus,
   selectTopTenRecentReviews,
-} from './detailedOffer';
+} from './detailed-offer';
 
 const makeOffer = (id: string, isFavorite = false): Offer => ({
   id,

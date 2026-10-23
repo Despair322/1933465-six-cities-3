@@ -18,7 +18,7 @@ test.describe('Card', () => {
     await expect(card.getByText('€120')).toBeVisible();
     await expect(card.getByText('/ night')).toBeVisible();
     await expect(card.getByRole('heading', { name: 'Central apartment' })).toBeVisible();
-    await expect(card.getByText('apartment', { exact: true })).toBeVisible();
+    await expect(card.getByText('Apartment', { exact: true })).toBeVisible();
     await expect(card.getByRole('img', { name: 'Place image' })).toHaveAttribute('src', 'apartment.jpg');
     await expect(card.getByRole('link')).toHaveCount(2);
     await expect(card.getByRole('link').nth(0)).toHaveAttribute('href', '/offer/offer-1');

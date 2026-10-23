@@ -3,7 +3,7 @@ import { createAPI } from '../services';
 import catalogReducer from './slices/catalog';
 import favoritesReducer from './slices/favorites';
 import userReducer from './slices/user';
-import detailedOfferReducer from './slices/detailedOffer';
+import detailedOfferReducer from './slices/detailed-offer';
 
 export const api = createAPI();
 

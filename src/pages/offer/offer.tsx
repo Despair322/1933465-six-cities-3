@@ -10,11 +10,11 @@ import Spinner from '../../components/spinner';
 import FavoriteButton from '../../components/favorite-button';
 import OfferHost from './components/offer-host';
 import { AppRoute, CardVariants, FavoriteButtonVariants, MapVariants, RatingVariants, RequestStatus } from '../../constants';
-import { mapToPoint } from '../../utils';
+import { capitalize, mapToPoint } from '../../utils';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectReviewsCount, selectTopTenRecentReviews } from '../../store/slices/detailedOffer';
-import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/thunks/detailedOffer';
+import { selectDetailedOffer, selectDetailedOfferLoadingStatus, selectNearbyOffers, selectNearbyOffersLoadingStatus, selectReviewsCount, selectTopTenRecentReviews } from '../../store/slices/detailed-offer';
+import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/thunks/detailed-offer';
 
 const MAX_NEARBY_OFFERS = 3;
 const MAX_IMAGES = 6;
@@ -125,7 +125,7 @@ function Offer(): JSX.Element {
               <Rating rating={rating} variant={RatingVariants.Offer} />
               <ul className="offer__features">
                 <li className="offer__feature offer__feature--entire">
-                  {type}
+                  {capitalize(type)}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
                   {bedrooms} {bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}

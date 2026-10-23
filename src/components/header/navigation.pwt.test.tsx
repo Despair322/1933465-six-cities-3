@@ -43,9 +43,9 @@ test.describe('Navigation', () => {
       },
     });
 
-    await expect(navigation.getByText('Test User')).toBeVisible();
+    await expect(navigation.getByText('user@test.com')).toBeVisible();
     await expect(navigation.getByText('2')).toHaveClass(/header__favorite-count/);
-    await expect(navigation.getByRole('link', { name: /Test User/ })).toHaveAttribute('href', '/favorites');
+    await expect(navigation.getByRole('link', { name: /user@test.com/ })).toHaveAttribute('href', '/favorites');
     await expect(navigation.getByRole('link', { name: 'Sign out' })).toHaveAttribute(
       'href',
       '/offer/offer-1?tab=details#reviews'

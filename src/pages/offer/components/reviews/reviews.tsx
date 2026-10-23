@@ -4,7 +4,7 @@ import ReviewComponent from './review';
 import { useAppSelector } from '../../../../hooks';
 import { AuthorizationStatus, RequestStatus } from '../../../../constants';
 import { selectAuthorizationStatus } from '../../../../store/slices/user';
-import { selectReviewsLoadingStatus } from '../../../../store/slices/detailedOffer';
+import { selectReviewsLoadingStatus } from '../../../../store/slices/detailed-offer';
 import { memo } from 'react';
 import type { Review } from '../../../../types';
 

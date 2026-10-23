@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { SORT_OPTIONS } from '../../../../constants';
 import type { SortType } from '../../../../types';
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
@@ -9,6 +9,7 @@ function SortForm(): JSX.Element {
   const activeSortType = useAppSelector(selectSortType);
   const activeSortText = SORT_OPTIONS.find(({ value }) => value === activeSortType)?.title;
   const [isOpen, setIsOpen] = useState(false);
+  const sortingTypeRef = useRef<HTMLSpanElement | null>(null);
   const dispatch = useAppDispatch();
 
   const handleSortDropDownClick = () => {
@@ -16,7 +17,7 @@ function SortForm(): JSX.Element {
   };
 
   const handleSortDropdownClickOutside = (evt: MouseEvent) => {
-    if (evt.target !== document.querySelector('.places__sorting-type')) {
+    if (evt.target !== sortingTypeRef.current) {
       setIsOpen(false);
     }
   };
@@ -37,7 +38,7 @@ function SortForm(): JSX.Element {
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
-      <span className="places__sorting-type" tabIndex={0} onClick={handleSortDropDownClick}>
+      <span className="places__sorting-type" tabIndex={0} onClick={handleSortDropDownClick} ref={sortingTypeRef}>
         {activeSortText}
         <svg className="places__sorting-arrow" width="7" height="4">
           <use xlinkHref="#icon-arrow-select"></use>

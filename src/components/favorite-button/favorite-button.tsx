@@ -18,6 +18,11 @@ function FavoriteButton({ isFavorite, id, variant }: FavoriteButtonProps): JSX.E
 
   const handleFavoriteClick = useMemo(
     () => debounce(() => {
+      if (!isAuth) {
+        navigate(`${AppRoute.Login}?redirect=${location.pathname}`,
+          { replace: true });
+        return;
+      }
       dispatch(postFavoriteAction({ id, status: !isFavorite })).unwrap().catch((status: unknown) => {
         if (status === StatusCodes.UNAUTHORIZED) {
           navigate(`${AppRoute.Login}?redirect=${location.pathname}`,
@@ -25,7 +30,7 @@ function FavoriteButton({ isFavorite, id, variant }: FavoriteButtonProps): JSX.E
         }
       });
     }, 300),
-    [dispatch, id, isFavorite, location, navigate],
+    [dispatch, id, isFavorite, location, navigate, isAuth],
   );
 
   return (

@@ -5,6 +5,7 @@ import type { CardProps } from './card.types';
 import Rating from '../rating/rating';
 import FavoriteisButton from '../favorite-button/favorite-button';
 import { memo } from 'react';
+import { capitalize } from '../../utils';
 
 function Card({ offer, onMouseEnter, onMouseLeave, variant = CardVariants.Main }: CardProps): JSX.Element {
   const { id, isPremium, previewImage, price, isFavorite, rating, title, type } = offer;
@@ -55,7 +56,7 @@ function Card({ offer, onMouseEnter, onMouseLeave, variant = CardVariants.Main }
         <h2 className="place-card__name">
           <Link to={offerPath}>{title}</Link>
         </h2>
-        <p className="place-card__type">{type}</p>
+        <p className="place-card__type">{capitalize(type)}</p>
       </div>
     </article >
   );
